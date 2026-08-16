@@ -3,90 +3,109 @@ import { Types } from 'mongoose';
 import { connectToDatabase } from '@/lib/mongodb';
 import { rateLimit } from '@/lib/rate-limit';
 import Registration from '@/models/Registration';
+import EventModel from '@/models/EventModel';
 
 export async function POST(req: NextRequest) {
   try {
-    // 0. Rate limit: 5 registrations per 10 minutes per IP
+    // Rate limit: 5 registrations per 10 minutes per IP
     const limited = await rateLimit(req, { name: 'register', limit: 5, windowMs: 10 * 60 * 1000 });
     if (limited) return limited;
 
-    // 1. Connect to database FIRST — fail fast if DB is unreachable
     await connectToDatabase();
 
-    // 2. Parse form data
-    const formData = await req.formData();
-    
-    // Extract text fields
-    const squadName = formData.get('squadName') as string;
-    const domain = formData.get('domain') as string;
-    const leaderFullName = formData.get('leaderFullName') as string;
-    const leaderEmail = formData.get('leaderEmail') as string;
-    const leaderPhone = formData.get('leaderPhone') as string;
-    const leaderCollege = formData.get('leaderCollege') as string;
-    const transactionId = formData.get('transactionId') as string;
-    const eventId = formData.get('eventId') as string | null;
+    const rawFormData = await req.formData();
+    const eventId = rawFormData.get('eventId') as string | null;
 
-    // Basic validation
-    if (!squadName || !domain || !leaderFullName || !leaderEmail || !leaderPhone || !leaderCollege || !transactionId) {
-      return NextResponse.json({ error: 'All required fields must be filled' }, { status: 400 });
-    }
+    let requiresPayment = false;
+    let eventTitle = 'Event';
 
-    // Parse team members
-    const members = [];
-    for (let i = 2; i <= 3; i++) {
-      const memberName = formData.get(`member${i}FullName`) as string;
-      const memberEmail = formData.get(`member${i}Email`) as string;
-      if (memberName && memberEmail) {
-        members.push({ fullName: memberName, email: memberEmail });
+    if (eventId && Types.ObjectId.isValid(eventId)) {
+      const ev = await EventModel.findById(eventId).lean();
+      if (ev) {
+        eventTitle = ev.title;
+        requiresPayment = ev.registration?.requiresPayment ?? ((ev.registration?.fee ?? 0) > 0);
       }
     }
 
-    // 3. Handle file — convert to base64 and store in MongoDB
-    const file = formData.get('paymentScreenshot') as File | null;
-
-    if (!file || file.size === 0) {
-      return NextResponse.json({ error: 'Payment screenshot is required' }, { status: 400 });
+    // Collect ALL submitted form entries into a customData dictionary
+    const customData: Record<string, unknown> = {};
+    for (const [key, value] of rawFormData.entries()) {
+      if (key === 'paymentScreenshot' && value instanceof File) continue;
+      customData[key] = typeof value === 'string' ? value.trim() : value;
     }
 
-    // Limit file size to 5MB
-    if (file.size > 5 * 1024 * 1024) {
-      return NextResponse.json({ error: 'Screenshot must be under 5MB' }, { status: 400 });
+    // Helper to retrieve value matching various candidate keys
+    const getVal = (...keys: string[]) => {
+      for (const k of keys) {
+        const v = rawFormData.get(k);
+        if (typeof v === 'string' && v.trim()) return v.trim();
+      }
+      return '';
+    };
+
+    const squadName = getVal('squadName', 'squad_name', 'squad', 'teamName', 'team_name', 'name', 'title') || 'Squad';
+    const domain = getVal('domain', 'category', 'path') || 'General';
+    const leaderFullName = getVal('leaderFullName', 'leader_name', 'fullName', 'full_name', 'name') || 'Participant';
+    const leaderEmail = getVal('leaderEmail', 'leader_email', 'email', 'email_address') || 'no-email@registration.local';
+    const leaderPhone = getVal('leaderPhone', 'leader_phone', 'phone', 'contact', 'mobile') || 'N/A';
+    const leaderCollege = getVal('leaderCollege', 'leader_college', 'college', 'institute') || 'N/A';
+    const transactionId = getVal('transactionId', 'transaction_id', 'txId', 'tx_id') || (requiresPayment ? '' : 'FREE-REGISTRATION');
+
+    if (requiresPayment && !transactionId) {
+      return NextResponse.json({ error: 'Transaction ID is required for paid registrations' }, { status: 400 });
     }
 
-    const bytes = await file.arrayBuffer();
-    const base64 = Buffer.from(bytes).toString('base64');
-    const mimeType = file.type || 'image/jpeg';
-    const paymentScreenshot = `data:${mimeType};base64,${base64}`;
+    // Handle payment screenshot file
+    let paymentScreenshot = 'data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAADUlEQVR42mNk+M9QDwADhgGAWjR9awAAAABJRU5ErkJggg==';
+    const file = rawFormData.get('paymentScreenshot') as File | null;
+    if (file && file.size > 0) {
+      if (file.size > 5 * 1024 * 1024) {
+        return NextResponse.json({ error: 'Payment screenshot must be under 5MB' }, { status: 400 });
+      }
+      const bytes = await file.arrayBuffer();
+      const base64 = Buffer.from(bytes).toString('base64');
+      const mimeType = file.type || 'image/jpeg';
+      paymentScreenshot = `data:${mimeType};base64,${base64}`;
+    } else if (requiresPayment) {
+      return NextResponse.json({ error: 'Payment screenshot is required for paid registrations' }, { status: 400 });
+    }
 
-    // 4. Save to database
+    // Parse team members if present
+    const members = [];
+    for (let i = 2; i <= 10; i++) {
+      const memberName = getVal(`member${i}FullName`, `member_${i}_name`);
+      const memberEmail = getVal(`member${i}Email`, `member_${i}_email`);
+      if (memberName || memberEmail) {
+        members.push({ fullName: memberName || `Member ${i}`, email: memberEmail || '' });
+      }
+    }
+
+    // Save registration document
     const newRegistration = new Registration({
-      ...(eventId ? { eventId: new Types.ObjectId(eventId) } : {}),
+      ...(eventId && Types.ObjectId.isValid(eventId) ? { eventId: new Types.ObjectId(eventId) } : {}),
       squadName,
       domain,
       leader: {
         fullName: leaderFullName,
         email: leaderEmail,
         phone: leaderPhone,
-        college: leaderCollege
+        college: leaderCollege,
       },
       members,
       transactionId,
-      paymentScreenshot
+      paymentScreenshot,
+      formData: customData,
+      status: 'pending',
     });
 
     await newRegistration.save();
 
-    return NextResponse.json({ success: true, message: 'Registration successful' }, { status: 201 });
+    return NextResponse.json({ success: true, message: `Registration for ${eventTitle} successful!` }, { status: 201 });
   } catch (error: unknown) {
     console.error('Registration API Error:', error);
-
     if (error instanceof Error) {
-      if (error.message.includes('ETIMEOUT') || error.message.includes('ECONNREFUSED')) {
-        return NextResponse.json({ error: 'Database connection failed. Please try again in a moment.' }, { status: 503 });
-      }
       return NextResponse.json({ error: error.message }, { status: 500 });
     }
-
     return NextResponse.json({ error: 'Internal Server Error' }, { status: 500 });
   }
 }

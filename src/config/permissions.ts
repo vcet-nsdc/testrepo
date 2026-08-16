@@ -52,6 +52,7 @@ export const RolePermissions: Record<Role, Permission[]> = {
     'event:create',
     'event:update',
     'cms:read',
+    'cms:write',
     'registration:read',
     'media:upload',
   ],

@@ -1,8 +1,9 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { useRouter } from "next/navigation";
-import { Save, Loader2, Plus, X } from "lucide-react";
+import Link from "next/link";
+import { Save, Loader2, Plus, X, FileEdit } from "lucide-react";
 import { cn } from "@/lib/utils";
 
 interface EventFormProps {
@@ -26,6 +27,7 @@ interface EventFormData {
   requiresApproval: boolean;
   teamMin: number;
   teamMax: number;
+  formSchemaId?: string;
   highlights: string[];
   faqs: { q: string; a: string }[];
 }
@@ -65,9 +67,19 @@ export default function EventForm({ initial, eventId }: EventFormProps) {
     requiresApproval: initial?.requiresApproval ?? true,
     teamMin: initial?.teamMin || 1,
     teamMax: initial?.teamMax || 4,
+    formSchemaId: initial?.formSchemaId || "",
     highlights: initial?.highlights || [],
     faqs: initial?.faqs || [],
   });
+
+  const [schemas, setSchemas] = useState<{ _id: string; name: string }[]>([]);
+
+  useEffect(() => {
+    fetch("/api/admin/form-schemas")
+      .then((r) => r.json())
+      .then((d) => setSchemas(d.data || []))
+      .catch(() => {});
+  }, []);
 
   const [newHighlight, setNewHighlight] = useState("");
   const [newFaqQ, setNewFaqQ] = useState("");
@@ -123,6 +135,7 @@ export default function EventForm({ initial, eventId }: EventFormProps) {
         requiresPayment: form.requiresPayment,
         requiresApproval: form.requiresApproval,
         teamConfig: { min: form.teamMin, max: form.teamMax },
+        formSchemaId: form.formSchemaId || undefined,
       },
       highlights: form.highlights,
       faqs: form.faqs,
@@ -175,9 +188,9 @@ export default function EventForm({ initial, eventId }: EventFormProps) {
       </div>
 
       {/* Dates & Location */}
-      <div className="bg-white/[0.02] border border-white/[0.06] rounded-2xl p-5 space-y-4">
+      <div className="bg-white/[0.02] border border-white/[0.06] rounded-2xl p-4 sm:p-5 space-y-4">
         <h3 className="text-sm font-semibold text-white/70">Schedule & Location</h3>
-        <div className="grid grid-cols-2 gap-4">
+        <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
           <Field label="Starts At">
             <input type="datetime-local" className={inputCls} value={form.startsAt} onChange={(e) => set("startsAt", e.target.value)} />
           </Field>
@@ -194,7 +207,7 @@ export default function EventForm({ initial, eventId }: EventFormProps) {
       </div>
 
       {/* Registration */}
-      <div className="bg-white/[0.02] border border-white/[0.06] rounded-2xl p-5 space-y-4">
+      <div className="bg-white/[0.02] border border-white/[0.06] rounded-2xl p-4 sm:p-5 space-y-4">
         <div className="flex items-center justify-between">
           <h3 className="text-sm font-semibold text-white/70">Registration</h3>
           <label className="flex items-center gap-2 cursor-pointer">
@@ -213,7 +226,7 @@ export default function EventForm({ initial, eventId }: EventFormProps) {
         </div>
         {form.registrationEnabled && (
           <div className="space-y-4">
-            <div className="grid grid-cols-2 gap-4">
+            <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
               <Field label="Team Min">
                 <input type="number" min={1} className={inputCls} value={form.teamMin} onChange={(e) => set("teamMin", Number(e.target.value))} />
               </Field>
@@ -236,6 +249,42 @@ export default function EventForm({ initial, eventId }: EventFormProps) {
                 <input type="number" min={0} className={inputCls} value={form.registrationFee} onChange={(e) => set("registrationFee", Number(e.target.value))} />
               </Field>
             )}
+
+            <Field label="Registration Form Schema (Google Forms Style)">
+              <div className="flex gap-2">
+                <select
+                  className={cn(inputCls, "flex-1 cursor-pointer [&>option]:bg-zinc-900")}
+                  value={form.formSchemaId || ""}
+                  onChange={(e) => set("formSchemaId", e.target.value)}
+                >
+                  <option value="">-- Standard Registration Form --</option>
+                  {schemas.map((s) => (
+                    <option key={s._id} value={s._id}>
+                      {s.name}
+                    </option>
+                  ))}
+                </select>
+                {form.formSchemaId ? (
+                  <Link
+                    href={`/admin/form-schemas/${form.formSchemaId}/edit`}
+                    target="_blank"
+                    className="flex items-center gap-1.5 px-3.5 py-2 text-xs font-medium rounded-lg bg-violet-500/20 border border-violet-500/30 text-violet-300 hover:bg-violet-500/30 transition-all whitespace-nowrap"
+                  >
+                    <FileEdit className="w-3.5 h-3.5" />
+                    Edit Form
+                  </Link>
+                ) : (
+                  <Link
+                    href="/admin/form-schemas/new"
+                    target="_blank"
+                    className="flex items-center gap-1.5 px-3.5 py-2 text-xs font-medium rounded-lg bg-white/[0.06] border border-white/10 text-white/70 hover:text-white transition-all whitespace-nowrap"
+                  >
+                    <Plus className="w-3.5 h-3.5" />
+                    New Form
+                  </Link>
+                )}
+              </div>
+            </Field>
           </div>
         )}
       </div>

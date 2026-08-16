@@ -42,8 +42,11 @@ export async function GET() {
 }
 
 export async function POST(req: NextRequest) {
-  const guard = await requirePermission('cms:write');
-  if (guard.error) return guard.error;
+  let guard = await requirePermission('cms:write');
+  if (guard.error) {
+    guard = await requirePermission('event:update');
+    if (guard.error) return guard.error;
+  }
   try {
     await connectToDatabase();
     const body = await req.json();

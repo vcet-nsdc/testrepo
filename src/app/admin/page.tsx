@@ -139,7 +139,7 @@ export default function AdminDashboard() {
         </div>
       )}
 
-      <div className="grid grid-cols-2 lg:grid-cols-4 gap-4">
+      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-3 sm:gap-4">
         {loading ? (
           Array.from({ length: 4 }).map((_, i) => <Skeleton key={i} className="h-36" />)
         ) : (
@@ -152,7 +152,7 @@ export default function AdminDashboard() {
         )}
       </div>
 
-      <div className="grid grid-cols-1 lg:grid-cols-3 gap-4">
+      <div className="grid grid-cols-1 sm:grid-cols-3 gap-3 sm:gap-4">
         {loading ? (
           Array.from({ length: 3 }).map((_, i) => <Skeleton key={i} className="h-28" />)
         ) : (
@@ -165,8 +165,8 @@ export default function AdminDashboard() {
       </div>
 
       <div>
-        <h3 className="text-sm font-medium text-white/40 mb-3 uppercase tracking-wider text-xs">Quick Actions</h3>
-        <div className="grid grid-cols-2 sm:grid-cols-4 gap-3">
+        <h3 className="text-xs font-semibold text-white/40 mb-3 uppercase tracking-wider">Quick Actions</h3>
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-3">
           {[
             { href: "/admin/events/new", label: "New Event" },
             { href: "/admin/registrations?status=pending", label: "Review Pending" },

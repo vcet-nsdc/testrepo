@@ -43,8 +43,11 @@ export async function GET(_req: NextRequest, { params }: Ctx) {
 }
 
 export async function PATCH(req: NextRequest, { params }: Ctx) {
-  const guard = await requirePermission('cms:write');
-  if (guard.error) return guard.error;
+  let guard = await requirePermission('cms:write');
+  if (guard.error) {
+    guard = await requirePermission('event:update');
+    if (guard.error) return guard.error;
+  }
   try {
     const { id } = await params;
     if (!validId(id)) return fail('NOT_FOUND', 'Schema not found', 404);
@@ -68,8 +71,11 @@ export async function PATCH(req: NextRequest, { params }: Ctx) {
 }
 
 export async function DELETE(_req: NextRequest, { params }: Ctx) {
-  const guard = await requirePermission('cms:write');
-  if (guard.error) return guard.error;
+  let guard = await requirePermission('cms:write');
+  if (guard.error) {
+    guard = await requirePermission('event:update');
+    if (guard.error) return guard.error;
+  }
   try {
     const { id } = await params;
     if (!validId(id)) return fail('NOT_FOUND', 'Schema not found', 404);

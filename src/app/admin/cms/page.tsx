@@ -111,7 +111,7 @@ function ItemForm({ type, initial, onSave, onCancel }: {
   return (
     <form onSubmit={submit} className="p-4 bg-[#0d0d16] border border-violet-500/20 rounded-xl space-y-3">
       {error && <div className="text-red-300 text-xs">{error}</div>}
-      <div className="grid grid-cols-2 gap-3">
+      <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
         <div>
           <label className="text-xs text-white/40 block mb-1">Key (optional)</label>
           <input className={inputCls} value={key} onChange={(e) => setKey(e.target.value)} placeholder="unique-key" />

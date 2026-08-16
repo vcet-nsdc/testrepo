@@ -86,7 +86,7 @@ export default function ThemesPage() {
       {error && <div className="p-4 bg-red-500/10 border border-red-500/20 rounded-xl text-red-300 text-sm">{error}</div>}
 
       {loading ? (
-        <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-4">
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
           {Array.from({ length: 6 }).map((_, i) => <div key={i} className="h-40 bg-white/[0.03] border border-white/[0.06] rounded-2xl animate-pulse" />)}
         </div>
       ) : themes.length === 0 ? (
@@ -96,7 +96,7 @@ export default function ThemesPage() {
           <button onClick={openNew} className="inline-block mt-4 px-4 py-2 text-sm text-violet-300 bg-violet-500/10 hover:bg-violet-500/20 border border-violet-500/20 rounded-lg transition-all">Create first theme</button>
         </div>
       ) : (
-        <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-4">
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
           {themes.map((t) => {
             const catCls = CATEGORY_CLS[t.category] ?? CATEGORY_CLS.custom;
             const enabledCount = t.layout.sections.filter((s) => s.enabled).length;

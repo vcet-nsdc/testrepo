@@ -17,7 +17,7 @@ export interface DynamicFormSchema { id: string; name: string; fields: FormField
 export interface DynamicEvent {
   id: string;
   title: string;
-  registration: { fee: number; requiresPayment: boolean; teamConfig?: { min: number; max: number } | null; formSchemaId?: string | null };
+  registration?: { fee?: number; requiresPayment?: boolean; teamConfig?: { min?: number; max?: number } | null; formSchemaId?: string | null };
 }
 
 const BASE = "w-full bg-black/30 border border-white/10 rounded-lg p-3 text-white outline-none focus:ring-2 focus:ring-purple-500/50 focus:border-purple-500/50 transition-all";
@@ -87,10 +87,10 @@ export default function DynamicRegistrationForm({ event, formSchema, upiId }: Pr
   }
 
   return (
-    <form onSubmit={handleSubmit} className="bg-black/40 backdrop-blur-md rounded-2xl border border-white/10 shadow-xl p-6 sm:p-10 relative">
-      <div className="mb-10 text-center pb-8 border-b border-white/10">
-        <h2 className="font-heading text-4xl sm:text-5xl font-bold mb-4 text-white">Register for <span className="bg-gradient-to-r from-purple-400 to-blue-400 bg-clip-text text-transparent">{event.title}</span></h2>
-        {event.registration.teamConfig && <p className="text-white/70 font-sans text-sm">Teams of {event.registration.teamConfig.min}–{event.registration.teamConfig.max} members.</p>}
+    <form onSubmit={handleSubmit} className="bg-black/40 backdrop-blur-md rounded-2xl border border-white/10 shadow-xl p-4 sm:p-6 md:p-10 relative">
+      <div className="mb-6 sm:mb-10 text-center pb-6 sm:pb-8 border-b border-white/10">
+        <h2 className="font-heading text-2xl sm:text-4xl md:text-5xl font-bold mb-3 text-white leading-tight">Register for <span className="bg-gradient-to-r from-purple-400 to-blue-400 bg-clip-text text-transparent">{event.title}</span></h2>
+        {event.registration?.teamConfig && <p className="text-white/70 font-sans text-xs sm:text-sm">Teams of {event.registration.teamConfig.min}–{event.registration.teamConfig.max} members.</p>}
       </div>
 
       {error && (
@@ -107,8 +107,8 @@ export default function DynamicRegistrationForm({ event, formSchema, upiId }: Pr
           </div>
         </div>
 
-        {event.registration.requiresPayment && (
-          <DynamicRegistrationFormPayment fee={event.registration.fee} upiId={upiId} />
+        {event.registration?.requiresPayment && (
+          <DynamicRegistrationFormPayment fee={event.registration.fee ?? 0} upiId={upiId} />
         )}
       </div>
 

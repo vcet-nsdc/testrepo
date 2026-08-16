@@ -9,6 +9,7 @@ import { Navbar } from '@/components/layout/navbar';
 import { Footer } from '@/components/layout/footer';
 import ShaderBackground from '@/components/shader-background';
 import { APP_CONFIG } from '@/lib/constants';
+import { AuthProvider } from '@/components/providers/AuthProvider';
 import './globals.css';
 import SocialSidebar from '@/components/socialsidebar';
 
@@ -118,17 +119,19 @@ export default function RootLayout({
         className={`antialiased dark min-h-screen flex flex-col font-sans`}
         suppressHydrationWarning
       >
-        <ErrorBoundary>
-          <Navbar />
-          <div className="flex-1 relative">
-            <ShaderBackground />
-            <div className="relative z-10">
-              <SocialSidebar />
-              {children}
+        <AuthProvider>
+          <ErrorBoundary>
+            <Navbar />
+            <div className="flex-1 relative">
+              <ShaderBackground />
+              <div className="relative z-10">
+                <SocialSidebar />
+                {children}
+              </div>
             </div>
-          </div>
-          <Footer />
-        </ErrorBoundary>
+            <Footer />
+          </ErrorBoundary>
+        </AuthProvider>
       </body>
     </html>
   );

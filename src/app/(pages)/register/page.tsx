@@ -1,12 +1,13 @@
+import { redirect } from "next/navigation";
 import DynamicRegistrationForm from "@/components/DynamicRegistrationForm";
 import type { DynamicEvent, DynamicFormSchema } from "@/components/DynamicRegistrationForm";
 
 async function getActiveEvent(): Promise<{
+  slug: string | null;
   event: DynamicEvent | null;
   formSchema: DynamicFormSchema | null;
   upiId: string | null;
 }> {
-  // Call services directly — we are in a Server Component
   const { connectToDatabase } = await import("@/lib/mongodb");
   const { default: EventModel } = await import("@/models/EventModel");
   const { getSettings } = await import("@/server/services/settingsService");
@@ -26,37 +27,56 @@ async function getActiveEvent(): Promise<{
     .populate("registration.formSchemaId")
     .lean();
 
-  if (!raw) return { event: null, formSchema: null, upiId: null };
+  if (!raw) return { slug: null, event: null, formSchema: null, upiId: null };
 
   const businessSettings = await getSettings("business");
-  const upiId = (businessSettings.upiId as string) ?? null;
+  const upiId = (businessSettings?.upiId as string) ?? null;
 
-  const schemaDoc = raw.registration.formSchemaId as unknown as {
+  const schemaDoc = raw.registration?.formSchemaId as unknown as {
     _id: { toString(): string };
     name: string;
     fields: DynamicFormSchema["fields"];
   } | null;
 
-  const formSchema: DynamicFormSchema | null = schemaDoc
+  const formSchema: DynamicFormSchema = schemaDoc
     ? { id: schemaDoc._id.toString(), name: schemaDoc.name, fields: schemaDoc.fields }
-    : null;
+    : {
+        id: "default-schema",
+        name: `${raw.title} Registration Form`,
+        fields: [
+          { key: "squadName", label: "Squad / Team Name", type: "text", required: true },
+          { key: "domain", label: "Domain / Category", type: "text", required: true },
+          { key: "leaderFullName", label: "Team Leader Full Name", type: "text", required: true },
+          { key: "leaderEmail", label: "Team Leader Email", type: "email", required: true },
+          { key: "leaderPhone", label: "Team Leader Phone Number", type: "phone", required: true },
+          { key: "leaderCollege", label: "College / Institute Name", type: "text", required: true },
+          { key: "member2FullName", label: "Member 2 Full Name", type: "text", required: false },
+          { key: "member2Email", label: "Member 2 Email", type: "email", required: false },
+          { key: "member3FullName", label: "Member 3 Full Name", type: "text", required: false },
+          { key: "member3Email", label: "Member 3 Email", type: "email", required: false },
+        ],
+      };
 
   const event: DynamicEvent = {
     id: raw._id.toString(),
     title: raw.title,
     registration: {
-      fee: raw.registration.fee,
-      requiresPayment: raw.registration.requiresPayment,
-      teamConfig: raw.registration.teamConfig ?? null,
+      fee: raw.registration?.fee ?? 0,
+      requiresPayment: raw.registration?.requiresPayment ?? false,
+      teamConfig: raw.registration?.teamConfig ?? null,
       formSchemaId: schemaDoc ? schemaDoc._id.toString() : null,
     },
   };
 
-  return { event, formSchema, upiId };
+  return { slug: raw.slug, event, formSchema, upiId };
 }
 
 export default async function RegisterPage() {
-  const { event, formSchema, upiId } = await getActiveEvent();
+  const { slug, event, formSchema, upiId } = await getActiveEvent();
+
+  if (slug) {
+    redirect(`/events/${slug}/register`);
+  }
 
   if (!event || !formSchema) {
     return (
@@ -86,3 +106,4 @@ export default async function RegisterPage() {
     </div>
   );
 }
+

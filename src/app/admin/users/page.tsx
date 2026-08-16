@@ -54,7 +54,7 @@ export default function UsersPage() {
 
   return (
     <div className="space-y-5 max-w-7xl">
-      <div className="flex items-center justify-between">
+      <div className="flex flex-wrap items-center justify-between gap-3">
         <div className="flex items-center gap-3">
           <div className="w-8 h-8 rounded-lg bg-violet-500/15 border border-violet-500/20 flex items-center justify-center">
             <UserCog className="w-4 h-4 text-violet-400" />

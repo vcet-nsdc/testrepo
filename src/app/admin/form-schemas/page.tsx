@@ -51,7 +51,7 @@ export default function FormSchemasPage() {
 
   return (
     <div className="space-y-6 max-w-5xl">
-      <div className="flex items-center justify-between">
+      <div className="flex flex-wrap items-center justify-between gap-3">
         <div>
           <h1 className="text-white font-semibold text-lg">Form Schemas</h1>
           <p className="text-white/40 text-sm mt-0.5">Manage dynamic form definitions</p>
@@ -69,7 +69,7 @@ export default function FormSchemasPage() {
         <div className="px-4 py-3 rounded-lg bg-red-500/10 border border-red-500/20 text-red-300 text-sm">{error}</div>
       )}
 
-      <div className="bg-white/[0.02] border border-white/[0.06] rounded-2xl overflow-hidden">
+      <div className="bg-white/[0.02] border border-white/[0.06] rounded-2xl overflow-x-auto">
         <table className="w-full text-sm">
           <thead>
             <tr className="border-b border-white/[0.06]">

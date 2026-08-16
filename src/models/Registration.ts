@@ -19,7 +19,6 @@ export interface IRegistration extends Document {
   }[];
   transactionId: string;
   paymentScreenshot: string;
-  // Cloudinary reference (Phase 8). Coexists with base64 during migration.
   paymentProof?: Types.ObjectId;
   payment: {
     status: PaymentStatus;
@@ -31,27 +30,28 @@ export interface IRegistration extends Document {
   reviewedBy?: Types.ObjectId;
   reviewedAt?: Date;
   certificateEligible: boolean;
+  formData?: Record<string, unknown>;
   createdAt: Date;
 }
 
 const RegistrationSchema = new Schema<IRegistration>({
   eventId: { type: Schema.Types.ObjectId, ref: 'Event' },
-  squadName: { type: String, required: true },
-  domain: { type: String, required: true },
+  squadName: { type: String, default: 'Squad' },
+  domain: { type: String, default: 'General' },
   leader: {
-    fullName: { type: String, required: true },
-    email: { type: String, required: true },
-    phone: { type: String, required: true },
-    college: { type: String, required: true },
+    fullName: { type: String, default: 'Participant' },
+    email: { type: String, default: 'no-email@registration.local' },
+    phone: { type: String, default: 'N/A' },
+    college: { type: String, default: 'N/A' },
   },
   members: [
     {
-      fullName: { type: String, required: true },
-      email: { type: String, required: true },
+      fullName: { type: String, default: '' },
+      email: { type: String, default: '' },
     }
   ],
-  transactionId: { type: String, required: true },
-  paymentScreenshot: { type: String, required: true },
+  transactionId: { type: String, default: 'FREE-REGISTRATION' },
+  paymentScreenshot: { type: String, default: '' },
   paymentProof: { type: Schema.Types.ObjectId, ref: 'MediaAsset' },
   payment: {
     status: { type: String, enum: ['submitted', 'verified', 'rejected'], default: 'submitted' },
@@ -63,6 +63,7 @@ const RegistrationSchema = new Schema<IRegistration>({
   reviewedBy: { type: Schema.Types.ObjectId, ref: 'User' },
   reviewedAt: { type: Date },
   certificateEligible: { type: Boolean, default: false },
+  formData: { type: Schema.Types.Mixed, default: {} },
   createdAt: { type: Date, default: Date.now }
 });
 

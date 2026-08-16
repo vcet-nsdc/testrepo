@@ -20,6 +20,7 @@ interface Event {
     requiresPayment: boolean;
     requiresApproval: boolean;
     teamConfig?: { min: number; max: number };
+    formSchemaId?: string;
   };
   highlights: string[];
   faqs: { q: string; a: string }[];
@@ -78,6 +79,7 @@ export default function EditEventPage({ params }: { params: Promise<{ id: string
           requiresApproval: event.registration?.requiresApproval ?? true,
           teamMin: event.registration?.teamConfig?.min ?? 1,
           teamMax: event.registration?.teamConfig?.max ?? 4,
+          formSchemaId: event.registration?.formSchemaId ?? "",
           highlights: event.highlights ?? [],
           faqs: event.faqs ?? [],
         }}

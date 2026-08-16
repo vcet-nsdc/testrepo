@@ -13,7 +13,7 @@ interface Event {
   startsAt?: string;
   venue?: string;
   summary?: string;
-  registration: { enabled: boolean; fee: number };
+  registration?: { enabled?: boolean; fee?: number };
   createdAt: string;
 }
 
@@ -64,14 +64,14 @@ export default function EventsPage() {
 
   return (
     <div className="space-y-5 max-w-7xl">
-      <div className="flex items-center justify-between">
-        <div className="flex items-center gap-1 bg-white/[0.03] border border-white/[0.06] rounded-lg p-1">
+      <div className="flex flex-wrap items-center justify-between gap-3">
+        <div className="flex items-center gap-1 bg-white/[0.03] border border-white/[0.06] rounded-lg p-1 overflow-x-auto max-w-full">
           {(["all", "published", "draft", "archived"] as const).map((s) => (
             <button
               key={s}
               onClick={() => setFilterStatus(s)}
               className={cn(
-                "px-3 py-1.5 rounded-md text-xs font-medium transition-all capitalize",
+                "px-3 py-1.5 rounded-md text-xs font-medium transition-all capitalize whitespace-nowrap",
                 filterStatus === s ? "bg-white/10 text-white" : "text-white/40 hover:text-white/70"
               )}
             >
@@ -131,7 +131,7 @@ export default function EventsPage() {
                     <span className="font-mono">/{ev.slug}</span>
                     {ev.startsAt && <span>{new Date(ev.startsAt).toLocaleDateString("en-IN")}</span>}
                     {ev.venue && <span>{ev.venue}</span>}
-                    {ev.registration.fee > 0 && <span>₹{ev.registration.fee}</span>}
+                    {(ev.registration?.fee ?? 0) > 0 && <span>₹{ev.registration?.fee}</span>}
                   </div>
                 </div>
                 <div className="flex items-center gap-1 opacity-0 group-hover:opacity-100 transition-opacity">

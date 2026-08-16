@@ -81,13 +81,13 @@ export default function SchemaEditor({ id, initialName="", initialFields=[] }: {
 
         {adding&&(
           <div className="border border-violet-500/20 rounded-xl p-4 space-y-3 bg-[#0d0d16]">
-            <div className="grid grid-cols-2 gap-3">
+            <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
               <div><label className="text-xs text-white/40 block mb-1">Label *</label>
                 <input className={ic} value={draft.label} placeholder="Full Name" onChange={e=>{sd("label",e.target.value);if(!draft.key)sd("key",toKey(e.target.value));}}/></div>
               <div><label className="text-xs text-white/40 block mb-1">Key</label>
                 <input className={ic} value={draft.key} placeholder="full_name" onChange={e=>sd("key",e.target.value)}/></div>
             </div>
-            <div className="grid grid-cols-2 gap-3">
+            <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
               <div><label className="text-xs text-white/40 block mb-1">Type</label>
                 <select className={ic} value={draft.type} onChange={e=>sd("type",e.target.value as FieldType)}>
                   {TYPES.map(t=><option key={t} value={t}>{t}</option>)}
@@ -106,7 +106,7 @@ export default function SchemaEditor({ id, initialName="", initialFields=[] }: {
             <details><summary className="flex items-center gap-1 text-xs text-white/30 cursor-pointer hover:text-white/50 list-none select-none">
               <ChevronRight className="w-3 h-3"/> Advanced (conditional)
             </summary>
-              <div className="grid grid-cols-2 gap-3 mt-2">
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 mt-2">
                 <div><label className="text-xs text-white/40 block mb-1">Show when field</label>
                   <input className={ic} value={draft.conditional?.fieldKey??""} placeholder="field_key"
                     onChange={e=>sd("conditional",{fieldKey:e.target.value,equals:draft.conditional?.equals??""})} /></div>
