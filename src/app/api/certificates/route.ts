@@ -22,7 +22,6 @@ export async function GET(req: NextRequest) {
 
     await connectToDatabase()
     
-    // @ts-expect-error - Mongoose typing issue
     const certificate = await Certificate.findOne({ 
       email: email.toLowerCase().trim() 
     }).sort({ createdAt: -1 })
@@ -35,7 +34,6 @@ export async function GET(req: NextRequest) {
     }
 
     // Update last accessed time
-    // @ts-expect-error - Mongoose typing issue
     await Certificate.findByIdAndUpdate(certificate._id, {
       lastAccessed: new Date()
     })
@@ -85,7 +83,6 @@ export async function POST(req: NextRequest) {
     await connectToDatabase()
     
     // Check if certificate already exists
-    // @ts-expect-error - Mongoose typing issue
     const existingCertificate = await Certificate.findOne({ 
       certificateNumber 
     })

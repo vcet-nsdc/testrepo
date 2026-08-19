@@ -5,14 +5,13 @@ import Certificate from '@/models/Certificate'
 // GET - Get certificate by ID
 export async function GET(
   _req: NextRequest,
-  { params }: { params: { id: string } }
+  { params }: { params: Promise<{ id: string }> }
 ) {
   try {
-    const { id } = params
+    const { id } = await params
 
     await connectToDatabase()
     
-    // @ts-expect-error - Mongoose typing issue
     const certificate = await Certificate.findById(id)
 
     if (!certificate) {
@@ -49,16 +48,15 @@ export async function GET(
 // PUT - Update certificate (download/share tracking)
 export async function PUT(
   req: NextRequest,
-  { params }: { params: { id: string } }
+  { params }: { params: Promise<{ id: string }> }
 ) {
   try {
-    const { id } = params
+    const { id } = await params
     const data = await req.json()
     const { action, imageData } = data
 
     await connectToDatabase()
     
-    // @ts-expect-error - Mongoose typing issue
     const certificate = await Certificate.findById(id)
 
     if (!certificate) {
@@ -68,8 +66,7 @@ export async function PUT(
       )
     }
 
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    const updateData: Record<string, any> = {
+    const updateData: Record<string, unknown> = {
       lastAccessed: new Date()
     }
 
@@ -85,12 +82,18 @@ export async function PUT(
       updateData.imageData = imageData
     }
 
-    // @ts-expect-error - Mongoose typing issue
     const updatedCertificate = await Certificate.findByIdAndUpdate(
       id,
       updateData,
       { new: true }
     )
+
+    if (!updatedCertificate) {
+      return NextResponse.json(
+        { success: false, message: 'Failed to update certificate' },
+        { status: 500 }
+      )
+    }
 
     return NextResponse.json({
       success: true,
@@ -119,14 +122,13 @@ export async function PUT(
 // DELETE - Delete certificate
 export async function DELETE(
   _req: NextRequest,
-  { params }: { params: { id: string } }
+  { params }: { params: Promise<{ id: string }> }
 ) {
   try {
-    const { id } = params
+    const { id } = await params
 
     await connectToDatabase()
     
-    // @ts-expect-error - Mongoose typing issue
     const certificate = await Certificate.findByIdAndDelete(id)
 
     if (!certificate) {

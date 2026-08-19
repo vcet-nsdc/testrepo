@@ -2,6 +2,7 @@
 
 import { useState } from "react";
 import { useRouter } from "next/navigation";
+import Image from "next/image";
 import { CheckCircle2, Loader2, AlertCircle } from "lucide-react";
 
 export default function RegisterForm() {
@@ -200,9 +201,11 @@ export default function RegisterForm() {
               Scan the QR code below to make the payment via UPI
             </p>
             <div className="bg-white rounded-2xl p-4 shadow-lg">
-              <img
+              <Image
                 src="/assests/payment.jpeg"
                 alt="Payment QR Code"
+                width={256}
+                height={256}
                 className="w-56 h-56 sm:w-64 sm:h-64 object-contain"
               />
             </div>

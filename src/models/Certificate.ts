@@ -1,7 +1,22 @@
-/* eslint-disable @typescript-eslint/no-explicit-any */
-import { Schema, models, model } from 'mongoose'
+import mongoose, { Schema, Document, Types } from 'mongoose'
 
-const CertificateSchema = new Schema({
+export interface ICertificate extends Document {
+  _id: Types.ObjectId;
+  certificateNumber: string;
+  name: string;
+  product: string;
+  email: string;
+  date: string;
+  imageData?: string | null;
+  status: 'generated' | 'downloaded' | 'shared';
+  downloadCount: number;
+  shareCount: number;
+  lastAccessed: Date;
+  createdAt: Date;
+  updatedAt: Date;
+}
+
+const CertificateSchema = new Schema<ICertificate>({
   certificateNumber: {
     type: String,
     required: true,
@@ -61,7 +76,7 @@ const CertificateSchema = new Schema({
 }, {
   timestamps: true,
   toJSON: {
-    transform: function(_doc: any, ret: Record<string, any>) {
+    transform: function(_doc, ret: Record<string, unknown>) {
       ret.id = ret._id
       delete ret._id
       delete ret.__v
@@ -80,4 +95,8 @@ CertificateSchema.pre('save', function(next) {
   next()
 })
 
-export default models.Certificate || model('Certificate', CertificateSchema)
+const Certificate =
+  (mongoose.models.Certificate as mongoose.Model<ICertificate>) ||
+  mongoose.model<ICertificate>('Certificate', CertificateSchema);
+
+export default Certificate;

@@ -1,4 +1,7 @@
 import mongoose, { Schema, Document, Types } from 'mongoose';
+import './EventModel';
+import './MediaAsset';
+import './User';
 
 export type RegistrationStatus = 'pending' | 'approved' | 'rejected' | 'waitlisted';
 export type PaymentStatus = 'submitted' | 'verified' | 'rejected';

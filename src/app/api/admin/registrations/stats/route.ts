@@ -1,10 +1,9 @@
-import { NextRequest } from 'next/server';
 import { connectToDatabase } from '@/lib/mongodb';
 import Registration from '@/models/Registration';
 import { requirePermission } from '@/lib/rbac';
 import { ok, handleRouteError } from '@/server/http';
 
-export async function GET(_req: NextRequest) {
+export async function GET() {
   const guard = await requirePermission('registration:read');
   if (guard.error) return guard.error;
 

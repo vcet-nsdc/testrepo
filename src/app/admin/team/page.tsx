@@ -1,6 +1,7 @@
 "use client";
 
 import { useState, useEffect, useCallback } from "react";
+import Image from "next/image";
 import { Plus, Pencil, Trash2, Globe, RefreshCw, Loader2, Save } from "lucide-react";
 import { cn } from "@/lib/utils";
 
@@ -200,7 +201,7 @@ export default function TeamPage() {
               ) : (
                 <div className="group flex items-center gap-3 p-4 bg-white/[0.02] hover:bg-white/[0.04] border border-white/[0.06] hover:border-white/10 rounded-xl transition-all">
                   {m.data.photo ? (
-                    <img src={m.data.photo} alt={m.data.name} className="w-10 h-10 rounded-full object-cover bg-white/10 flex-shrink-0" />
+                    <Image src={m.data.photo} alt={m.data.name} width={40} height={40} unoptimized className="w-10 h-10 rounded-full object-cover bg-white/10 flex-shrink-0" />
                   ) : (
                     <div className="w-10 h-10 rounded-full bg-violet-500/20 flex items-center justify-center flex-shrink-0 text-violet-300 text-sm font-semibold">
                       {m.data.name.charAt(0)}

@@ -1,4 +1,7 @@
 import mongoose, { Schema, Document, Types } from 'mongoose';
+import './FormSchema';
+import './EventTheme';
+import './User';
 
 export type EventStatus = 'draft' | 'published' | 'archived';
 

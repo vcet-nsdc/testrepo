@@ -81,13 +81,19 @@ function InspectionModal({ reg, onClose, onAction }: {
   const [imgLoading, setImgLoading] = useState(true);
 
   useEffect(() => {
+    let createdUrl: string | null = null;
     setImgLoading(true);
     fetch(`/api/admin/screenshot/${reg._id}`)
       .then((r) => r.blob())
-      .then((b) => setImgUrl(URL.createObjectURL(b)))
+      .then((b) => {
+        createdUrl = URL.createObjectURL(b);
+        setImgUrl(createdUrl);
+      })
       .catch(() => setImgUrl(null))
       .finally(() => setImgLoading(false));
-    return () => { if (imgUrl) URL.revokeObjectURL(imgUrl); };
+    return () => {
+      if (createdUrl) URL.revokeObjectURL(createdUrl);
+    };
   }, [reg._id]);
 
   const act = async (action: string) => {
@@ -171,6 +177,7 @@ function InspectionModal({ reg, onClose, onAction }: {
               </div>
             ) : imgUrl ? (
               <div className="bg-black/50 border border-white/[0.08] rounded-xl p-2 flex justify-center">
+                {/* eslint-disable-next-line @next/next/no-img-element */}
                 <img src={imgUrl} alt="Payment Proof" className="max-h-72 object-contain rounded-lg" />
               </div>
             ) : (
@@ -297,7 +304,7 @@ function RegistrationsContent() {
       p.set("page", "1");
       router.push(`/admin/registrations?${p.toString()}`);
     }
-  }, [debouncedSearch]);
+  }, [debouncedSearch, viewMode, router, searchParams]);
 
   // Load events & stats for Overview Grid
   const loadDashboardData = useCallback(async () => {

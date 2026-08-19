@@ -2,6 +2,7 @@ import { NextRequest, NextResponse } from 'next/server';
 import { Types } from 'mongoose';
 import { connectToDatabase } from '@/lib/mongodb';
 import { rateLimit } from '@/lib/rate-limit';
+import { sanitizeText, sanitizeEmail } from '@/lib/sanitize';
 import Registration from '@/models/Registration';
 import EventModel from '@/models/EventModel';
 
@@ -27,18 +28,18 @@ export async function POST(req: NextRequest) {
       }
     }
 
-    // Collect ALL submitted form entries into a customData dictionary
+    // Collect ALL submitted form entries into a customData dictionary (excluding payment screenshot)
     const customData: Record<string, unknown> = {};
     for (const [key, value] of rawFormData.entries()) {
-      if (key === 'paymentScreenshot' && value instanceof File) continue;
-      customData[key] = typeof value === 'string' ? value.trim() : value;
+      if (key === 'paymentScreenshot') continue;
+      customData[key] = typeof value === 'string' ? sanitizeText(value) : value;
     }
 
     // Helper to retrieve value matching various candidate keys
     const getVal = (...keys: string[]) => {
       for (const k of keys) {
         const v = rawFormData.get(k);
-        if (typeof v === 'string' && v.trim()) return v.trim();
+        if (typeof v === 'string' && v.trim()) return sanitizeText(v.trim());
       }
       return '';
     };
@@ -46,7 +47,8 @@ export async function POST(req: NextRequest) {
     const squadName = getVal('squadName', 'squad_name', 'squad', 'teamName', 'team_name', 'name', 'title') || 'Squad';
     const domain = getVal('domain', 'category', 'path') || 'General';
     const leaderFullName = getVal('leaderFullName', 'leader_name', 'fullName', 'full_name', 'name') || 'Participant';
-    const leaderEmail = getVal('leaderEmail', 'leader_email', 'email', 'email_address') || 'no-email@registration.local';
+    const rawLeaderEmail = getVal('leaderEmail', 'leader_email', 'email', 'email_address');
+    const leaderEmail = rawLeaderEmail ? sanitizeEmail(rawLeaderEmail) : 'no-email@registration.local';
     const leaderPhone = getVal('leaderPhone', 'leader_phone', 'phone', 'contact', 'mobile') || 'N/A';
     const leaderCollege = getVal('leaderCollege', 'leader_college', 'college', 'institute') || 'N/A';
     const transactionId = getVal('transactionId', 'transaction_id', 'txId', 'tx_id') || (requiresPayment ? '' : 'FREE-REGISTRATION');
@@ -74,9 +76,10 @@ export async function POST(req: NextRequest) {
     const members = [];
     for (let i = 2; i <= 10; i++) {
       const memberName = getVal(`member${i}FullName`, `member_${i}_name`);
-      const memberEmail = getVal(`member${i}Email`, `member_${i}_email`);
+      const rawMemberEmail = getVal(`member${i}Email`, `member_${i}_email`);
+      const memberEmail = rawMemberEmail ? sanitizeEmail(rawMemberEmail) : '';
       if (memberName || memberEmail) {
-        members.push({ fullName: memberName || `Member ${i}`, email: memberEmail || '' });
+        members.push({ fullName: memberName || `Member ${i}`, email: memberEmail });
       }
     }
 

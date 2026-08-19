@@ -4,6 +4,7 @@
  */
 
 import type { Metadata, Viewport } from 'next';
+import { Dosis, Manrope } from 'next/font/google';
 import { ErrorBoundary } from '@/components/ui/error-boundary';
 import { Navbar } from '@/components/layout/navbar';
 import { Footer } from '@/components/layout/footer';
@@ -12,6 +13,18 @@ import { APP_CONFIG } from '@/lib/constants';
 import { AuthProvider } from '@/components/providers/AuthProvider';
 import './globals.css';
 import SocialSidebar from '@/components/socialsidebar';
+
+const dosis = Dosis({
+  subsets: ['latin'],
+  variable: '--font-dosis',
+  display: 'swap',
+});
+
+const manrope = Manrope({
+  subsets: ['latin'],
+  variable: '--font-manrope',
+  display: 'swap',
+});
 
 // ============================================================================
 // METADATA CONFIGURATION
@@ -96,11 +109,9 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="en" className="min-h-screen" suppressHydrationWarning>
+    <html lang="en" className={`min-h-screen ${dosis.variable} ${manrope.variable}`} suppressHydrationWarning>
       <head>
         {/* Preconnect to external domains for performance */}
-        <link rel="preconnect" href="https://fonts.googleapis.com" />
-        <link rel="preconnect" href="https://fonts.gstatic.com" crossOrigin="anonymous" />
         <link rel="preconnect" href="https://ik.imagekit.io" />
         <link rel="preconnect" href="https://images.unsplash.com" />
         <link rel="preconnect" href="https://res.cloudinary.com" />
@@ -111,9 +122,7 @@ export default function RootLayout({
         <link rel="apple-touch-icon" href="/apple-touch-icon.png" />
       
         {/* DNS prefetch for performance */}
-        <link rel="dns-prefetch" href="//fonts.googleapis.com" />
         <link rel="dns-prefetch" href="//ik.imagekit.io" />
-        <link href="https://fonts.googleapis.com/css2?family=Dosis:wght@300;400;500;600;700&family=Manrope:wght@300;400;500;600;700&display=swap" rel="stylesheet" />
       </head>
       <body
         className={`antialiased dark min-h-screen flex flex-col font-sans`}
