@@ -1,7 +1,7 @@
 "use client";
 
 import { useState } from "react";
-import { CheckCircle2, Loader2, AlertCircle } from "lucide-react";
+import { CheckCircle2, Loader2, AlertCircle, Sparkles, User } from "lucide-react";
 import DynamicRegistrationFormPayment from "@/components/DynamicRegistrationFormPayment";
 
 export interface FormField {
@@ -13,55 +13,152 @@ export interface FormField {
   conditional?: { fieldKey: string; equals: string };
 }
 
-export interface DynamicFormSchema { id: string; name: string; fields: FormField[] }
+export interface DynamicFormSchema {
+  id: string;
+  name: string;
+  fields: FormField[];
+}
+
 export interface DynamicEvent {
   id: string;
   title: string;
-  registration?: { fee?: number; requiresPayment?: boolean; teamConfig?: { min?: number; max?: number } | null; formSchemaId?: string | null };
+  registration?: {
+    fee?: number;
+    requiresPayment?: boolean;
+    teamConfig?: { min?: number; max?: number } | null;
+    formSchemaId?: string | null;
+  };
 }
 
-const BASE = "w-full bg-black/30 border border-white/10 rounded-lg p-3 text-white outline-none focus:ring-2 focus:ring-purple-500/50 focus:border-purple-500/50 transition-all";
+const INPUT_BASE =
+  "w-full bg-black/60 border border-white/15 text-white placeholder-white/25 rounded-xl px-4 py-3 text-sm outline-none focus:border-purple-500/70 focus:ring-2 focus:ring-purple-500/20 transition-all font-sans";
 
-function DynField({ field, values, onChange }: { field: FormField; values: Record<string, string>; onChange: (k: string, v: string) => void }) {
+function DynField({
+  field,
+  values,
+  onChange,
+}: {
+  field: FormField;
+  values: Record<string, string>;
+  onChange: (k: string, v: string) => void;
+}) {
   if (field.conditional && values[field.conditional.fieldKey] !== field.conditional.equals) return null;
-  const common = { name: field.key, required: field.required, className: BASE };
+
+  const isFullWidth = field.type === "textarea" || field.type === "file";
+
   return (
-    <div className="space-y-2">
-      <label className="text-sm font-medium text-white/90 block">{field.label}{field.required ? " *" : ""}</label>
+    <div className={`space-y-2 font-sans ${isFullWidth ? "md:col-span-2" : ""}`}>
+      <label className="text-xs font-semibold text-white/90 uppercase tracking-wider block">
+        {field.label}
+        {field.required && <span className="text-red-400 ml-1 font-bold">*</span>}
+      </label>
+
       {field.type === "textarea" ? (
-        <textarea {...common} rows={3} onChange={e => onChange(field.key, e.target.value)} />
+        <textarea
+          name={field.key}
+          required={field.required}
+          rows={3}
+          placeholder={`Enter ${field.label.toLowerCase()}`}
+          className={INPUT_BASE}
+          onChange={(e) => onChange(field.key, e.target.value)}
+        />
       ) : field.type === "select" ? (
-        <select {...common} className={BASE + " appearance-none cursor-pointer [&>option]:bg-zinc-900"} onChange={e => onChange(field.key, e.target.value)}>
-          <option value="">-- Select --</option>
-          {field.options?.map(o => <option key={o} value={o}>{o}</option>)}
+        <select
+          name={field.key}
+          required={field.required}
+          className={`${INPUT_BASE} cursor-pointer appearance-none bg-[url('data:image/svg+xml;charset=US-ASCII,%3Csvg%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20width%3D%22292.4%22%20height%3D%22292.4%22%3E%3Cpath%20fill%3D%22%23FFFFFF%22%20d%3D%22M287%2069.4a17.6%2017.6%200%200%200-13-5.4H18.4c-5%200-9.3%201.8-12.9%205.4A17.6%2017.6%200%200%200%200%2082.2c0%205%201.8%209.3%205.4%2012.9l128%20127.9c3.6%203.6%207.8%205.4%2012.8%205.4s9.2-1.8%2012.8-5.4L287%2095c3.5-3.5%205.4-7.8%205.4-12.8%200-5-1.9-9.2-5.5-12.8z%22%2F%3E%3C%2Fsvg%3E')] bg-[length:12px_12px] bg-[right_1rem_center] bg-no-repeat pr-10 [&>option]:bg-zinc-900`}
+          onChange={(e) => onChange(field.key, e.target.value)}
+        >
+          <option value="">-- Select {field.label} --</option>
+          {field.options?.map((o) => (
+            <option key={o} value={o}>
+              {o}
+            </option>
+          ))}
         </select>
       ) : field.type === "checkbox" ? (
-        <input type="checkbox" name={field.key} required={field.required} className="h-4 w-4 accent-purple-500" onChange={e => onChange(field.key, e.target.checked ? "true" : "")} />
+        <label className="flex items-center gap-3 p-3 bg-black/40 border border-white/10 rounded-xl cursor-pointer hover:border-purple-500/40 transition-colors">
+          <input
+            type="checkbox"
+            name={field.key}
+            required={field.required}
+            className="w-4 h-4 rounded accent-purple-600 cursor-pointer"
+            onChange={(e) => onChange(field.key, e.target.checked ? "true" : "")}
+          />
+          <span className="text-sm text-white/80 font-medium">{field.label}</span>
+        </label>
       ) : field.type === "file" ? (
-        <input type="file" name={field.key} required={field.required} className="w-full bg-black/30 border border-white/10 rounded-lg p-2.5 text-white outline-none focus:ring-2 focus:ring-purple-500/50 transition-all file:mr-4 file:py-2 file:px-4 file:rounded-xl file:border-0 file:text-sm file:font-semibold file:bg-purple-600 file:text-white hover:file:bg-purple-500 cursor-pointer" />
+        <input
+          type="file"
+          name={field.key}
+          required={field.required}
+          className="w-full bg-black/50 border border-white/15 rounded-xl p-2.5 text-white outline-none focus:ring-2 focus:ring-purple-500/50 file:mr-4 file:py-2 file:px-4 file:rounded-lg file:border-0 file:text-xs file:font-bold file:bg-purple-600 file:text-white hover:file:bg-purple-500 cursor-pointer text-xs"
+        />
       ) : (
-        <input type={field.type === "phone" ? "tel" : field.type} {...common} onChange={e => onChange(field.key, e.target.value)} />
+        <input
+          type={field.type === "phone" ? "tel" : field.type}
+          name={field.key}
+          required={field.required}
+          placeholder={`Enter ${field.label.toLowerCase()}`}
+          className={INPUT_BASE}
+          onChange={(e) => onChange(field.key, e.target.value)}
+        />
       )}
     </div>
   );
 }
 
-interface Props { event: DynamicEvent; formSchema: DynamicFormSchema; upiId: string | null }
+interface Props {
+  event: DynamicEvent;
+  formSchema: DynamicFormSchema;
+  upiId: string | null;
+  qrCodeUrl?: string | null | undefined;
+}
 
-export default function DynamicRegistrationForm({ event, formSchema, upiId }: Props) {
+export default function DynamicRegistrationForm({ event, formSchema, upiId, qrCodeUrl }: Props) {
   const [values, setValues] = useState<Record<string, string>>({});
   const [submitting, setSubmitting] = useState(false);
   const [success, setSuccess] = useState(false);
   const [error, setError] = useState("");
 
-  const onChange = (k: string, v: string) => setValues(p => ({ ...p, [k]: v }));
+  const onChange = (k: string, v: string) => setValues((p) => ({ ...p, [k]: v }));
+
+  // Filter out payment fields if they exist in schema so they are handled cleanly in the Payment block
+  const hasPaymentInSchema = formSchema.fields.some(
+    (f) =>
+      f.key === "transaction_id" ||
+      f.key === "transactionId" ||
+      f.key === "payment_screenshot" ||
+      f.key === "paymentScreenshot"
+  );
+
+  const shouldRenderPayment = (event.registration?.requiresPayment ?? false) || hasPaymentInSchema;
+
+  const generalFields = formSchema.fields.filter(
+    (f) =>
+      !shouldRenderPayment ||
+      (f.key !== "transaction_id" &&
+        f.key !== "transactionId" &&
+        f.key !== "payment_screenshot" &&
+        f.key !== "paymentScreenshot")
+  );
 
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     setSubmitting(true);
     setError("");
+
     const fd = new FormData(e.currentTarget);
     fd.set("eventId", event.id);
+
+    // Sync snake_case custom schema fields with backend expectations
+    if (!fd.get("paymentScreenshot") && fd.get("payment_screenshot")) {
+      fd.set("paymentScreenshot", fd.get("payment_screenshot") as File);
+    }
+    if (!fd.get("transactionId") && fd.get("transaction_id")) {
+      fd.set("transactionId", fd.get("transaction_id") as string);
+    }
+
     try {
       const res = await fetch("/api/register", { method: "POST", body: fd });
       const data = await res.json();
@@ -77,44 +174,96 @@ export default function DynamicRegistrationForm({ event, formSchema, upiId }: Pr
 
   if (success) {
     return (
-      <div className="bg-black/40 backdrop-blur-md rounded-2xl border border-white/10 shadow-xl p-8 sm:p-12 text-center relative overflow-hidden">
-        <div className="flex justify-center mb-6"><div className="h-24 w-24 bg-green-500/20 rounded-full flex items-center justify-center"><CheckCircle2 className="h-12 w-12 text-green-400" /></div></div>
-        <h2 className="font-heading text-3xl sm:text-5xl font-bold mb-4 text-white">Registration <span className="bg-gradient-to-r from-purple-400 to-blue-400 bg-clip-text text-transparent">Successful!</span></h2>
-        <p className="text-white/80 text-lg mb-4 font-sans">Your registration has been recorded. Check your email for details.</p>
-        <button onClick={() => (window.location.href = "/")} className="bg-white/10 text-white font-semibold text-lg px-8 py-3 rounded-lg border border-white/20 hover:bg-white/20 transition-all">Return to Home</button>
+      <div className="bg-[#0b0b14]/90 backdrop-blur-2xl rounded-3xl border border-white/10 shadow-[0_0_60px_rgba(147,51,234,0.2)] p-8 sm:p-12 text-center relative overflow-hidden font-sans">
+        <div className="flex justify-center mb-6">
+          <div className="h-24 w-24 bg-emerald-500/20 rounded-full border border-emerald-500/40 flex items-center justify-center animate-bounce">
+            <CheckCircle2 className="h-12 w-12 text-emerald-400" />
+          </div>
+        </div>
+        <h2 className="font-heading text-3xl sm:text-5xl font-bold mb-4 text-white">
+          Registration <span className="bg-gradient-to-r from-purple-400 via-pink-400 to-blue-400 bg-clip-text text-transparent">Successful!</span>
+        </h2>
+        <p className="text-white/80 text-base sm:text-lg mb-8 max-w-lg mx-auto">
+          Your squad registration for <strong>{event.title}</strong> has been successfully recorded. Check your email for further instructions.
+        </p>
+        <button
+          onClick={() => (window.location.href = "/")}
+          className="bg-purple-600 hover:bg-purple-500 text-white font-bold text-base px-8 py-3.5 rounded-xl border border-purple-400/30 shadow-lg shadow-purple-950/50 transition-all hover:-translate-y-0.5"
+        >
+          Return to Home Page
+        </button>
       </div>
     );
   }
 
   return (
-    <form onSubmit={handleSubmit} className="bg-black/40 backdrop-blur-md rounded-2xl border border-white/10 shadow-xl p-4 sm:p-6 md:p-10 relative">
-      <div className="mb-6 sm:mb-10 text-center pb-6 sm:pb-8 border-b border-white/10">
-        <h2 className="font-heading text-2xl sm:text-4xl md:text-5xl font-bold mb-3 text-white leading-tight">Register for <span className="bg-gradient-to-r from-purple-400 to-blue-400 bg-clip-text text-transparent">{event.title}</span></h2>
-        {event.registration?.teamConfig && <p className="text-white/70 font-sans text-xs sm:text-sm">Teams of {event.registration.teamConfig.min}–{event.registration.teamConfig.max} members.</p>}
-      </div>
-
-      {error && (
-        <div className="mb-8 p-4 bg-red-500/10 border border-red-500/50 rounded-xl flex items-center gap-3 text-red-200">
-          <AlertCircle className="h-6 w-6 text-red-400 flex-shrink-0" />
-          <p className="font-sans">{error}</p>
+    <form
+      onSubmit={handleSubmit}
+      className="bg-[#0b0b14]/90 backdrop-blur-2xl rounded-3xl border border-white/10 shadow-[0_0_60px_rgba(147,51,234,0.15)] p-5 sm:p-8 md:p-12 relative overflow-hidden font-sans space-y-8"
+    >
+      {/* Top Banner & Header */}
+      <div className="text-center pb-6 sm:pb-8 border-b border-white/10 space-y-3">
+        <div className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-purple-500/15 border border-purple-500/30 text-purple-300 text-xs font-semibold uppercase tracking-widest shadow-sm">
+          <Sparkles className="w-3.5 h-3.5 text-purple-400" /> Event Registration
         </div>
-      )}
-
-      <div className="space-y-8 font-sans">
-        <div className="bg-white/5 border border-white/10 rounded-xl p-5 sm:p-8 relative">
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mt-2">
-            {formSchema.fields.map(field => <DynField key={field.key} field={field} values={values} onChange={onChange} />)}
-          </div>
-        </div>
-
-        {event.registration?.requiresPayment && (
-          <DynamicRegistrationFormPayment fee={event.registration.fee ?? 0} upiId={upiId} />
+        <h2 className="font-heading text-3xl sm:text-5xl font-extrabold text-white leading-tight">
+          Register for{" "}
+          <span className="bg-gradient-to-r from-purple-400 via-indigo-300 to-blue-400 bg-clip-text text-transparent">
+            {event.title}
+          </span>
+        </h2>
+        {event.registration?.teamConfig && (
+          <p className="text-white/60 text-xs sm:text-sm font-medium">
+            Teams of {event.registration.teamConfig.min}–{event.registration.teamConfig.max} members.
+          </p>
         )}
       </div>
 
-      <div className="mt-10 pt-8 border-t border-white/10 text-center">
-        <button disabled={submitting} type="submit" className="relative inline-flex items-center justify-center w-full sm:w-auto px-10 py-4 font-bold text-white bg-gradient-to-r from-purple-600 to-blue-600 rounded-xl hover:from-purple-500 hover:to-blue-500 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-offset-black focus:ring-purple-500 disabled:opacity-70 disabled:cursor-not-allowed shadow-[0_0_20px_rgba(168,85,247,0.4)] hover:shadow-[0_0_30px_rgba(168,85,247,0.6)] hover:-translate-y-1 transition-all">
-          {submitting ? <><Loader2 className="mr-2 h-5 w-5 animate-spin" />PROCESSING...</> : "SUBMIT REGISTRATION"}
+      {error && (
+        <div className="p-4 bg-red-500/10 border border-red-500/50 rounded-2xl flex items-center gap-3 text-red-200 text-sm">
+          <AlertCircle className="h-5 w-5 text-red-400 flex-shrink-0" />
+          <p>{error}</p>
+        </div>
+      )}
+
+      {/* 1. General Registration Form Schema Fields */}
+      <div className="bg-white/[0.02] border border-white/[0.06] rounded-2xl p-5 sm:p-8 space-y-6">
+        <div className="flex items-center gap-2 pb-3 border-b border-white/10">
+          <User className="w-4 h-4 text-purple-400" />
+          <h3 className="text-sm font-bold text-white uppercase tracking-wider">Participant & Team Information</h3>
+        </div>
+
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-5 sm:gap-6">
+          {generalFields.map((field) => (
+            <DynField key={field.key} field={field} values={values} onChange={onChange} />
+          ))}
+        </div>
+      </div>
+
+      {/* 2. Payment Section (QR Code + Payment Proof Verification) */}
+      {shouldRenderPayment && (
+        <DynamicRegistrationFormPayment
+          fee={event.registration?.fee ?? 0}
+          upiId={upiId}
+          qrCodeUrl={qrCodeUrl}
+        />
+      )}
+
+      {/* 3. Submit Button */}
+      <div className="pt-6 border-t border-white/10 text-center">
+        <button
+          disabled={submitting}
+          type="submit"
+          className="relative inline-flex items-center justify-center w-full sm:w-auto px-12 py-4 text-base font-extrabold text-white bg-gradient-to-r from-purple-600 via-indigo-600 to-blue-600 rounded-xl hover:from-purple-500 hover:to-blue-500 focus:outline-none focus:ring-2 focus:ring-purple-500 disabled:opacity-50 disabled:cursor-not-allowed shadow-[0_0_30px_rgba(168,85,247,0.4)] hover:shadow-[0_0_40px_rgba(168,85,247,0.6)] hover:-translate-y-0.5 transition-all"
+        >
+          {submitting ? (
+            <>
+              <Loader2 className="mr-2.5 h-5 w-5 animate-spin text-white" />
+              PROCESSING REGISTRATION…
+            </>
+          ) : (
+            "SUBMIT REGISTRATION"
+          )}
         </button>
       </div>
     </form>

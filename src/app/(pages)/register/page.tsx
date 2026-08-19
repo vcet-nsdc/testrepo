@@ -2,11 +2,14 @@ import { redirect } from "next/navigation";
 import DynamicRegistrationForm from "@/components/DynamicRegistrationForm";
 import type { DynamicEvent, DynamicFormSchema } from "@/components/DynamicRegistrationForm";
 
+export const dynamic = "force-dynamic";
+
 async function getActiveEvent(): Promise<{
   slug: string | null;
   event: DynamicEvent | null;
   formSchema: DynamicFormSchema | null;
   upiId: string | null;
+  qrCodeUrl?: string | null;
 }> {
   const { connectToDatabase } = await import("@/lib/mongodb");
   const { default: EventModel } = await import("@/models/EventModel");
@@ -31,6 +34,7 @@ async function getActiveEvent(): Promise<{
 
   const businessSettings = await getSettings("business");
   const upiId = (businessSettings?.upiId as string) ?? null;
+  const qrCodeUrl = (businessSettings?.qrCodeUrl as string) || "/assests/payment.jpeg";
 
   const schemaDoc = raw.registration?.formSchemaId as unknown as {
     _id: { toString(): string };
@@ -68,11 +72,11 @@ async function getActiveEvent(): Promise<{
     },
   };
 
-  return { slug: raw.slug, event, formSchema, upiId };
+  return { slug: raw.slug, event, formSchema, upiId, qrCodeUrl };
 }
 
 export default async function RegisterPage() {
-  const { slug, event, formSchema, upiId } = await getActiveEvent();
+  const { slug, event, formSchema, upiId, qrCodeUrl } = await getActiveEvent();
 
   if (slug) {
     redirect(`/events/${slug}/register`);
@@ -101,7 +105,7 @@ export default async function RegisterPage() {
   return (
     <div className="min-h-full w-full overflow-x-hidden">
       <main className="max-w-4xl mx-auto px-4 sm:px-6 pt-32 pb-20">
-        <DynamicRegistrationForm event={event} formSchema={formSchema} upiId={upiId} />
+        <DynamicRegistrationForm event={event} formSchema={formSchema} upiId={upiId} qrCodeUrl={qrCodeUrl} />
       </main>
     </div>
   );
