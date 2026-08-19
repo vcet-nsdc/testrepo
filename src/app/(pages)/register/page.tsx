@@ -104,7 +104,7 @@ export default async function RegisterPage() {
 
   return (
     <div className="min-h-full w-full overflow-x-hidden">
-      <main className="max-w-4xl mx-auto px-4 sm:px-6 pt-32 pb-20">
+      <main className="max-w-4xl mx-auto px-4 sm:px-6 pt-36 sm:pt-44 pb-20">
         <DynamicRegistrationForm event={event} formSchema={formSchema} upiId={upiId} qrCodeUrl={qrCodeUrl} />
       </main>
     </div>

@@ -2,8 +2,10 @@ import NextAuth from 'next-auth';
 import Credentials from 'next-auth/providers/credentials';
 import { z } from 'zod';
 import authConfig from '@/auth.config';
-import { connectToDatabase } from '@/lib/mongodb';
+import { connectToDatabase, setupDnsResolvers } from '@/lib/mongodb';
 import User from '@/models/User';
+
+setupDnsResolvers();
 import { verifyPassword } from '@/lib/password';
 import { isLockedOut, recordFailedAttempt, clearAttempts } from '@/lib/login-attempts';
 

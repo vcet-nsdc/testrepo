@@ -295,14 +295,17 @@ function RegistrationsContent() {
     ];
   }, [schemaFields, items]);
 
-  // Sync debounced search to URL query
+  // Sync debounced search to URL query only when value actually changes
   useEffect(() => {
     if (viewMode === "details") {
-      const p = new URLSearchParams(searchParams.toString());
-      if (debouncedSearch) p.set("search", debouncedSearch);
-      else p.delete("search");
-      p.set("page", "1");
-      router.push(`/admin/registrations?${p.toString()}`);
+      const currentSearch = searchParams.get("search") || "";
+      if (debouncedSearch !== currentSearch) {
+        const p = new URLSearchParams(searchParams.toString());
+        if (debouncedSearch) p.set("search", debouncedSearch);
+        else p.delete("search");
+        p.set("page", "1");
+        router.push(`/admin/registrations?${p.toString()}`);
+      }
     }
   }, [debouncedSearch, viewMode, router, searchParams]);
 
