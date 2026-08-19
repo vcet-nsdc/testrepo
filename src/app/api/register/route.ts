@@ -111,6 +111,21 @@ export async function POST(req: NextRequest) {
 
     await newRegistration.save();
 
+    // Send confirmation email to applicant
+    if (leaderEmail && leaderEmail !== 'no-email@registration.local') {
+      try {
+        const { sendRegistrationSubmissionEmail } = await import('@/lib/email');
+        void sendRegistrationSubmissionEmail({
+          email: leaderEmail,
+          name: leaderFullName,
+          squadName,
+          eventTitle,
+        });
+      } catch (e) {
+        console.error('[Registration API] Failed to send submission email:', e);
+      }
+    }
+
     return NextResponse.json({ success: true, message: `Registration for ${eventTitle} successful!` }, { status: 201 });
   } catch (error: unknown) {
     console.error('Registration API Error:', error);

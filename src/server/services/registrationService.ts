@@ -54,6 +54,26 @@ export async function reviewRegistration(
     userAgent: actor.userAgent,
   });
 
+  if (action === 'approve') {
+    try {
+      const { sendRegistrationApprovedEmail } = await import('@/lib/email');
+      const populated = await Registration.findById(id).populate('eventId', 'title').lean();
+      const eventTitle = (populated?.eventId as unknown as { title?: string })?.title || 'Event';
+      const email = reg.leader?.email || String(reg.formData?.email || reg.formData?.member1Email || '');
+      const name = reg.leader?.fullName || String(reg.formData?.name || reg.formData?.member1Name || 'Participant');
+      if (email && email !== 'no-email@registration.local') {
+        void sendRegistrationApprovedEmail({
+          email,
+          name,
+          squadName: reg.squadName,
+          eventTitle,
+        });
+      }
+    } catch (e) {
+      console.error('[Registration Service] Failed to send approval email:', e);
+    }
+  }
+
   return { data: reg.toObject() };
 }
 
