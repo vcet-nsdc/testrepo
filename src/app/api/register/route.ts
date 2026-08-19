@@ -59,7 +59,15 @@ export async function POST(req: NextRequest) {
 
     // Handle payment screenshot file
     let paymentScreenshot = 'data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAADUlEQVR42mNk+M9QDwADhgGAWjR9awAAAABJRU5ErkJggg==';
-    const file = rawFormData.get('paymentScreenshot') as File | null;
+    let file = (rawFormData.get('paymentScreenshot') || rawFormData.get('payment_screenshot')) as File | null;
+    if (!file) {
+      for (const [k, v] of rawFormData.entries()) {
+        if (v instanceof File && v.size > 0 && (k.toLowerCase().includes('screenshot') || k.toLowerCase().includes('payment'))) {
+          file = v;
+          break;
+        }
+      }
+    }
     if (file && file.size > 0) {
       if (file.size > 5 * 1024 * 1024) {
         return NextResponse.json({ error: 'Payment screenshot must be under 5MB' }, { status: 400 });

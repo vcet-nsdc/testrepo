@@ -8,6 +8,7 @@
     "start": "next start",
     "lint": "eslint",
     "seed:admin": "node --env-file=.env scripts/seed-admin.mjs",
+    "create:user": "node --env-file=.env scripts/create-user.mjs",
     "migrate:events": "node --env-file=.env scripts/migrate-events.mjs",
     "migrate:cms": "node --env-file=.env scripts/migrate-cms.mjs",
     "migrate:proofs": "node --env-file=.env scripts/migrate-proofs.mjs"

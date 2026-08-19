@@ -1,4 +1,14 @@
 import mongoose from 'mongoose'
+import dns from 'dns'
+
+try {
+  if (dns.setDefaultResultOrder) {
+    dns.setDefaultResultOrder('ipv4first');
+  }
+  dns.setServers(['8.8.8.8', '1.1.1.1']);
+} catch {
+  // Ignore DNS setServers errors if restricted
+}
 
 interface MongooseCache {
   conn: typeof mongoose | null;
@@ -15,7 +25,7 @@ if (!globalWithMongoose._mongooseCache) {
 const cached = globalWithMongoose._mongooseCache;
 
 export async function connectToDatabase() {
-  const uri = process.env.MONGODB_URI;
+  const uri = process.env.MONGODB_URI?.trim();
 
   if (!uri) {
     throw new Error('Please define the MONGODB_URI environment variable');

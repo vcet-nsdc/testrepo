@@ -1,6 +1,8 @@
 import DynamicRegistrationForm from "@/components/DynamicRegistrationForm";
 import type { DynamicEvent, DynamicFormSchema } from "@/components/DynamicRegistrationForm";
 
+export const dynamic = "force-dynamic";
+
 const DEFAULT_FORM_FIELDS: DynamicFormSchema["fields"] = [
   { key: "squadName", label: "Squad / Team Name", type: "text", required: true },
   { key: "domain", label: "Domain / Category", type: "text", required: true },
@@ -18,6 +20,7 @@ async function getEventRegistrationData(slug: string): Promise<{
   event: DynamicEvent | null;
   formSchema: DynamicFormSchema | null;
   upiId: string | null;
+  qrCodeUrl?: string | null;
   eventTitle?: string;
   isClosed?: boolean;
 }> {
@@ -47,6 +50,7 @@ async function getEventRegistrationData(slug: string): Promise<{
 
   const businessSettings = await getSettings("business");
   const upiId = (businessSettings?.upiId as string) ?? null;
+  const qrCodeUrl = (businessSettings?.qrCodeUrl as string) || "/assests/payment.jpeg";
 
   const schemaDoc = raw.registration?.formSchemaId as unknown as {
     _id: { toString(): string };
@@ -69,12 +73,12 @@ async function getEventRegistrationData(slug: string): Promise<{
     },
   };
 
-  return { event, formSchema, upiId, eventTitle: raw.title };
+  return { event, formSchema, upiId, qrCodeUrl, eventTitle: raw.title };
 }
 
 export default async function EventRegistrationPage({ params }: { params: Promise<{ slug: string }> }) {
   const { slug } = await params;
-  const { event, formSchema, upiId, eventTitle, isClosed } = await getEventRegistrationData(slug);
+  const { event, formSchema, upiId, qrCodeUrl, eventTitle, isClosed } = await getEventRegistrationData(slug);
 
   if (isClosed || !event || !formSchema) {
     return (
@@ -107,7 +111,7 @@ export default async function EventRegistrationPage({ params }: { params: Promis
   return (
     <div className="min-h-full w-full overflow-x-hidden">
       <main className="max-w-4xl mx-auto px-4 sm:px-6 pt-32 pb-20">
-        <DynamicRegistrationForm event={event} formSchema={formSchema} upiId={upiId} />
+        <DynamicRegistrationForm event={event} formSchema={formSchema} upiId={upiId} qrCodeUrl={qrCodeUrl} />
       </main>
     </div>
   );
