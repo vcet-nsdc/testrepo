@@ -1,7 +1,7 @@
 "use client";
 
 import { useState } from "react";
-import { QrCode, Copy, Check, Upload, Image as ImageIcon, CreditCard, Sparkles, CheckCircle2 } from "lucide-react";
+import { QrCode, Copy, Check, Upload, CreditCard, Sparkles, CheckCircle2 } from "lucide-react";
 
 interface Props {
   fee: number;
