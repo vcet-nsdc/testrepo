@@ -202,7 +202,7 @@ export default function RegisterForm() {
             </p>
             <div className="bg-white rounded-2xl p-4 shadow-lg">
               <Image
-                src="/assests/payment.jpeg"
+                src="/assests/jishantqr.png"
                 alt="Payment QR Code"
                 width={256}
                 height={256}
@@ -210,7 +210,7 @@ export default function RegisterForm() {
               />
             </div>
             <p className="text-white/60 text-sm font-mono">
-              UPI ID: varunsoni998@okaxis
+              UPI ID: 8108359566@kotakbank
             </p>
           </div>
         </div>
