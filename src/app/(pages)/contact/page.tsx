@@ -1,31 +1,21 @@
-/**
- * Contact Page
- * Contact information and form
- */
-
 import { Suspense } from 'react';
-import { Metadata } from 'next';
+import type { Metadata } from 'next';
 import { ContactInfo } from '@/components/contact/contact-info';
 import { ContactForm } from '@/components/contact/contact-form';
 import { LoadingState } from '@/components/ui/loading';
-
-// ============================================================================
-// METADATA
-// ============================================================================
+import { APP_CONFIG } from '@/lib/constants';
 
 export const metadata: Metadata = {
-  title: 'Contact',
-  description: 'Get in touch with NSDC VCET team for collaborations and inquiries',
+  title: 'Contact Us',
+  description: 'Get in touch with the official VCET NSDC Student Chapter team for event inquiries, sponsorships, hackathon partnerships, and campus collaborations at VCET Vasai.',
+  keywords: ['Contact VCET NSDC', 'VCET Vasai Address', 'NSDC Sponsorships', ...APP_CONFIG.keywords],
   openGraph: {
-    title: 'Contact | NSDC VCET',
-    description: 'Get in touch with NSDC VCET team for collaborations and inquiries',
-    type: 'website',
+    title: 'Contact Us | VCET NSDC',
+    description: 'Get in touch with the official VCET NSDC Student Chapter team for event inquiries and collaborations.',
+    url: `${APP_CONFIG.url}/contact`,
+    siteName: APP_CONFIG.name,
   },
 };
-
-// ============================================================================
-// CONTACT PAGE COMPONENT
-// ============================================================================
 
 export default function ContactPage() {
   return (
@@ -36,17 +26,15 @@ export default function ContactPage() {
             Contact Us
           </h1>
           <p className="text-xl text-white/80 max-w-2xl mx-auto">
-            Get in touch with our team for collaborations, inquiries, or to learn more about NSDC VCET
+            Get in touch with our team for collaborations, inquiries, or to learn more about VCET NSDC
           </p>
         </div>
 
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-12">
-          {/* Contact Information */}
           <Suspense fallback={<LoadingState message="Loading contact information..." />}>
             <ContactInfo />
           </Suspense>
 
-          {/* Contact Form */}
           <Suspense fallback={<LoadingState message="Loading contact form..." />}>
             <ContactForm />
           </Suspense>
