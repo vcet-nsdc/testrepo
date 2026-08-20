@@ -130,6 +130,13 @@ export async function sendRegistrationApprovedEmail({
         <div style="background-color: #064e3b; border: 1px solid #10b981; padding: 15px; border-radius: 8px; margin: 20px 0; text-align: center;">
           <p style="color: #a7f3d0; font-weight: bold; margin: 0; font-size: 16px;">Status: APPROVED & CONFIRMED ✓</p>
         </div>
+        <div style="background-color: #0f291e; border: 1px solid #22c55e; padding: 18px; border-radius: 8px; margin: 20px 0; text-align: center;">
+          <p style="color: #86efac; font-weight: bold; margin: 0 0 10px 0; font-size: 15px;">Join the Official WhatsApp Group:</p>
+          <a href="https://chat.whatsapp.com/BaTrgCU0sm2E6XQC7p72r2?s=cl&p=a&mlu=4" target="_blank" style="display: inline-block; background-color: #25d366; color: #ffffff; text-decoration: none; padding: 10px 20px; border-radius: 6px; font-weight: bold; font-size: 14px;">Join WhatsApp Group</a>
+          <p style="color: #94a3b8; font-size: 12px; margin: 10px 0 0 0; word-break: break-all;">
+            <a href="https://chat.whatsapp.com/BaTrgCU0sm2E6XQC7p72r2?s=cl&p=a&mlu=4" target="_blank" style="color: #38bdf8; text-decoration: underline;">https://chat.whatsapp.com/BaTrgCU0sm2E6XQC7p72r2?s=cl&p=a&mlu=4</a>
+          </p>
+        </div>
         <p style="color: #cbd5e1; font-size: 14px; line-height: 1.6;">
           Get ready with your team. Further event instructions, schedules, and details will be shared soon. We look forward to seeing you at the event!
         </p>
