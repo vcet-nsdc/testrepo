@@ -20,14 +20,15 @@ const Upcoming: React.FC = () => {
 
   const events = [
     {
-      title: 'Techblitz 2026',
-      dateTime: 'March 2026 • 10:00 AM',
+      title: 'Byteverse 2026',
+      dateTime: 'November 2026',
       venue: 'VCET, Vasai',
       shortDescription:
-        'TechBlitz 2026 is a high-voltage, manga-themed tech competition organized by VCET NSDC. Assemble your squad, pick your domain, and battle it out with the brightest minds across campuses. Whether you code, design, or innovate - this is your arena.',
-      imagePath: '/assests/techblitz.jpeg',
+        'Byteverse 2026 is a high-voltage, manga-themed tech competition organized by VCET NSDC. Assemble your squad, pick your domain, and battle it out with the brightest minds across campuses. Whether you code, design, or innovate - this is your arena.',
+      imagePath: '/assests/byteverse.jpeg',
+      logoPath: '/assests/byteverse_logo_v2.png',
       overview:
-        'TechBlitz 2026 is a high-voltage, manga-themed tech competition organized by VCET NSDC. Assemble your squad, pick your domain, and battle it out with the brightest minds across campuses. Whether you code, design, or innovate - this is your arena.',
+        'Byteverse 2026 is a high-voltage, manga-themed tech competition organized by VCET NSDC. Assemble your squad, pick your domain, and battle it out with the brightest minds across campuses. Whether you code, design, or innovate - this is your arena.',
       highlights: [
         'Interactive technical rounds testing diverse computer science knowledge.',
         'Opportunities to learn about the latest industry trends.',
