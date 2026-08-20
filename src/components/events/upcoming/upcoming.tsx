@@ -40,6 +40,7 @@ const Upcoming: React.FC = () => {
         'Certificates of participation for all attendees.',
         'Special recognition for top performers in specific domains.',
       ],
+      websiteLink: 'https://byteverse-2026.vercel.app',
     },
   ];
 

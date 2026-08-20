@@ -14,6 +14,7 @@ interface EventCardProps {
   overview: string
   highlights: string[]
   awards: string[]
+  websiteLink?: string
 }
 
 const EventCard: React.FC<EventCardProps> = ({
@@ -26,6 +27,7 @@ const EventCard: React.FC<EventCardProps> = ({
   overview,
   highlights,
   awards,
+  websiteLink,
 }) => {
   const [isModalOpen, setIsModalOpen] = useState<boolean>(false)
   const overlayRef = useRef<HTMLDivElement | null>(null)
@@ -110,22 +112,30 @@ const EventCard: React.FC<EventCardProps> = ({
             </div>
 
             <div className="w-full md:w-3/5 p-6 flex flex-col floating-element">
-              <div className="relative mb-4 group h-28 md:h-44 w-full flex items-center justify-center">
+              <div className="relative mb-4 md:mb-2 group h-28 md:h-44 w-full flex items-center justify-center">
                 <div className="relative w-full h-full scale-[1.25] md:scale-[1.35] group-hover:scale-[1.35] md:group-hover:scale-[1.45] transition-transform duration-300">
                   <Image src={logoPath || imagePath || '/assests/image.png'} alt={title} fill className="object-contain" sizes="(max-width: 768px) 100vw, 50vw" priority />
                 </div>
                 <div className="absolute inset-0 bg-gradient-to-t from-black/25 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300 pointer-events-none rounded-xl" />
               </div>
               <div className="flex-1 flex flex-col justify-center md:block">
-                <div className="flex items-center gap-2 mb-2">
+                <div className="flex items-center gap-2 mb-2 md:mb-1">
                   <div className="w-2 h-2 bg-violet-500 rounded-full shrink-0" />
                   <span className="text-white text-sm font-heading">{dateTime}</span>
                 </div>
-                <div className="flex items-center gap-2 mb-3">
+                <div className="flex items-center gap-2 mb-3 md:mb-1">
                   <div className="w-2 h-2 bg-slate-400 rounded-full shrink-0" />
                   <span className="text-white text-sm font-heading">{venue}</span>
                 </div>
-                <p className="text-white text-xs leading-relaxed mb-4 font-body">{shortDescription}</p>
+                {websiteLink && (
+                  <div className="flex items-center gap-2 mb-3 md:mb-1">
+                    <div className="w-2 h-2 bg-fuchsia-500 rounded-full shrink-0" />
+                    <span className="text-white text-sm font-heading">
+                      LINK : <a href={websiteLink} target="_blank" rel="noopener noreferrer" className="hover:text-fuchsia-300 transition-colors cursor-pointer relative z-20">{websiteLink}</a>
+                    </span>
+                  </div>
+                )}
+                <p className="text-white text-xs leading-relaxed mb-4 md:mb-2 font-body">{shortDescription}</p>
                 <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4 mt-auto md:mt-0">
                   <div className="flex items-center gap-2 attendee-icons flex-wrap">
                     <span className="text-[11px] text-white font-body">Teams • Open to all</span>
