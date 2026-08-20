@@ -21,8 +21,8 @@ export default function DynamicRegistrationFormPayment({
   const [fileName, setFileName] = useState<string>("");
   const [zoomQr, setZoomQr] = useState(false);
 
-  const displayUpi = upiId || "varunsoni998@okaxis";
-  const displayQr = qrCodeUrl || "/assests/payment.jpeg";
+  const displayUpi = upiId || "8108359566@kotakbank";
+  const displayQr = qrCodeUrl || "/assests/jishantqr.png";
 
   const copyUpi = () => {
     navigator.clipboard.writeText(displayUpi);
