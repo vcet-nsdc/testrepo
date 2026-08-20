@@ -54,11 +54,23 @@ export const RolePermissions: Record<Role, Permission[]> = {
     'cms:read',
     'cms:write',
     'registration:read',
+    'registration:approve',
+    'registration:export',
     'media:upload',
   ],
 };
 
 /** Returns true if the given role is granted the given permission. */
 export function can(role: Role, permission: Permission): boolean {
-  return RolePermissions[role].includes(permission);
+  if (!role) return false;
+  const roleStr = String(role).toUpperCase().replace(/-/g, '_');
+  const perms = RolePermissions[roleStr as Role] || RolePermissions[role];
+  if (perms) {
+    return perms.includes(permission);
+  }
+  // Fallback for legacy / standard admin strings
+  if (roleStr === 'ADMIN' || roleStr === 'SUPERADMIN' || roleStr === 'FACULTY_ADMIN') {
+    return true;
+  }
+  return false;
 }

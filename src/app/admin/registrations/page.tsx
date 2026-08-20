@@ -189,11 +189,13 @@ function InspectionModal({ reg, onClose, onAction }: {
 
           {reg.status === "pending" && (
             <div>
-              <p className="text-white/40 text-xs font-medium uppercase tracking-wider mb-2">Admin Review Note (optional)</p>
+              <p className="text-white/40 text-xs font-medium uppercase tracking-wider mb-2">
+                Admin Review Note / Rejection Reason (sent to applicant via email)
+              </p>
               <input
                 value={note}
                 onChange={(e) => setNote(e.target.value)}
-                placeholder="E.g. Transaction ID verified, payment received…"
+                placeholder="E.g. Reason for rejection (e.g. Invalid Transaction ID, blurry screenshot) or approval note…"
                 className="w-full bg-white/[0.04] border border-white/[0.08] rounded-xl px-3.5 py-2.5 text-sm text-white placeholder-white/20 outline-none focus:border-violet-500/50"
               />
             </div>

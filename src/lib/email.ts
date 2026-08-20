@@ -9,24 +9,32 @@ interface EmailOptions {
 function getTransporter() {
   const host = process.env.SMTP_HOST || process.env.EMAIL_SERVER_HOST;
   const user = process.env.SMTP_USER || process.env.EMAIL_SERVER_USER;
-  const pass = process.env.SMTP_PASS || process.env.EMAIL_SERVER_PASSWORD;
+  let pass = process.env.SMTP_PASS || process.env.EMAIL_SERVER_PASSWORD;
   const port = Number(process.env.SMTP_PORT || process.env.EMAIL_SERVER_PORT || 587);
 
   if (!host || !user || !pass) {
     return null;
   }
 
+  // Remove spaces from Gmail app passwords if present (e.g. "yhhe cigq yetd oyno" -> "yhhecigqyetcoyno")
+  pass = pass.replace(/\s+/g, '');
+
   return nodemailer.createTransport({
     host,
     port,
     secure: port === 465,
     auth: { user, pass },
+    tls: {
+      rejectUnauthorized: false,
+    },
   });
 }
 
 export async function sendEmail({ to, subject, html }: EmailOptions): Promise<boolean> {
   const transporter = getTransporter();
-  const from = process.env.SMTP_FROM || process.env.EMAIL_FROM || '"VCET NSDC" <noreply@vcetnsdc.com>';
+  const user = process.env.SMTP_USER || process.env.EMAIL_SERVER_USER || '';
+  const defaultFrom = user ? `"VCET NSDC" <${user}>` : '"VCET NSDC" <noreply@vcetnsdc.com>';
+  const from = process.env.SMTP_FROM || process.env.EMAIL_FROM || defaultFrom;
 
   if (!transporter) {
     console.log(`[Email Service (Dev Simulation)] Would send email to: ${to}`);
@@ -35,13 +43,13 @@ export async function sendEmail({ to, subject, html }: EmailOptions): Promise<bo
   }
 
   try {
-    await transporter.sendMail({
+    const info = await transporter.sendMail({
       from,
       to,
       subject,
       html,
     });
-    console.log(`[Email Sent] Successfully delivered to ${to}`);
+    console.log(`[Email Sent] Successfully delivered to ${to}, messageId: ${info.messageId}`);
     return true;
   } catch (err) {
     console.error(`[Email Error] Failed to send email to ${to}:`, err);
@@ -136,6 +144,60 @@ export async function sendRegistrationApprovedEmail({
   return sendEmail({
     to: email,
     subject: `🎉 Registration Approved for ${eventTitle}!`,
+    html,
+  });
+}
+
+/**
+ * Send notification when admin rejects event registration
+ */
+export async function sendRegistrationRejectedEmail({
+  email,
+  name,
+  squadName,
+  eventTitle,
+  reason,
+}: {
+  email: string;
+  name: string;
+  squadName: string;
+  eventTitle: string;
+  reason?: string | undefined;
+}) {
+  const html = `
+    <div style="font-family: Arial, sans-serif; background-color: #0d0d18; color: #ffffff; padding: 30px; borderRadius: 16px; max-width: 600px; margin: 0 auto;">
+      <div style="text-align: center; margin-bottom: 20px;">
+        <h1 style="color: #ef4444; font-size: 26px; margin: 0;">Registration Status Update</h1>
+        <p style="color: #94a3b8; font-size: 14px; margin-top: 5px;">VCET NSDC Official Notice</p>
+      </div>
+
+      <div style="background-color: #161626; border: 1px solid #dc2626; padding: 25px; border-radius: 12px;">
+        <h2 style="color: #ffffff; font-size: 20px; margin-top: 0;">Hello ${name},</h2>
+        <p style="color: #cbd5e1; font-size: 15px; line-height: 1.6;">
+          Regrettably, your registration for squad <strong style="color: #38bdf8;">${squadName}</strong> for <strong style="color: #c084fc;">${eventTitle}</strong> could not be approved at this time.
+        </p>
+        ${
+          reason
+            ? `<div style="background-color: #450a0a; border: 1px solid #ef4444; padding: 15px; border-radius: 8px; margin: 20px 0;">
+                <p style="color: #f87171; font-weight: bold; margin: 0 0 5px 0; font-size: 14px;">Reason / Admin Note:</p>
+                <p style="color: #fca5a5; margin: 0; font-size: 14px; line-height: 1.5;">${reason}</p>
+               </div>`
+            : ''
+        }
+        <p style="color: #cbd5e1; font-size: 14px; line-height: 1.6;">
+          If you believe this is an error or have questions regarding your submission, please reach out to the VCET NSDC organizing team.
+        </p>
+      </div>
+
+      <div style="text-align: center; margin-top: 25px; color: #64748b; font-size: 12px;">
+        <p>© ${new Date().getFullYear()} VCET NSDC. All rights reserved.</p>
+      </div>
+    </div>
+  `;
+
+  return sendEmail({
+    to: email,
+    subject: `Registration Update for ${eventTitle}`,
     html,
   });
 }
