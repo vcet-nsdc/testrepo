@@ -10,6 +10,7 @@ interface EventCardProps {
   venue: string
   shortDescription: string
   imagePath: string | StaticImageData
+  logoPath?: string | StaticImageData
   overview: string
   highlights: string[]
   awards: string[]
@@ -21,6 +22,7 @@ const EventCard: React.FC<EventCardProps> = ({
   venue,
   shortDescription,
   imagePath,
+  logoPath,
   overview,
   highlights,
   awards,
@@ -91,54 +93,47 @@ const EventCard: React.FC<EventCardProps> = ({
     <>
       <div ref={cardWrapperRef} className="event-card-wrapper w-full ">
         <div ref={cardRef} className="event-card card-surface rounded-3xl cursor-pointer">
-          <div className="flex h-72 card-content">
+          <div className="flex flex-col md:flex-row h-auto md:h-72 card-content">
             <div className="glass-pane" />
 
-            <div className="w-2/5 relative shimmer flex flex-col items-center justify-center p-6 floating-element rounded-l-3xl overflow-hidden">
+            <div className="w-full md:w-2/5 h-64 md:h-full relative shimmer flex flex-col items-center justify-center p-6 floating-element rounded-t-3xl md:rounded-l-3xl md:rounded-tr-none overflow-hidden shrink-0">
               <Image
                 src={imagePath || '/assests/image.png'}
                 alt={title}
                 fill
-                className="object-cover transition-transform duration-300 group-hover:scale-105 z-0"
+                className="object-fill transition-transform duration-300 group-hover:scale-105 z-0"
                 sizes="(max-width: 768px) 100vw, 33vw"
                 priority
               />
-              <div className="absolute inset-0 bg-gradient-to-br from-purple-800/60 to-fuchsia-800/60 z-[10]" />
+              <div className="absolute inset-0 bg-gradient-to-br from-purple-800/60 to-fuchsia-800/60 z-[10] pointer-events-none mix-blend-overlay" />
 
-              <div className="absolute top-4 left-4 z-[30]">
-                <span className="relative bg-white/25 text-white text-xs md:text-sm px-3 py-1.5 rounded-full font-heading tracking-wider border border-white/30 drop-shadow-md">COMPETITION</span>
-              </div>
-              <h3 className="relative z-[30] text-white text-2xl text-center leading-tight transform rotate-[-1deg] font-heading">{title}</h3>
-              <div className="absolute bottom-4 right-4 z-[30]">
-                <div className="w-8 h-8 bg-white/15 rounded-full flex items-center justify-center border border-white/20">
-                  <div className="w-4 h-4 bg-white/80 rounded-full" />
-                </div>
-              </div>
             </div>
 
-            <div className="w-3/5 p-6 flex flex-col floating-element">
-              <div className="relative mb-4 rounded-xl overflow-hidden group h-24">
-                <Image src={imagePath || '/assests/image.png'} alt={title} fill className="object-cover transition-transform duration-300 group-hover:scale-105" sizes="(max-width: 768px) 100vw, 50vw" priority />
-                <div className="absolute inset-0 bg-gradient-to-t from-black/25 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
+            <div className="w-full md:w-3/5 p-6 flex flex-col floating-element">
+              <div className="relative mb-4 group h-28 md:h-44 w-full flex items-center justify-center">
+                <div className="relative w-full h-full scale-[1.25] md:scale-[1.35] group-hover:scale-[1.35] md:group-hover:scale-[1.45] transition-transform duration-300">
+                  <Image src={logoPath || imagePath || '/assests/image.png'} alt={title} fill className="object-contain" sizes="(max-width: 768px) 100vw, 50vw" priority />
+                </div>
+                <div className="absolute inset-0 bg-gradient-to-t from-black/25 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300 pointer-events-none rounded-xl" />
               </div>
-              <div className="flex-1">
+              <div className="flex-1 flex flex-col justify-center md:block">
                 <div className="flex items-center gap-2 mb-2">
-                  <div className="w-2 h-2 bg-violet-500 rounded-full" />
+                  <div className="w-2 h-2 bg-violet-500 rounded-full shrink-0" />
                   <span className="text-white text-sm font-heading">{dateTime}</span>
                 </div>
                 <div className="flex items-center gap-2 mb-3">
-                  <div className="w-2 h-2 bg-slate-400 rounded-full" />
+                  <div className="w-2 h-2 bg-slate-400 rounded-full shrink-0" />
                   <span className="text-white text-sm font-heading">{venue}</span>
                 </div>
                 <p className="text-white text-xs leading-relaxed mb-4 font-body">{shortDescription}</p>
-                <div className="flex items-center justify-between">
-                  <div className="flex items-center gap-2 attendee-icons">
+                <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4 mt-auto md:mt-0">
+                  <div className="flex items-center gap-2 attendee-icons flex-wrap">
                     <span className="text-[11px] text-white font-body">Teams • Open to all</span>
                     <div className="bg-fuchsia-100 text-fuchsia-700 text-[10px] px-2 py-1 rounded-full font-heading border border-fuchsia-300">Awards: Trophy + Certificates</div>
                   </div>
                   <button
                     onClick={() => setIsModalOpen(true)}
-                    className="bg-gradient-to-r from-fuchsia-600 to-purple-700 text-white px-4 py-2 rounded-xl text-xs font-heading hover:shadow-lg hover:scale-105 transition-all duration-200 read-more-btn"
+                    className="bg-gradient-to-r from-fuchsia-600 to-purple-700 text-white px-4 py-2 rounded-xl text-xs font-heading hover:shadow-lg hover:scale-105 transition-all duration-200 read-more-btn w-full sm:w-auto shrink-0"
                     data-original="Read more"
                     aria-label="Read more"
                   >

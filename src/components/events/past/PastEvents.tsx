@@ -28,6 +28,27 @@ export function PastEventsSection({ events }: PastEventsSectionProps) {
 
   const sampleEvents: Event[] = [
     {
+      id: "event_techblitz_2026",
+      title: "Techblitz 2026",
+      year: "2025-26",
+      date: "2026-03-13",
+      time: "10:00 AM",
+      venue: "VCET, Vasai",
+      description: "TechBlitz 2026 is a high-voltage, manga-themed tech competition organized by VCET NSDC.",
+      about: "TechBlitz 2026 is a high-voltage, manga-themed tech competition organized by VCET NSDC. Assemble your squad, pick your domain, and battle it out with the brightest minds across campuses. Whether you code, design, or innovate - this is your arena.",
+      highlights: [
+        "Interactive technical rounds testing diverse computer science knowledge.",
+        "Opportunities to learn about the latest industry trends.",
+        "Engaging competition format designed to challenge and entertain.",
+        "Showcase your technical prowess among peers and win exciting rewards.",
+        "Exciting prizes for the winning teams.",
+        "Certificates of participation for all attendees.",
+        "Special recognition for top performers in specific domains."
+      ],
+      gallery: [],
+      link: "#"
+    },
+    {
       id: "event_000",
       title: "Code-o-Fiesta 2025",
       year: "2025-26",
