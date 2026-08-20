@@ -8,19 +8,27 @@
 // ============================================================================
 
 export const APP_CONFIG = {
-  name: 'NSDC VCET',
-  description: 'National Student Data Corps - Vidyavardhini\'s College of Engineering and Technology',
-  url: process.env.NEXT_PUBLIC_APP_URL || 'https://nsdc-vcet.vercel.app',
+  name: 'VCET NSDC - National Student Data Corps',
+  shortName: 'VCET NSDC',
+  description: 'Official National Student Data Corps (NSDC) Chapter at Vidyavardhini\'s College of Engineering and Technology (VCET), Vasai. Hosting flagship hackathons, data science workshops, technical competitions, and student developer initiatives.',
+  url: process.env.NEXT_PUBLIC_APP_URL || 'https://vcetnsdc.com',
   version: '1.0.0',
-  author: 'NSDC VCET Team',
+  author: 'VCET NSDC Team',
   keywords: [
-    'NSDC',
-    'VCET',
-    'Data Science',
+    'VCET NSDC',
+    'NSDC VCET',
+    'National Student Data Corps',
+    'VCET Vasai',
+    'Vidyavardhini College of Engineering and Technology',
+    'Byteverse',
+    'Byteverse Hackathon',
+    'VCET Hackathon',
+    'Data Science Student Chapter',
     'Artificial Intelligence',
-    'Student Chapter',
     'Machine Learning',
-    'Data Visualization',
+    'Coding Competitions Mumbai',
+    'Engineering College Vasai',
+    'Developer Community Maharashtra',
   ],
 } as const;
 
@@ -43,9 +51,9 @@ export const NAVIGATION = {
     { label: 'Socials', href: '/socials' },
   ],
   social: [
-    { label: 'Instagram', href: '#instagram', icon: 'instagram' },
-    { label: 'LinkedIn', href: '#linkedin', icon: 'linkedin' },
-    { label: 'YouTube', href: '#youtube', icon: 'youtube' },
+    { label: 'Instagram', href: 'https://instagram.com/vcet_nsdc', icon: 'instagram' },
+    { label: 'LinkedIn', href: 'https://linkedin.com/company/vcet-nsdc', icon: 'linkedin' },
+    { label: 'YouTube', href: 'https://youtube.com/@vcet_nsdc', icon: 'youtube' },
     { label: 'Email', href: 'mailto:nsdc@vcet.edu.in', icon: 'mail' },
   ],
 } as const;
@@ -56,19 +64,19 @@ export const NAVIGATION = {
 
 export const CONTACT_INFO = {
   email: 'nsdc@vcet.edu.in',
-  chairperson: 'shreya.225297202@vcet.edu.in ',
+  chairperson: 'shreya.225297202@vcet.edu.in',
   secretary: 'saloni.225257205@vcet.edu.in',
   address: {
     street: 'Vidyavardhini\'s College Of Engineering and Technology, K.T. Marg',
-    campus: 'Vartak College Campus Vasai Road',
+    campus: 'Vartak College Campus, Vasai Road (W)',
     city: 'Vasai-Virar',
     state: 'Maharashtra',
     pincode: '401202',
     country: 'India',
   },
   coordinates: {
-    lat: 19.4700,
-    lng: 72.8000,
+    lat: 19.3837,
+    lng: 72.8286,
   },
 } as const;
 
@@ -80,7 +88,7 @@ export const STATS = {
   teamMembers: 50,
   events: 12,
   participants: 1000,
-  yearsActive: 1,
+  yearsActive: 2,
 } as const;
 
 // ============================================================================

@@ -1,28 +1,18 @@
-/**
- * Team Page
- * Display team members with proper organization
- */
-
 import { Metadata } from 'next';
 import Teams from '@/components/team/Teams';
-
-// ============================================================================
-// METADATA
-// ============================================================================
+import { APP_CONFIG } from '@/lib/constants';
 
 export const metadata: Metadata = {
-  title: 'Team',
-  description: 'Meet the dedicated team members behind NSDC VCET',
+  title: 'Our Core Team',
+  description: 'Meet the passionate student leaders, committee members, and mentors behind VCET NSDC Student Chapter at Vidyavardhini\'s College of Engineering and Technology.',
+  keywords: ['VCET NSDC Team', 'NSDC Core Committee', 'VCET Student Leaders', ...APP_CONFIG.keywords],
   openGraph: {
-    title: 'Team | NSDC VCET',
-    description: 'Meet the dedicated team members behind NSDC VCET',
-    type: 'website',
+    title: 'Our Core Team | VCET NSDC',
+    description: 'Meet the passionate student leaders and mentors behind VCET NSDC.',
+    url: `${APP_CONFIG.url}/team`,
+    siteName: APP_CONFIG.name,
   },
 };
-
-// ============================================================================
-// TEAM PAGE COMPONENT
-// ============================================================================
 
 export default function TeamPage() {
   return (
