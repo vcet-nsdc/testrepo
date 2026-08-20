@@ -3,7 +3,6 @@ import { useEffect, useRef, useState } from 'react'
 import Image, { StaticImageData } from 'next/image'
 // import eventImg from './event-img.png' // Make sure this path is correct
 import { AnimatePresence, motion } from 'framer-motion'
-import { Link as LinkIcon } from 'lucide-react'
 
 interface EventCardProps {
   title: string
