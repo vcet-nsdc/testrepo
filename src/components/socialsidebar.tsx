@@ -16,7 +16,9 @@ export default function SocialSidebar() {
     const observer = new IntersectionObserver(
       (entries) => {
         const [entry] = entries
-        setIsVisible(!entry.isIntersecting)
+        if (entry) {
+          setIsVisible(!entry.isIntersecting)
+        }
       },
       { rootMargin: "0px", threshold: 0.1 }
     )
