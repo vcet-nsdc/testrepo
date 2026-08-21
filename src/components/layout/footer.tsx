@@ -6,7 +6,9 @@
 'use client';
 
 import { motion } from 'framer-motion';
-import { Mail, Linkedin, Youtube, Instagram } from 'lucide-react';
+import { Youtube, Instagram } from 'lucide-react';
+import { FaLinkedinIn } from 'react-icons/fa';
+import { SiGmail } from 'react-icons/si';
 import { NAVIGATION, CONTACT_INFO } from '@/lib/constants';
 
 const containerVariants = {
@@ -34,7 +36,7 @@ const itemVariants = {
 
 export function Footer() {
   return (
-    <footer className="relative z-10 text-white overflow-hidden bg-black/50 rounded-2xl m-4 mt-8">
+    <footer id="footer" className="relative z-10 text-white overflow-hidden bg-black/50 rounded-2xl m-4 mt-8">
       {/* Main footer content */}
       <motion.div
         className="relative z-10 max-w-7xl mx-auto px-6 py-16"
@@ -90,29 +92,37 @@ export function Footer() {
             <div className="space-y-4">
               <motion.a
                 href={`mailto:${CONTACT_INFO.email}`}
-                className="flex items-center space-x-3 text-gray-300 hover:text-purple-400 transition-colors duration-200"
+                className="flex items-center space-x-3 text-gray-300 hover:text-gray-100 transition-colors duration-200 group"
                 whileHover={{ scale: 1.05 }}
                 transition={{ type: 'spring', stiffness: 300 }}
               >
-                <Mail size={18} />
+                <div className="w-8 h-8 rounded-full bg-black/40 flex items-center justify-center group-hover:shadow-[0_0_15px_rgba(255,107,107,0.5)] transition-shadow">
+                  <SiGmail size={16} fill="url(#gmail-smooth-grad)" className="drop-shadow-[0_0_4px_rgba(255,107,107,0.4)]" />
+                </div>
                 <span className="text-sm">{CONTACT_INFO.email}</span>
               </motion.a>
 
               <div className="flex space-x-4 pt-2">
                 {[
-                  { icon: Linkedin, href: '#linkedin' },
-                  { icon: Youtube, href: '#youtube' },
-                  { icon: Instagram, href: '#instagram' },
-                ].map(({ icon: Icon, href }, index) => (
+                  { icon: FaLinkedinIn, href: 'https://www.linkedin.com/in/vcet-nsdc/', color: "text-blue-500 drop-shadow-[0_0_4px_rgba(59,130,246,0.6)]", glowClass: "hover:shadow-[0_0_15px_rgba(59,130,246,0.5)]" },
+                  { icon: Youtube, href: 'https://www.youtube.com/channel/UCjBw5a7WU00GwkxaTjF9jqg', color: "text-red-500 drop-shadow-[0_0_4px_rgba(239,68,68,0.6)]", glowClass: "hover:shadow-[0_0_15px_rgba(239,68,68,0.5)]" },
+                  { icon: Instagram, href: 'https://www.instagram.com/vcet.nsdc/', isIg: true, glowClass: "hover:shadow-[0_0_15px_rgba(219,39,119,0.5)]" },
+                ].map(({ icon: Icon, href, color, isIg, glowClass }, index) => (
                   <motion.a
                     key={index}
                     href={href}
-                    className="text-gray-300 hover:text-purple-400 transition-colors duration-200"
+                    target={href.startsWith('#') ? undefined : "_blank"}
+                    rel={href.startsWith('#') ? undefined : "noopener noreferrer"}
+                    className={`w-10 h-10 rounded-full bg-black/40 flex items-center justify-center transition-all duration-300 ${glowClass}`}
                     whileHover={{ scale: 1.2, rotate: 5 }}
                     whileTap={{ scale: 0.9 }}
                     transition={{ type: 'spring', stiffness: 300 }}
                   >
-                    <Icon size={20} />
+                    {isIg ? (
+                      <Icon size={18} stroke="url(#ig-grad)" className="drop-shadow-[0_0_4px_rgba(219,39,119,0.6)]" />
+                    ) : (
+                      <Icon size={18} className={color} />
+                    )}
                   </motion.a>
                 ))}
               </div>
