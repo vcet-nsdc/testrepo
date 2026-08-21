@@ -1,7 +1,7 @@
 'use client'
 
-import { useEffect, useState } from "react";
-import { motion } from "framer-motion";
+import { useEffect, useState, useRef } from "react";
+import { motion, useMotionValue, useSpring } from "framer-motion";
 import { FaInstagram, FaLinkedin, FaEnvelope } from "react-icons/fa";
 
 type ProfileCardProps = {
@@ -70,24 +70,6 @@ const ProfileCard: React.FC<ProfileCardProps> = ({
     }
   };
 
-  const overlayVariants = {
-    hidden: { opacity: 0, scale: 0.8 },
-    visible: { 
-      opacity: 0, 
-      scale: 1,
-      transition: {
-        duration: 0.3,
-      }
-    },
-    hover: {
-      opacity: 1,
-      scale: 1,
-      transition: {
-        duration: 0.3,
-      }
-    }
-  };
-
   const contentVariants = {
     hidden: { opacity: 0, y: 20 },
     visible: { 
@@ -98,6 +80,30 @@ const ProfileCard: React.FC<ProfileCardProps> = ({
         delay: 0.2,
       }
     }
+  };
+
+  const [isHovered, setIsHovered] = useState(false);
+  const containerRef = useRef<HTMLDivElement>(null);
+  
+  const mouseX = useMotionValue(200);
+  const mouseY = useMotionValue(200);
+  const springX = useSpring(mouseX, { damping: 25, stiffness: 220 });
+  const springY = useSpring(mouseY, { damping: 25, stiffness: 220 });
+
+  const hasSocialLinks = Boolean(instagramUrl || linkedinUrl || email);
+
+  const handleMouseMove = (e: React.MouseEvent<HTMLDivElement>) => {
+    if (!containerRef.current) return;
+    const rect = containerRef.current.getBoundingClientRect();
+    const x = e.clientX - rect.left;
+    const y = e.clientY - rect.top;
+    
+    // Clamp so the pill stays within bounds
+    const clampedX = Math.max(95, Math.min(rect.width - 95, x));
+    const clampedY = Math.max(40, Math.min(rect.height - 40, y));
+    
+    mouseX.set(clampedX);
+    mouseY.set(clampedY);
   };
 
   useEffect(() => {
@@ -119,70 +125,89 @@ const ProfileCard: React.FC<ProfileCardProps> = ({
     >
       <div className="absolute inset-0 rounded-2xl bg-gradient-to-br from-slate-700/20 to-slate-900/40 pointer-events-none" />
       <div className="relative overflow-hidden rounded-2xl">
-        <div className="relative w-full h-[350px] sm:h-[400px] overflow-hidden">
+        <div 
+          ref={containerRef}
+          className="relative w-full h-[350px] sm:h-[400px] overflow-hidden"
+          onMouseEnter={(e) => {
+            const rect = e.currentTarget.getBoundingClientRect();
+            const x = Math.max(95, Math.min(rect.width - 95, e.clientX - rect.left));
+            const y = Math.max(40, Math.min(rect.height - 40, e.clientY - rect.top));
+            mouseX.set(x);
+            mouseY.set(y);
+            setIsHovered(true);
+          }}
+          onMouseMove={handleMouseMove}
+          onMouseLeave={() => setIsHovered(false)}
+        >
           <motion.img
             src={avatarUrl}
             alt={name}
-            className="w-full h-full object-cover"
+            className="w-full h-full object-cover transition duration-300 ease-out group-hover:brightness-[0.65]"
             loading="lazy"
             variants={imageVariants}
             initial="hidden"
             animate="visible"
             whileHover="hover"
           />
-          {/* Hover social overlay */}
-          <motion.div 
-            className="pointer-events-none absolute inset-0 flex items-center justify-center"
-            variants={overlayVariants}
-            initial="hidden"
-            animate="visible"
-            whileHover="hover"
-          >
+          {/* Dynamic hover social overlay following cursor position */}
+          {hasSocialLinks && (
             <motion.div 
-              className="pointer-events-auto flex items-center gap-4 rounded-full bg-slate-900/70 px-4 py-2 backdrop-blur-md shadow-lg"
-              initial={{ scale: 0.8, opacity: 0 }}
-              whileHover={{ scale: 1, opacity: 1 }}
+              className="pointer-events-none absolute top-0 left-0 z-20"
+              style={{
+                x: springX,
+                y: springY,
+                translateX: "-50%",
+                translateY: "-50%",
+              }}
+              initial={{ opacity: 0, scale: 0.6 }}
+              animate={{ 
+                opacity: isHovered ? 1 : 0, 
+                scale: isHovered ? 1 : 0.6,
+                pointerEvents: isHovered ? "auto" : "none" 
+              }}
               transition={{ duration: 0.2 }}
             >
-              {instagramUrl && (
-                <motion.a
-                  href={instagramUrl}
-                  target="_blank"
-                  rel="noreferrer"
-                  aria-label="Instagram"
-                  className="text-pink-400 hover:text-pink-300 text-xl"
-                  whileHover={{ scale: 1.2, rotate: 5 }}
-                  whileTap={{ scale: 0.9 }}
-                >
-                  <FaInstagram />
-                </motion.a>
-              )}
-              {linkedinUrl && (
-                <motion.a
-                  href={linkedinUrl}
-                  target="_blank"
-                  rel="noreferrer"
-                  aria-label="LinkedIn"
-                  className="text-sky-400 hover:text-sky-300 text-xl"
-                  whileHover={{ scale: 1.2, rotate: -5 }}
-                  whileTap={{ scale: 0.9 }}
-                >
-                  <FaLinkedin />
-                </motion.a>
-              )}
-              {email && (
-                <motion.a
-                  href={`mailto:${email}`}
-                  aria-label="Email"
-                  className="text-emerald-300 hover:text-emerald-200 text-xl"
-                  whileHover={{ scale: 1.2, rotate: 3 }}
-                  whileTap={{ scale: 0.9 }}
-                >
-                  <FaEnvelope />
-                </motion.a>
-              )}
+              <div className="flex items-center gap-5 rounded-full bg-slate-900/85 px-5 py-3 backdrop-blur-md shadow-2xl border border-slate-700/60">
+                {instagramUrl && (
+                  <motion.a
+                    href={instagramUrl}
+                    target="_blank"
+                    rel="noreferrer"
+                    aria-label="Instagram"
+                    className="text-pink-400 hover:text-pink-300 text-3xl"
+                    whileHover={{ scale: 1.25, rotate: 5 }}
+                    whileTap={{ scale: 0.9 }}
+                  >
+                    <FaInstagram size={32} />
+                  </motion.a>
+                )}
+                {linkedinUrl && (
+                  <motion.a
+                    href={linkedinUrl}
+                    target="_blank"
+                    rel="noreferrer"
+                    aria-label="LinkedIn"
+                    className="text-sky-400 hover:text-sky-300 text-3xl"
+                    whileHover={{ scale: 1.25, rotate: -5 }}
+                    whileTap={{ scale: 0.9 }}
+                  >
+                    <FaLinkedin size={32} />
+                  </motion.a>
+                )}
+                {email && (
+                  <motion.a
+                    href={`mailto:${email}`}
+                    aria-label="Email"
+                    className="text-emerald-300 hover:text-emerald-200 text-3xl"
+                    whileHover={{ scale: 1.25, rotate: 3 }}
+                    whileTap={{ scale: 0.9 }}
+                  >
+                    <FaEnvelope size={32} />
+                  </motion.a>
+                )}
+              </div>
             </motion.div>
-          </motion.div>
+          )}
         </div>
         <motion.div 
           className="p-6"
