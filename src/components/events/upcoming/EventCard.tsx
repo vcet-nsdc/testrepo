@@ -3,6 +3,7 @@ import { useEffect, useRef, useState } from 'react'
 import Image, { StaticImageData } from 'next/image'
 // import eventImg from './event-img.png' // Make sure this path is correct
 import { AnimatePresence, motion } from 'framer-motion'
+import { createPortal } from 'react-dom'
 
 interface EventCardProps {
   title: string
@@ -78,16 +79,37 @@ const EventCard: React.FC<EventCardProps> = ({
   }, [])
 
   useEffect(() => {
-    if (typeof document === 'undefined') return
+    if (typeof document === 'undefined' || typeof window === 'undefined') return
 
     if (isModalOpen) {
+      const scrollY = window.scrollY
+      document.body.style.position = 'fixed'
+      document.body.style.top = `-${scrollY}px`
+      document.body.style.width = '100%'
       document.body.classList.add('modal-open')
     } else {
+      const scrollY = document.body.style.top
+      document.body.style.position = ''
+      document.body.style.top = ''
+      document.body.style.width = ''
       document.body.classList.remove('modal-open')
+      if (scrollY) {
+        window.scrollTo(0, parseInt(scrollY || '0') * -1)
+      }
     }
 
     return () => {
-      document.body.classList.remove('modal-open')
+      // In case component unmounts while modal is open, we need to clean up
+      if (document.body.style.position === 'fixed') {
+        const scrollY = document.body.style.top
+        document.body.style.position = ''
+        document.body.style.top = ''
+        document.body.style.width = ''
+        document.body.classList.remove('modal-open')
+        if (scrollY) {
+          window.scrollTo(0, parseInt(scrollY || '0') * -1)
+        }
+      }
     }
   }, [isModalOpen])
 
@@ -156,80 +178,83 @@ const EventCard: React.FC<EventCardProps> = ({
         </div>
       </div>
 
-      <AnimatePresence>
-        {isModalOpen && (
-          <div
-            id="modal"
-            className="fixed inset-0 z-50 flex items-center justify-center p-4 mt-20 rounded-3xl "
-            // onClick={() => setIsModalOpen(false)} // Removed to prevent closing by clicking outside
-          >
-            <motion.div
-              className="absolute inset-0 bg-black/80"
-              initial={{ opacity: 0 }}
-              animate={{ opacity: 1 }}
-              exit={{ opacity: 0 }}
-            />
-            <motion.div
-              onClick={(e) => e.stopPropagation()}
-              initial={{ opacity: 0 }}
-              animate={{ opacity: 1, transition: { duration: 0.5 } }}
-              exit={{ opacity: 0 }}
-              className="relative z-10 w-full max-w-2xl rounded-lg border border-white/10"
-              style={{ maxHeight: '85vh' }}
+      {typeof document !== 'undefined' && createPortal(
+        <AnimatePresence>
+          {isModalOpen && (
+            <div
+              id="modal"
+              className="fixed inset-0 z-[100] flex items-center justify-center p-4 rounded-3xl"
+              style={{ paddingTop: '5rem' }}
             >
-              <button
-                onClick={() => setIsModalOpen(false)}
-                className="absolute top-4 right-8 text-fuchsia-100 hover:text-white transition-colors z-20"
-                aria-label="Close modal"
+              <motion.div
+                className="absolute inset-0 bg-black/80"
+                initial={{ opacity: 0 }}
+                animate={{ opacity: 1 }}
+                exit={{ opacity: 0 }}
+              />
+              <motion.div
+                onClick={(e) => e.stopPropagation()}
+                initial={{ opacity: 0 }}
+                animate={{ opacity: 1, transition: { duration: 0.5 } }}
+                exit={{ opacity: 0 }}
+                className="relative z-10 w-full max-w-2xl rounded-lg border border-white/10"
+                style={{ maxHeight: '85vh' }}
               >
-                <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M6 18L18 6M6 6l12 12"></path>
-                </svg>
-              </button>
-              <div 
-                className="w-full p-6 text-left modal-content rounded-md h-[85vh]" 
-                style={{ backgroundColor: 'rgba(23, 10, 36, 0.7)', backdropFilter: 'blur(12px)' }}
-              >
-                <h3 className="text-fuchsia-100 text-lg font-heading mb-4">
-                  {title} — Event Details
-                </h3>
-                  <div className="grid sm:grid-cols-2 gap-4 text-sm text-fuchsia-200 mb-4">
-                    <div className="space-y-1">
-                      <p className="text-fuchsia-300 font-body">Date & Time</p>
-                      <p className="text-fuchsia-100 font-heading">{dateTime}</p>
+                <button
+                  onClick={() => setIsModalOpen(false)}
+                  className="absolute top-4 right-8 text-fuchsia-100 hover:text-white transition-colors z-20"
+                  aria-label="Close modal"
+                >
+                  <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M6 18L18 6M6 6l12 12"></path>
+                  </svg>
+                </button>
+                <div 
+                  className="w-full p-6 text-left modal-content rounded-md h-[85vh] overflow-y-auto" 
+                  style={{ backgroundColor: 'rgba(23, 10, 36, 0.7)', backdropFilter: 'blur(12px)' }}
+                >
+                  <h3 className="text-fuchsia-100 text-lg font-heading mb-4">
+                    {title} — Event Details
+                  </h3>
+                    <div className="grid sm:grid-cols-2 gap-4 text-sm text-fuchsia-200 mb-4">
+                      <div className="space-y-1">
+                        <p className="text-fuchsia-300 font-body">Date & Time</p>
+                        <p className="text-fuchsia-100 font-heading">{dateTime}</p>
+                      </div>
+                      <div className="space-y-1">
+                        <p className="text-fuchsia-300 font-body">Venue</p>
+                        <p className="text-fuchsia-100 font-heading">{venue}</p>
+                      </div>
                     </div>
-                    <div className="space-y-1">
-                      <p className="text-fuchsia-300 font-body">Venue</p>
-                      <p className="text-fuchsia-100 font-heading">{venue}</p>
+                    <div className="mb-4">
+                      <p className="text-fuchsia-300 text-sm mb-1.5 font-body">Overview</p>
+                      <p className="text-fuchsia-100 text-sm leading-relaxed font-body">{overview}</p>
+                    </div>
+                    <div className="grid sm:grid-cols-2 gap-6">
+                      <div>
+                        <p className="text-fuchsia-300 text-sm mb-1.5 font-body">Highlights</p>
+                        <ul className="space-y-1 list-disc list-inside">
+                          {highlights.map((item, index) => (
+                            <li key={index} className="text-fuchsia-100 text-sm font-body">{item}</li>
+                          ))}
+                        </ul>
+                      </div>
+                      <div>
+                        <p className="text-fuchsia-300 text-sm mb-1.5 font-body">Awards</p>
+                        <ul className="space-y-1 list-disc list-inside">
+                          {awards.map((item, index) => (
+                            <li key={index} className="text-fuchsia-100 text-sm font-body">{item}</li>
+                          ))}
+                        </ul>
+                      </div>
                     </div>
                   </div>
-                  <div className="mb-4">
-                    <p className="text-fuchsia-300 text-sm mb-1.5 font-body">Overview</p>
-                    <p className="text-fuchsia-100 text-sm leading-relaxed font-body">{overview}</p>
-                  </div>
-                  <div className="grid sm:grid-cols-2 gap-6">
-                    <div>
-                      <p className="text-fuchsia-300 text-sm mb-1.5 font-body">Highlights</p>
-                      <ul className="space-y-1 list-disc list-inside">
-                        {highlights.map((item, index) => (
-                          <li key={index} className="text-fuchsia-100 text-sm font-body">{item}</li>
-                        ))}
-                      </ul>
-                    </div>
-                    <div>
-                      <p className="text-fuchsia-300 text-sm mb-1.5 font-body">Awards</p>
-                      <ul className="space-y-1 list-disc list-inside">
-                        {awards.map((item, index) => (
-                          <li key={index} className="text-fuchsia-100 text-sm font-body">{item}</li>
-                        ))}
-                      </ul>
-                    </div>
-                  </div>
-                </div>
-            </motion.div>
-          </div>
-        )}
-      </AnimatePresence>
+              </motion.div>
+            </div>
+          )}
+        </AnimatePresence>,
+        document.body
+      )}
     </>
   )
 }

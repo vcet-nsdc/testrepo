@@ -1,7 +1,7 @@
 "use client"
 
 import { motion } from "framer-motion"
-import { useState } from "react"
+import { useState, useEffect } from "react"
 import { EventCard } from "./EventCard"
 import { EventModal } from "./eventmodal"
 
@@ -25,6 +25,40 @@ interface PastEventsSectionProps {
 
 export function PastEventsSection({ events }: PastEventsSectionProps) {
   const [selectedEvent, setSelectedEvent] = useState<Event | null>(null)
+
+  useEffect(() => {
+    if (typeof document === 'undefined' || typeof window === 'undefined') return
+
+    if (selectedEvent) {
+      const scrollY = window.scrollY
+      document.body.style.position = 'fixed'
+      document.body.style.top = `-${scrollY}px`
+      document.body.style.width = '100%'
+      document.body.classList.add('modal-open')
+    } else {
+      const scrollY = document.body.style.top
+      document.body.style.position = ''
+      document.body.style.top = ''
+      document.body.style.width = ''
+      document.body.classList.remove('modal-open')
+      if (scrollY) {
+        window.scrollTo(0, parseInt(scrollY || '0') * -1)
+      }
+    }
+
+    return () => {
+      if (document.body.style.position === 'fixed') {
+        const scrollY = document.body.style.top
+        document.body.style.position = ''
+        document.body.style.top = ''
+        document.body.style.width = ''
+        document.body.classList.remove('modal-open')
+        if (scrollY) {
+          window.scrollTo(0, parseInt(scrollY || '0') * -1)
+        }
+      }
+    }
+  }, [selectedEvent])
 
   const sampleEvents: Event[] = [
     {
