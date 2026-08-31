@@ -135,7 +135,7 @@ const EventCard: React.FC<EventCardProps> = ({
 
             <div className="w-full md:w-3/5 p-6 flex flex-col floating-element">
               <div className="relative mb-4 md:mb-2 group h-28 md:h-44 w-full flex items-center justify-center">
-                <div className="relative w-full h-full scale-[1.25] md:scale-[1.35] group-hover:scale-[1.35] md:group-hover:scale-[1.45] transition-transform duration-300">
+                <div className="relative w-full h-full scale-[1.25] md:scale-[1.8] group-hover:scale-[1.35] md:group-hover:scale-[1.9] transition-transform duration-300">
                   <Image src={logoPath || imagePath || '/assests/image.png'} alt={title} fill className="object-contain" sizes="(max-width: 768px) 100vw, 50vw" priority />
                 </div>
                 <div className="absolute inset-0 bg-gradient-to-t from-black/25 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300 pointer-events-none rounded-xl" />
@@ -157,6 +157,12 @@ const EventCard: React.FC<EventCardProps> = ({
                     </span>
                   </div>
                 )}
+                <div className="flex items-center gap-2 mb-3 md:mb-1">
+                  <div className="w-2 h-2 bg-pink-400 rounded-full shrink-0" />
+                  <span className="text-white text-xs md:text-sm font-heading truncate">
+                    Sponsored by - ITech
+                  </span>
+                </div>
                 <p className="text-white text-xs leading-relaxed mb-4 md:mb-2 font-body">{shortDescription}</p>
                 <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4 mt-auto md:mt-0">
                   <div className="flex items-center gap-2 attendee-icons flex-wrap">
@@ -229,6 +235,16 @@ const EventCard: React.FC<EventCardProps> = ({
                     <div className="mb-4">
                       <p className="text-fuchsia-300 text-sm mb-1.5 font-body">Overview</p>
                       <p className="text-fuchsia-100 text-sm leading-relaxed font-body">{overview}</p>
+                    </div>
+                    <div className="mb-4">
+                      <p className="text-fuchsia-300 text-sm mb-1.5 font-body">Sponsored by</p>
+                      <div className="flex items-center gap-4 bg-white/5 rounded-lg p-3 w-fit border border-white/10">
+                        <div className="relative w-24 h-12 bg-white flex items-center justify-center rounded overflow-hidden p-1">
+                          {/* We point this to /assests/itech.png - please save your image there! */}
+                          <Image src="/assests/itech.png" alt="ITech Computer Education" fill className="object-contain" />
+                        </div>
+                        <span className="text-fuchsia-100 text-sm md:text-base font-heading">ITech Computer Education</span>
+                      </div>
                     </div>
                     <div className="grid sm:grid-cols-2 gap-6">
                       <div>
