@@ -270,3 +270,8 @@ body.certificate-modal-open {
   position: fixed !important;
   width: 100% !important;
 }
+
+/* Prevent body scroll for event modals without jumping to top */
+body.modal-open {
+  overflow: hidden !important;
+}

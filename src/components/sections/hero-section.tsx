@@ -77,7 +77,10 @@ export function HeroSection() {
           transition={{ delay: 2, duration: 0.8 }}
           className="flex justify-center"
         >
-          <Button className="flex items-center justify-center gap-2">
+          <Button 
+            className="flex items-center justify-center gap-2"
+            onClick={() => document.getElementById('about')?.scrollIntoView({ behavior: 'smooth' })}
+          >
             <span>About Us</span>
             <ArrowRight className="h-5 w-5" />
           </Button>

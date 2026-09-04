@@ -47,7 +47,7 @@ export async function POST(req: NextRequest) {
     const squadName = getVal('squadName', 'squad_name', 'squad', 'teamName', 'team_name', 'name', 'title') || 'Squad';
     const domain = getVal('domain', 'category', 'path') || 'General';
     const leaderFullName = getVal('leaderFullName', 'leader_name', 'fullName', 'full_name', 'name') || 'Participant';
-    const rawLeaderEmail = getVal('leaderEmail', 'leader_email', 'email', 'email_address');
+    const rawLeaderEmail = getVal('leaderEmail', 'leader_email', 'email', 'email_address', 'emailid', 'email_id', 'contact_email', 'user_email', 'mail');
     const leaderEmail = rawLeaderEmail ? sanitizeEmail(rawLeaderEmail) : 'no-email@registration.local';
     const leaderPhone = getVal('leaderPhone', 'leader_phone', 'phone', 'contact', 'mobile') || 'N/A';
     const leaderCollege = getVal('leaderCollege', 'leader_college', 'college', 'institute') || 'N/A';
@@ -115,7 +115,7 @@ export async function POST(req: NextRequest) {
     if (leaderEmail && leaderEmail !== 'no-email@registration.local') {
       try {
         const { sendRegistrationSubmissionEmail } = await import('@/lib/email');
-        void sendRegistrationSubmissionEmail({
+        await sendRegistrationSubmissionEmail({
           email: leaderEmail,
           name: leaderFullName,
           squadName,

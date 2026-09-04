@@ -20,6 +20,49 @@ const STATUS_BY_ACTION: Record<ReviewAction, RegistrationStatus> = {
   waitlist: 'waitlisted',
 };
 
+// Helper to reliably extract email from leader or custom formData fields
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
+function extractEmailFromRegistration(reg: any): string {
+  if (reg.leader?.email && reg.leader.email !== 'no-email@registration.local' && reg.leader.email.includes('@')) {
+    return reg.leader.email.trim();
+  }
+  if (reg.formData && typeof reg.formData === 'object') {
+    for (const [key, val] of Object.entries(reg.formData)) {
+      if (typeof val === 'string' && val.includes('@') && val.includes('.')) {
+        const k = key.toLowerCase();
+        if (k.includes('email') || k.includes('mail') || k.includes('contact')) {
+          return val.trim();
+        }
+      }
+    }
+    for (const val of Object.values(reg.formData)) {
+      if (typeof val === 'string' && /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(val.trim())) {
+        return val.trim();
+      }
+    }
+  }
+  return '';
+}
+
+// Helper to reliably extract name from leader or custom formData fields
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
+function extractNameFromRegistration(reg: any): string {
+  if (reg.leader?.fullName && reg.leader.fullName !== 'Participant' && reg.leader.fullName.trim()) {
+    return reg.leader.fullName.trim();
+  }
+  if (reg.formData && typeof reg.formData === 'object') {
+    for (const [key, val] of Object.entries(reg.formData)) {
+      if (typeof val === 'string' && val.trim()) {
+        const k = key.toLowerCase();
+        if (k.includes('name') || k.includes('leader') || k.includes('participant')) {
+          return val.trim();
+        }
+      }
+    }
+  }
+  return reg.squadName || 'Participant';
+}
+
 export async function reviewRegistration(
   id: string,
   action: ReviewAction,
@@ -59,18 +102,47 @@ export async function reviewRegistration(
       const { sendRegistrationApprovedEmail } = await import('@/lib/email');
       const populated = await Registration.findById(id).populate('eventId', 'title').lean();
       const eventTitle = (populated?.eventId as unknown as { title?: string })?.title || 'Event';
-      const email = reg.leader?.email || String(reg.formData?.email || reg.formData?.member1Email || '');
-      const name = reg.leader?.fullName || String(reg.formData?.name || reg.formData?.member1Name || 'Participant');
-      if (email && email !== 'no-email@registration.local') {
-        void sendRegistrationApprovedEmail({
+      
+      const email = extractEmailFromRegistration(reg);
+      const name = extractNameFromRegistration(reg);
+
+      if (email && email.includes('@')) {
+        await sendRegistrationApprovedEmail({
           email,
           name,
           squadName: reg.squadName,
           eventTitle,
         });
+        console.log(`[Registration Service] Approval email sent to ${email}`);
+      } else {
+        console.warn(`[Registration Service] No valid email found for registration ${id} approval notice.`);
       }
     } catch (e) {
       console.error('[Registration Service] Failed to send approval email:', e);
+    }
+  } else if (action === 'reject') {
+    try {
+      const { sendRegistrationRejectedEmail } = await import('@/lib/email');
+      const populated = await Registration.findById(id).populate('eventId', 'title').lean();
+      const eventTitle = (populated?.eventId as unknown as { title?: string })?.title || 'Event';
+      
+      const email = extractEmailFromRegistration(reg);
+      const name = extractNameFromRegistration(reg);
+
+      if (email && email.includes('@')) {
+        await sendRegistrationRejectedEmail({
+          email,
+          name,
+          squadName: reg.squadName,
+          eventTitle,
+          reason: note,
+        });
+        console.log(`[Registration Service] Rejection email sent to ${email}`);
+      } else {
+        console.warn(`[Registration Service] No valid email found for registration ${id} rejection notice.`);
+      }
+    } catch (e) {
+      console.error('[Registration Service] Failed to send rejection email:', e);
     }
   }
 

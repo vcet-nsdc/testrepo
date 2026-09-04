@@ -1,12 +1,23 @@
-import Events from '@/components/events/Events'
+import type { Metadata } from 'next';
+import Events from '@/components/events/Events';
+import { APP_CONFIG } from '@/lib/constants';
 
-const page = () => {
+export const metadata: Metadata = {
+  title: 'Events & Hackathons',
+  description: 'Explore upcoming flagship hackathons, technical competitions, coding contests, and workshops organized by VCET NSDC Student Chapter at Vasai Road.',
+  keywords: ['VCET NSDC Events', 'Byteverse Hackathon', 'Coding Competitions Vasai', 'Engineering Events Mumbai', ...APP_CONFIG.keywords],
+  openGraph: {
+    title: 'Events & Hackathons | VCET NSDC',
+    description: 'Explore upcoming flagship hackathons, technical competitions, coding contests, and workshops organized by VCET NSDC.',
+    url: `${APP_CONFIG.url}/events`,
+    siteName: APP_CONFIG.name,
+  },
+};
+
+export default function EventsPage() {
   return (
     <div>
-      <Events/>
+      <Events />
     </div>
-  )
+  );
 }
-
-export default page
-

@@ -34,7 +34,7 @@ async function getActiveEvent(): Promise<{
 
   const businessSettings = await getSettings("business");
   const upiId = (businessSettings?.upiId as string) ?? null;
-  const qrCodeUrl = (businessSettings?.qrCodeUrl as string) || "/assests/payment.jpeg";
+  const qrCodeUrl = (businessSettings?.qrCodeUrl as string) || "/assests/jishantqr.png";
 
   const schemaDoc = raw.registration?.formSchemaId as unknown as {
     _id: { toString(): string };

@@ -3,6 +3,7 @@
 import { motion, AnimatePresence } from "framer-motion"
 import {  X } from "lucide-react"
 import { ImageCarousel } from "./imagecrousal"
+import { createPortal } from "react-dom"
 
 interface Event {
   id: string
@@ -38,17 +39,17 @@ export function EventModal({ event, onClose, stockImages }: EventModalProps) {
 
   const imagesToShow = event.gallery && event.gallery.length > 0 ? event.gallery : stockImages
 
-  return (
+  return typeof document !== 'undefined' ? createPortal(
     <AnimatePresence>
       <motion.div 
-        className="fixed inset-0 z-50 flex items-center justify-center bg-black/80 backdrop-blur-sm p-4"
+        className="fixed inset-0 z-[100] flex items-center justify-center bg-black/80 backdrop-blur-sm p-4"
         initial={{ opacity: 0 }}
         animate={{ opacity: 1 }}
         exit={{ opacity: 0 }}
         onClick={onClose}
       >
         <motion.div
-          className="relative w-full mt-20 max-w-4xl max-h-[80vh] rounded-lg border border-white/10 modal-smooth-scroll"
+          className="relative w-full max-w-4xl max-h-[80vh] rounded-lg border border-white/10 modal-smooth-scroll"
           style={{ backgroundColor: 'rgba(23, 10, 36, 0.7)', backdropFilter: 'blur(12px)' }}
           initial={{ scale: 0.8, opacity: 0 }}
           animate={{ scale: 1, opacity: 1 }}
@@ -112,26 +113,10 @@ export function EventModal({ event, onClose, stockImages }: EventModalProps) {
                   </div>
                 </div>
               )}
-
-              {/* <div className="flex justify-center pt-4">
-                <Button
-                  asChild
-                  className="bg-gradient-to-r from-fuchsia-600 to-purple-700 text-white px-4 py-2 rounded-xl text-xs font-heading hover:shadow-lg hover:scale-105 transition-all duration-200"
-                >
-                  <a
-                    href={event.link}
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    className="flex items-center justify-center gap-2"
-                  >
-                    View Event Details
-                    <ExternalLink className="w-4 h-4" />
-                  </a>
-                </Button>
-              </div> */}
               </div>
         </motion.div>
       </motion.div>
-    </AnimatePresence>
-  )
+    </AnimatePresence>,
+    document.body
+  ) : null
 }
