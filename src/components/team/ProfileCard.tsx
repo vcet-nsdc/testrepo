@@ -1,7 +1,7 @@
 'use client'
 
-import { useEffect, useState, useRef } from "react";
-import { motion, useMotionValue, useSpring } from "framer-motion";
+import { useEffect, useState } from "react";
+import { motion } from "framer-motion";
 import { FaInstagram, FaLinkedin, FaEnvelope } from "react-icons/fa";
 
 type ProfileCardProps = {
@@ -28,6 +28,7 @@ const ProfileCard: React.FC<ProfileCardProps> = ({
   email,
 }) => {
   const [tiltClass, setTiltClass] = useState("");
+  const [isHovered, setIsHovered] = useState(false);
 
   // Animation variants
   const cardVariants = {
@@ -82,29 +83,7 @@ const ProfileCard: React.FC<ProfileCardProps> = ({
     }
   };
 
-  const [isHovered, setIsHovered] = useState(false);
-  const containerRef = useRef<HTMLDivElement>(null);
-  
-  const mouseX = useMotionValue(200);
-  const mouseY = useMotionValue(200);
-  const springX = useSpring(mouseX, { damping: 25, stiffness: 220 });
-  const springY = useSpring(mouseY, { damping: 25, stiffness: 220 });
-
   const hasSocialLinks = Boolean(instagramUrl || linkedinUrl || email);
-
-  const handleMouseMove = (e: React.MouseEvent<HTMLDivElement>) => {
-    if (!containerRef.current) return;
-    const rect = containerRef.current.getBoundingClientRect();
-    const x = e.clientX - rect.left;
-    const y = e.clientY - rect.top;
-    
-    // Clamp so the pill stays within bounds
-    const clampedX = Math.max(95, Math.min(rect.width - 95, x));
-    const clampedY = Math.max(40, Math.min(rect.height - 40, y));
-    
-    mouseX.set(clampedX);
-    mouseY.set(clampedY);
-  };
 
   useEffect(() => {
     if (!enableTilt) return;
@@ -122,23 +101,12 @@ const ProfileCard: React.FC<ProfileCardProps> = ({
       initial="hidden"
       animate="visible"
       whileHover="hover"
+      onMouseEnter={() => setIsHovered(true)}
+      onMouseLeave={() => setIsHovered(false)}
     >
       <div className="absolute inset-0 rounded-2xl bg-gradient-to-br from-slate-700/20 to-slate-900/40 pointer-events-none" />
       <div className="relative overflow-hidden rounded-2xl">
-        <div 
-          ref={containerRef}
-          className="relative w-full h-[350px] sm:h-[400px] overflow-hidden"
-          onMouseEnter={(e) => {
-            const rect = e.currentTarget.getBoundingClientRect();
-            const x = Math.max(95, Math.min(rect.width - 95, e.clientX - rect.left));
-            const y = Math.max(40, Math.min(rect.height - 40, e.clientY - rect.top));
-            mouseX.set(x);
-            mouseY.set(y);
-            setIsHovered(true);
-          }}
-          onMouseMove={handleMouseMove}
-          onMouseLeave={() => setIsHovered(false)}
-        >
+        <div className="relative w-full h-[350px] sm:h-[400px] overflow-hidden">
           <motion.img
             src={avatarUrl}
             alt={name}
@@ -149,23 +117,18 @@ const ProfileCard: React.FC<ProfileCardProps> = ({
             animate="visible"
             whileHover="hover"
           />
-          {/* Dynamic hover social overlay following cursor position */}
+          {/* Social overlay fixed at bottom middle of photo */}
           {hasSocialLinks && (
             <motion.div 
-              className="pointer-events-none absolute top-0 left-0 z-20"
-              style={{
-                x: springX,
-                y: springY,
-                translateX: "-50%",
-                translateY: "-50%",
-              }}
-              initial={{ opacity: 0, scale: 0.6 }}
+              className="absolute bottom-5 left-1/2 -translate-x-1/2 z-20"
+              initial={{ opacity: 0, y: 15, scale: 0.85 }}
               animate={{ 
                 opacity: isHovered ? 1 : 0, 
-                scale: isHovered ? 1 : 0.6,
+                y: isHovered ? 0 : 15,
+                scale: isHovered ? 1 : 0.85,
                 pointerEvents: isHovered ? "auto" : "none" 
               }}
-              transition={{ duration: 0.2 }}
+              transition={{ duration: 0.25, ease: "easeOut" }}
             >
               <div className="flex items-center gap-5 rounded-full bg-slate-900/85 px-5 py-3 backdrop-blur-md shadow-2xl border border-slate-700/60">
                 {instagramUrl && (
@@ -196,7 +159,9 @@ const ProfileCard: React.FC<ProfileCardProps> = ({
                 )}
                 {email && (
                   <motion.a
-                    href={`mailto:${email}`}
+                    href={`https://mail.google.com/mail/?view=cm&fs=1&to=${encodeURIComponent(email)}`}
+                    target="_blank"
+                    rel="noopener noreferrer"
                     aria-label="Email"
                     className="text-emerald-300 hover:text-emerald-200 text-3xl"
                     whileHover={{ scale: 1.25, rotate: 3 }}
