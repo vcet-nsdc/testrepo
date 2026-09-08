@@ -5,9 +5,13 @@ import { Instagram, Youtube } from "lucide-react"
 import { FaLinkedinIn } from "react-icons/fa"
 import { SiGmail } from "react-icons/si"
 import { useEffect, useState } from "react"
+import { usePathname } from "next/navigation"
 
 export default function SocialSidebar() {
+  const pathname = usePathname()
   const [isVisible, setIsVisible] = useState(true)
+
+  if (pathname === '/contact') return null
 
   useEffect(() => {
     const footer = document.getElementById("footer")

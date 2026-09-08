@@ -1,17 +1,19 @@
 import { Suspense } from 'react';
 import type { Metadata } from 'next';
-import { ContactInfo } from '@/components/contact/contact-info';
-import { ContactForm } from '@/components/contact/contact-form';
+import { ContactView } from '@/components/contact/contact-view';
 import { LoadingState } from '@/components/ui/loading';
 import { APP_CONFIG } from '@/lib/constants';
+import './contact.css';
 
 export const metadata: Metadata = {
   title: 'Contact Us',
-  description: 'Get in touch with the official VCET NSDC Student Chapter team for event inquiries, sponsorships, hackathon partnerships, and campus collaborations at VCET Vasai.',
+  description:
+    'Get in touch with the official VCET NSDC Student Chapter team for event inquiries, sponsorships, hackathon partnerships, and campus collaborations at VCET Vasai.',
   keywords: ['Contact VCET NSDC', 'VCET Vasai Address', 'NSDC Sponsorships', ...APP_CONFIG.keywords],
   openGraph: {
     title: 'Contact Us | VCET NSDC',
-    description: 'Get in touch with the official VCET NSDC Student Chapter team for event inquiries and collaborations.',
+    description:
+      'Get in touch with the official VCET NSDC Student Chapter team for event inquiries and collaborations.',
     url: `${APP_CONFIG.url}/contact`,
     siteName: APP_CONFIG.name,
   },
@@ -19,27 +21,10 @@ export const metadata: Metadata = {
 
 export default function ContactPage() {
   return (
-    <main className="min-h-full py-20">
-      <div className="max-w-7xl mx-auto px-6">
-        <div className="text-center mb-12">
-          <h1 className="text-4xl md:text-5xl font-bold text-white mb-4">
-            Contact Us
-          </h1>
-          <p className="text-xl text-white/80 max-w-2xl mx-auto">
-            Get in touch with our team for collaborations, inquiries, or to learn more about VCET NSDC
-          </p>
-        </div>
-
-        <div className="grid grid-cols-1 lg:grid-cols-2 gap-12">
-          <Suspense fallback={<LoadingState message="Loading contact information..." />}>
-            <ContactInfo />
-          </Suspense>
-
-          <Suspense fallback={<LoadingState message="Loading contact form..." />}>
-            <ContactForm />
-          </Suspense>
-        </div>
-      </div>
+    <main className="min-h-full">
+      <Suspense fallback={<LoadingState message="Loading contact experience..." />}>
+        <ContactView />
+      </Suspense>
     </main>
   );
 }
