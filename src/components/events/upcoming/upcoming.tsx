@@ -45,15 +45,25 @@ const Upcoming: React.FC = () => {
   ];
 
   return (
-    <div className='font-body min-h-screen flex justify-center items-center'>
-      {/* Removed overlayRef div */}
+    <div className='font-body flex flex-col justify-center items-center'>
+      <div className='w-full max-w-4xl mx-auto px-4 sm:px-6 pt-24 pb-4 md:pt-36'>
+        <div className='text-center mb-10'>
+          <div className="inline-flex items-center gap-2 bg-pink-500/10 border border-pink-500/30 rounded-full px-4 py-1.5 mb-3 backdrop-blur-md">
+            <span className="relative flex h-2 w-2">
+              <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-pink-400 opacity-75"></span>
+              <span className="relative inline-flex rounded-full h-2 w-2 bg-pink-500"></span>
+            </span>
+            <span className="text-xs font-heading font-semibold uppercase tracking-wider text-pink-200">
+              Live Competition
+            </span>
+          </div>
+          <h1 className='text-4xl md:text-5xl font-bold text-white mb-3 text-balance font-heading'>Ongoing Event</h1>
+          <p className='text-base md:text-lg text-purple-200 max-w-xl mx-auto font-body'>
+            Assemble your squad, pick your domain, and battle it out in our flagship arena
+          </p>
+        </div>
 
-      {/* Removed Header Section */}
-
-      {/* Removed Statistics Cards Section */}
-
-      <div className='max-w-3xl mx-auto px-6 pt-20 pb-20 md:pt-40'>
-        <div className='flex flex-col items-center gap-16'>
+        <div className='flex flex-col items-center gap-12'>
           {events.map((event, index) => (
             <EventCard key={index} {...event} />
           ))}
@@ -209,20 +219,7 @@ const Upcoming: React.FC = () => {
         .event-card-wrapper.is-tilted .attendee-icons {
           transform: translateZ(80px);
         }
-        .card-surface {
-          background: linear-gradient(
-            180deg,
-            #a78bfa 0%,
-            #8b5cf6 45%,
-            #7c3aed 100%
-          );
-          border: 1px solid rgba(139, 92, 246, 0.35);
-          box-shadow:
-            0 0 0 1px rgba(139, 92, 246, 0.15),
-            0 10px 30px rgba(99, 102, 241, 0.18);
-        }
-        /* Removed side-panel-gradient */
-        /* Removed image-cover */
+        /* Glassmorphism styles are handled via modern Tailwind classes */
       `}</style>
     </div>
   );

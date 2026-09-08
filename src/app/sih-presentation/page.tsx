@@ -1,11 +1,11 @@
 "use client";
 
-import React, { useState, useEffect } from "react";
+import { useState, useEffect } from "react";
 import { 
   ChevronLeft, ChevronRight, Lightbulb, CheckCircle2, 
-  ShieldAlert, Zap, Thermometer, Droplets, Battery, 
+  ShieldAlert, Zap, Thermometer, Battery, 
   Sun, Cpu, Settings, Factory, Shield, Leaf, 
-  TrendingUp, Users, Link as LinkIcon
+  TrendingUp, Users, Link as LinkIcon, FileText
 } from "lucide-react";
 
 export default function Presentation() {

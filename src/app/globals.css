@@ -1,3 +1,4 @@
+@import url('https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400..900;1,400..900&family=Cinzel+Decorative:wght@700;900&family=Italiana&family=Rozha+One&display=swap');
 @import "tailwindcss";
 @plugin "tailwindcss-animate";
 
@@ -19,6 +20,7 @@
   /* Font Variables */
   --font-manrope: "Manrope", sans-serif;
   --font-dosis: "Dosis", sans-serif;
+  --font-transcity: "Playfair Display", "Italiana", "Rozha One", "Cinzel Decorative", Georgia, serif;
   --radius: 0.625rem;
   --background: oklch(1 0 0);
   --foreground: oklch(0.145 0 0);
@@ -68,6 +70,7 @@
   /* Fonts */
   --font-sans: var(--font-manrope);
   --font-heading: var(--font-dosis);
+  --font-transcity: var(--font-transcity);
   --color-sidebar-ring: var(--sidebar-ring);
   --color-sidebar-border: var(--sidebar-border);
   --color-sidebar-accent-foreground: var(--sidebar-accent-foreground);
@@ -275,3 +278,105 @@ body.certificate-modal-open {
 body.modal-open {
   overflow: hidden !important;
 }
+
+/* Continuous Auto-Scrolling Photo Strip (Event Photo Marquee) */
+@keyframes photoStripScroll {
+  0% {
+    transform: translate3d(0, 0, 0);
+  }
+  100% {
+    transform: translate3d(-50%, 0, 0);
+  }
+}
+
+.photo-strip-container {
+  position: relative;
+  width: 100%;
+  overflow: hidden;
+}
+
+.photo-strip-track {
+  display: flex;
+  width: max-content;
+  will-change: transform;
+  animation: photoStripScroll var(--marquee-duration, 35s) linear infinite;
+}
+
+.photo-strip-container:hover .photo-strip-track {
+  animation-play-state: paused !important;
+}
+
+.photo-strip-mask {
+  mask-image: linear-gradient(
+    to right,
+    transparent 0%,
+    black 6%,
+    black 94%,
+    transparent 100%
+  );
+  -webkit-mask-image: linear-gradient(
+    to right,
+    transparent 0%,
+    black 6%,
+    black 94%,
+    transparent 100%
+  );
+}
+
+/* UI Image Auto Slider track support */
+.infinite-scroll-track {
+  display: flex;
+  width: max-content;
+  will-change: transform;
+  animation: photoStripScroll var(--slider-duration, 25s) linear infinite;
+}
+
+.scroll-mask-container {
+  mask-image: linear-gradient(
+    to right,
+    transparent 0%,
+    black 10%,
+    black 90%,
+    transparent 100%
+  );
+  -webkit-mask-image: linear-gradient(
+    to right,
+    transparent 0%,
+    black 10%,
+    black 90%,
+    transparent 100%
+  );
+}
+
+.group:hover .infinite-scroll-track {
+  animation-play-state: paused !important;
+}
+
+/* Transcity Authentic Luxury Serif Display Typography */
+@font-face {
+  font-family: 'Transcity';
+  src: url('/fonts/Transcity.otf') format('opentype');
+  font-weight: 400;
+  font-style: normal;
+  font-display: swap;
+}
+
+.font-transcity {
+  font-family: 'Transcity', 'Playfair Display', 'Italiana', Georgia, serif;
+  font-feature-settings: "swsh" 1, "dlig" 1, "liga" 1;
+}
+
+/* Refined alphabet outline illumination tracing each letter on hover - GPU-optimized for 120fps */
+.logo-alphabet-trace {
+  filter: drop-shadow(0 12px 24px rgba(0, 0, 0, 0.8));
+  will-change: transform;
+  transform: translateZ(0);
+  backface-visibility: hidden;
+  transition: filter 0.25s ease;
+}
+
+.group:hover .logo-alphabet-trace,
+.logo-alphabet-trace:hover {
+  filter: drop-shadow(0 0 10px rgba(192, 132, 252, 0.75))
+          drop-shadow(0 14px 28px rgba(0, 0, 0, 0.85)) !important;
+}
