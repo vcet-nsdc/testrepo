@@ -5,7 +5,7 @@ import Registration from '@/models/Registration';
 import EventModel from '@/models/EventModel';
 import FormSchemaModel, { IFormField } from '@/models/FormSchema';
 import { requirePermission } from '@/lib/rbac';
-import * as XLSX from 'xlsx';
+import ExcelJS from 'exceljs';
 
 interface RegistrationDoc {
   _id: string;
@@ -189,50 +189,59 @@ export async function GET(req: NextRequest) {
       ];
     }
 
-    // Generate Excel row objects matching exact Form Schema column titles
-    const rows = regDocs.map((r, i) => {
-      const rowObj: Record<string, unknown> = {
+    // Filter out file types that shouldn't appear as text columns
+    const activeColumns = targetSchemaFields.filter(
+      (f) => !(f.type === 'file' && (f.key.includes('screenshot') || f.label.toLowerCase().includes('screenshot')))
+    );
+
+    const headers = [
+      'S.No',
+      'Event',
+      'Status',
+      ...activeColumns.map((f) => f.label),
+      'Transaction ID / UTR',
+      'Payment Screenshot URL',
+      'Registered At',
+    ];
+
+    const workbook = new ExcelJS.Workbook();
+    const worksheet = workbook.addWorksheet('Registrations');
+
+    worksheet.columns = headers.map((header) => ({
+      header,
+      key: header,
+      width: Math.max(header.length + 5, 15),
+    }));
+
+    // Style header row
+    worksheet.getRow(1).font = { bold: true };
+
+    for (const [i, r] of regDocs.entries()) {
+      const rowData: Record<string, unknown> = {
         'S.No': i + 1,
         'Event': r.eventId?.title || 'General / Unspecified',
         'Status': r.status ? r.status.toUpperCase() : 'PENDING',
       };
 
-      // Map every single Form Schema Field into Excel columns using exact Label!
-      for (const f of targetSchemaFields) {
-        // Skip file screenshot inputs in dynamic fields as screenshot link is attached separately
-        if (f.type === 'file' && (f.key.includes('screenshot') || f.label.toLowerCase().includes('screenshot'))) {
-          continue;
-        }
-
+      for (const f of activeColumns) {
         const val = getFieldValue(r, f.key, f.label);
-        rowObj[f.label] = val !== undefined && val !== null ? val : '';
+        rowData[f.label] = val !== undefined && val !== null ? String(val) : '';
       }
 
-      // Append Transaction ID & Payment Screenshot link columns
       const txId = r.transactionId && r.transactionId !== 'FREE-REGISTRATION'
         ? r.transactionId
         : String(r.formData?.transactionId || r.formData?.transaction_id || '');
 
-      if (txId) {
-        rowObj['Transaction ID / UTR'] = txId;
-      }
+      rowData['Transaction ID / UTR'] = txId;
+      rowData['Payment Screenshot URL'] = r.paymentScreenshot ? `${origin}/api/admin/screenshot/${r._id}` : '';
+      rowData['Registered At'] = r.createdAt ? new Date(r.createdAt).toLocaleString('en-IN') : '';
 
-      if (r.paymentScreenshot) {
-        rowObj['Payment Screenshot URL'] = `${origin}/api/admin/screenshot/${r._id}`;
-      }
+      worksheet.addRow(rowData);
+    }
 
-      rowObj['Registered At'] = r.createdAt ? new Date(r.createdAt).toLocaleString('en-IN') : '';
+    const buffer = await workbook.xlsx.writeBuffer();
 
-      return rowObj;
-    });
-
-    const ws = XLSX.utils.json_to_sheet(rows);
-    const wb = XLSX.utils.book_new();
-    XLSX.utils.book_append_sheet(wb, ws, 'Registrations');
-
-    const buf = XLSX.write(wb, { type: 'buffer', bookType: 'xlsx' });
-
-    return new NextResponse(buf, {
+    return new NextResponse(buffer, {
       status: 200,
       headers: {
         'Content-Type': 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet',
@@ -245,3 +254,4 @@ export async function GET(req: NextRequest) {
     return NextResponse.json({ error: msg }, { status: 500 });
   }
 }
+

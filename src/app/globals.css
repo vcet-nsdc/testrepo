@@ -4,54 +4,59 @@
 @custom-variant dark (&:is(.dark *));
 
 :root {
-  /* Background & Foreground */
+  /* Cinematic Deep-Space Void Palette */
+  --void: #05030A;
+  --void-surface: #0A0612;
+  --void-card: rgba(10, 6, 18, 0.8);
+  
+  /* Neon Accents */
+  --neon-purple: #7F45DB;
+  --neon-purple-glow: rgba(127, 69, 219, 0.4);
+  --neon-lavender: #A472F7;
+  --neon-lavender-glow: rgba(164, 114, 247, 0.45);
+  --neon-cyan: #00F0FF;
+  --neon-emerald: #10B981;
+
+  /* Glassmorphism System */
+  --glass-bg: rgba(255, 255, 255, 0.02);
+  --glass-bg-hover: rgba(255, 255, 255, 0.045);
+  --glass-border: rgba(164, 114, 247, 0.15);
+  --glass-border-hover: rgba(164, 114, 247, 0.35);
 
   /* Primary Palette */
-  --color-primary: #7F45DB;  /* Oat White */
-  --color-primary-dark: #4A2293; /* Dark Stone */
-  --color-primary-light: #A472F7; /* Orange Vibe */
+  --color-primary: #7F45DB;
+  --color-primary-dark: #4A2293;
+  --color-primary-light: #A472F7;
 
   /* Secondary Palette */
   --color-border-grey: #8A8A8A;
-  --color-text-grey: #6E6E6E;
+  --color-text-grey: #94A3B8;
   --color-light-grey: #EAEAEA;
 
   /* Font Variables */
   --font-manrope: "Manrope", sans-serif;
   --font-dosis: "Dosis", sans-serif;
-  --radius: 0.625rem;
-  --background: oklch(1 0 0);
-  --foreground: oklch(0.145 0 0);
-  --card: oklch(1 0 0);
-  --card-foreground: oklch(0.145 0 0);
-  --popover: oklch(1 0 0);
-  --popover-foreground: oklch(0.145 0 0);
-  --primary: oklch(0.205 0 0);
-  --primary-foreground: oklch(0.985 0 0);
-  --secondary: oklch(0.97 0 0);
-  --secondary-foreground: oklch(0.205 0 0);
-  --muted: oklch(0.97 0 0);
-  --muted-foreground: oklch(0.556 0 0);
-  --accent: oklch(0.97 0 0);
-  --accent-foreground: oklch(0.205 0 0);
-  --destructive: oklch(0.577 0.245 27.325);
-  --border: oklch(0.922 0 0);
-  --input: oklch(0.922 0 0);
-  --ring: oklch(0.708 0 0);
-  --chart-1: oklch(0.646 0.222 41.116);
-  --chart-2: oklch(0.6 0.118 184.704);
-  --chart-3: oklch(0.398 0.07 227.392);
-  --chart-4: oklch(0.828 0.189 84.429);
-  --chart-5: oklch(0.769 0.188 70.08);
-  --sidebar: oklch(0.985 0 0);
-  --sidebar-foreground: oklch(0.145 0 0);
-  --sidebar-primary: oklch(0.205 0 0);
-  --sidebar-primary-foreground: oklch(0.985 0 0);
-  --sidebar-accent: oklch(0.97 0 0);
-  --sidebar-accent-foreground: oklch(0.205 0 0);
-  --sidebar-border: oklch(0.922 0 0);
-  --sidebar-ring: oklch(0.708 0 0);
+  --radius: 0.75rem;
+  --background: #05030A;
+  --foreground: #F8FAFC;
+  --card: #0A0612;
+  --card-foreground: #F8FAFC;
+  --popover: #0A0612;
+  --popover-foreground: #F8FAFC;
+  --primary: #7F45DB;
+  --primary-foreground: #FFFFFF;
+  --secondary: #1E1B2E;
+  --secondary-foreground: #F8FAFC;
+  --muted: #1E1B2E;
+  --muted-foreground: #94A3B8;
+  --accent: #A472F7;
+  --accent-foreground: #05030A;
+  --destructive: #EF4444;
+  --border: rgba(255, 255, 255, 0.08);
+  --input: rgba(255, 255, 255, 0.08);
+  --ring: #7F45DB;
 }
+
 
 @theme inline {
   --color-background: var(--background);
@@ -106,10 +111,18 @@ body {
   font-family: var(--font-sans);
 }
 
-/* Headings use Dosis */
+/* Headings use Space Grotesk / Dosis */
 h1, h2, h3, h4, h5, h6 {
-  font-family: var(--font-heading);
-  font-weight: 600;
+  font-family: var(--font-space-grotesk), var(--font-dosis), sans-serif;
+  font-weight: 700;
+}
+
+.font-display {
+  font-family: var(--font-space-grotesk), var(--font-dosis), sans-serif;
+}
+
+.font-mono-tech {
+  font-family: var(--font-jetbrains-mono), monospace;
 }
 
 .dark {
@@ -275,3 +288,330 @@ body.certificate-modal-open {
 body.modal-open {
   overflow: hidden !important;
 }
+
+/* ============================================================================
+   CINEMATIC "DATA COMPILER" VOID DESIGN SYSTEM UTILITIES
+   ============================================================================ */
+
+.bg-void {
+  background-color: var(--void);
+}
+
+.bg-void-surface {
+  background-color: var(--void-surface);
+}
+
+.bg-void-card {
+  background-color: var(--void-card);
+}
+
+.glass-panel {
+  background: var(--glass-bg);
+  border: 1px solid var(--glass-border);
+  backdrop-filter: blur(20px);
+  -webkit-backdrop-filter: blur(20px);
+  transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.glass-panel:hover {
+  background: var(--glass-bg-hover);
+  border-color: var(--glass-border-hover);
+  box-shadow: 0 0 30px rgba(127, 69, 219, 0.15);
+}
+
+.glass-card-interactive {
+  background: rgba(255, 255, 255, 0.02);
+  border: 1px solid rgba(255, 255, 255, 0.06);
+  backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
+  transition: transform 0.25s ease, border-color 0.25s ease, box-shadow 0.25s ease;
+}
+
+.glass-card-interactive:hover {
+  transform: translateY(-2px) scale(1.015);
+  border-color: #7F45DB;
+  box-shadow: 0 0 25px rgba(127, 69, 219, 0.25);
+}
+
+/* Background Cyber Grid */
+.cyber-grid {
+  background-image: 
+    linear-gradient(to right, rgba(255, 255, 255, 0.03) 1px, transparent 1px),
+    linear-gradient(to bottom, rgba(255, 255, 255, 0.03) 1px, transparent 1px);
+  background-size: 48px 48px;
+}
+
+.cyber-dots {
+  background-image: radial-gradient(rgba(164, 114, 247, 0.15) 1px, transparent 1px);
+  background-size: 24px 24px;
+}
+
+/* Neon Glows */
+.text-neon-glow {
+  text-shadow: 0 0 20px rgba(164, 114, 247, 0.6), 0 0 40px rgba(127, 69, 219, 0.4);
+}
+
+.border-neon-glow {
+  box-shadow: 0 0 20px rgba(127, 69, 219, 0.3), inset 0 0 15px rgba(164, 114, 247, 0.1);
+}
+
+/* Blinking Cursor for Terminal */
+@keyframes terminalBlink {
+  0%, 100% { opacity: 1; }
+  50% { opacity: 0; }
+}
+
+.animate-cursor-blink {
+  animation: terminalBlink 1s infinite;
+}
+
+/* Monolith Glow Pulse & Portal Aesthetics */
+@keyframes monolithPulse {
+  0%, 100% {
+    opacity: 0.9;
+    filter: drop-shadow(0 0 35px rgba(255, 255, 255, 0.8)) drop-shadow(0 0 80px rgba(164, 114, 247, 0.6)) drop-shadow(0 0 140px rgba(127, 69, 219, 0.4));
+  }
+  50% {
+    opacity: 1;
+    filter: drop-shadow(0 0 50px rgba(255, 255, 255, 1)) drop-shadow(0 0 110px rgba(164, 114, 247, 0.85)) drop-shadow(0 0 180px rgba(127, 69, 219, 0.6));
+  }
+}
+
+.animate-monolith-glow {
+  animation: monolithPulse 4s ease-in-out infinite;
+}
+
+/* Static Noise Overlay */
+.noise-overlay {
+  background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noiseFilter'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.8' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noiseFilter)' opacity='0.035'/%3E%3C/svg%3E");
+}
+
+/* Monolith Light Bloom Flash */
+.light-bloom-flash {
+  background: radial-gradient(
+    circle at center,
+    rgba(255, 255, 255, 0.95) 0%,
+    rgba(164, 114, 247, 0.6) 30%,
+    rgba(127, 69, 219, 0.3) 60%,
+    transparent 80%
+  );
+}
+
+
+/* Monolith Door 3D Perspective Portal */
+.monolith-door-frame {
+  box-shadow: 
+    0 0 0 1px rgba(255, 255, 255, 0.4),
+    0 0 25px rgba(255, 255, 255, 0.9),
+    0 0 60px rgba(164, 114, 247, 0.6),
+    0 0 120px rgba(127, 69, 219, 0.4),
+    inset 0 0 30px rgba(255, 255, 255, 0.9);
+}
+
+.monolith-ground-reflection {
+  background: radial-gradient(
+    ellipse 60% 35% at 50% 0%,
+    rgba(255, 255, 255, 0.45) 0%,
+    rgba(164, 114, 247, 0.3) 25%,
+    rgba(127, 69, 219, 0.15) 50%,
+    transparent 85%
+  );
+  transform: perspective(600px) rotateX(75deg);
+  transform-origin: top center;
+}
+
+/* ============================================================================
+   CRYSTALLINE BENTO SYSTEM (Phase 3: Prismatic Borders & CSS Glint)
+   ============================================================================ */
+
+.crystalline-card {
+  background: rgba(8, 6, 13, 0.65);
+  backdrop-filter: blur(20px);
+  -webkit-backdrop-filter: blur(20px);
+  border: 1px solid rgba(164, 114, 247, 0.12);
+  box-shadow: 
+    inset 0 0 1px rgba(164, 114, 247, 0.4),
+    inset 0 0 12px rgba(164, 114, 247, 0.05);
+  transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+  position: relative;
+  overflow: hidden;
+}
+
+.crystalline-card:hover {
+  border-color: rgba(164, 114, 247, 0.35);
+  box-shadow: 
+    inset 0 0 1px rgba(164, 114, 247, 0.6),
+    inset 0 0 20px rgba(164, 114, 247, 0.12),
+    0 0 30px rgba(127, 69, 219, 0.18);
+}
+
+.crystalline-card-highlight {
+  background: rgba(10, 16, 20, 0.7);
+  backdrop-filter: blur(20px);
+  -webkit-backdrop-filter: blur(20px);
+  border: 1px solid rgba(16, 185, 129, 0.35);
+  box-shadow: 
+    inset 0 0 1px rgba(16, 185, 129, 0.5),
+    inset 0 0 16px rgba(16, 185, 129, 0.08),
+    0 0 25px rgba(16, 185, 129, 0.15);
+  position: relative;
+  overflow: hidden;
+  transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.crystalline-card-highlight:hover {
+  border-color: rgba(52, 211, 153, 0.7);
+  box-shadow: 
+    inset 0 0 1px rgba(52, 211, 153, 0.8),
+    inset 0 0 24px rgba(16, 185, 129, 0.18),
+    0 0 35px rgba(16, 185, 129, 0.3);
+}
+
+/* CSS Only Glint Effect: Races across on hover */
+.crystalline-glint {
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  left: 0;
+  width: 45%;
+  background: linear-gradient(
+    90deg,
+    transparent 0%,
+    rgba(255, 255, 255, 0.03) 30%,
+    rgba(255, 255, 255, 0.22) 50%,
+    rgba(164, 114, 247, 0.15) 70%,
+    transparent 100%
+  );
+  transform: translateX(-150%) skewX(-45deg);
+  pointer-events: none;
+  transition: transform 0.6s linear;
+  z-index: 20;
+}
+
+.group:hover .crystalline-glint {
+  transform: translateX(350%) skewX(-45deg);
+}
+
+/* Geode Fracture SVG Facet Styling */
+.geode-facet-left {
+  fill: #120A1C;
+  stroke: #2E1945;
+  stroke-width: 1.5;
+  filter: drop-shadow(0 0 15px rgba(127, 69, 219, 0.25));
+}
+
+.geode-facet-right {
+  fill: #0F0818;
+  stroke: #2A153E;
+  stroke-width: 1.5;
+  filter: drop-shadow(0 0 15px rgba(127, 69, 219, 0.25));
+}
+
+/* Backward-compatible alias */
+.bento-cell {
+  background: rgba(8, 6, 13, 0.65);
+  backdrop-filter: blur(20px);
+  -webkit-backdrop-filter: blur(20px);
+  border: 1px solid rgba(164, 114, 247, 0.12);
+  box-shadow: 
+    inset 0 0 1px rgba(164, 114, 247, 0.4),
+    inset 0 0 12px rgba(164, 114, 247, 0.05);
+  transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+  position: relative;
+  overflow: hidden;
+}
+
+.bento-cell:hover {
+  border-color: rgba(164, 114, 247, 0.35);
+  box-shadow: 
+    inset 0 0 1px rgba(164, 114, 247, 0.6),
+    inset 0 0 20px rgba(164, 114, 247, 0.12),
+    0 0 30px rgba(127, 69, 219, 0.18);
+}
+
+.bento-cell-highlight {
+  background: rgba(10, 16, 20, 0.7);
+  backdrop-filter: blur(20px);
+  -webkit-backdrop-filter: blur(20px);
+  border: 1px solid rgba(16, 185, 129, 0.35);
+  box-shadow: 
+    inset 0 0 1px rgba(16, 185, 129, 0.5),
+    inset 0 0 16px rgba(16, 185, 129, 0.08),
+    0 0 25px rgba(16, 185, 129, 0.15);
+  position: relative;
+  overflow: hidden;
+  transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.bento-cell-highlight:hover {
+  border-color: rgba(52, 211, 153, 0.7);
+  box-shadow: 
+    inset 0 0 1px rgba(52, 211, 153, 0.8),
+    inset 0 0 24px rgba(16, 185, 129, 0.18),
+    0 0 35px rgba(16, 185, 129, 0.3);
+}
+
+/* Perspective Floor Grid (Grounding in 3D Depth) */
+.perspective-floor-grid {
+  background-image: 
+    linear-gradient(to right, rgba(164, 114, 247, 0.18) 1px, transparent 1px),
+    linear-gradient(to bottom, rgba(164, 114, 247, 0.18) 1px, transparent 1px);
+  background-size: 48px 48px;
+  transform: perspective(450px) rotateX(72deg);
+  transform-origin: bottom center;
+  mask-image: linear-gradient(to top, rgba(0, 0, 0, 0.9) 0%, rgba(0, 0, 0, 0) 85%);
+  -webkit-mask-image: linear-gradient(to top, rgba(0, 0, 0, 0.9) 0%, rgba(0, 0, 0, 0) 85%);
+}
+
+/* Anamorphic Exposure Bloom & Lens Flare (Horizontal beam, corners anchored in dark void) */
+.anamorphic-bloom-flare {
+  background: radial-gradient(
+    ellipse 85% 32% at 50% 50%,
+    rgba(255, 255, 255, 0.98) 0%,
+    rgba(233, 213, 255, 0.85) 25%,
+    rgba(164, 114, 247, 0.55) 55%,
+    rgba(127, 69, 219, 0.2) 80%,
+    transparent 100%
+  );
+  filter: drop-shadow(0 0 35px rgba(164, 114, 247, 0.9)) drop-shadow(0 0 70px rgba(127, 69, 219, 0.6));
+}
+
+.anamorphic-horizontal-streak {
+  background: linear-gradient(
+    90deg,
+    transparent 0%,
+    rgba(164, 114, 247, 0.2) 15%,
+    rgba(255, 255, 255, 0.95) 50%,
+    rgba(164, 114, 247, 0.2) 85%,
+    transparent 100%
+  );
+  box-shadow: 0 0 25px #FFFFFF, 0 0 50px #A472F7, 0 0 100px #7F45DB;
+}
+
+/* Matrix Background Grid */
+.bento-matrix-grid {
+  background-image: 
+    linear-gradient(to right, rgba(255, 255, 255, 0.04) 1px, transparent 1px),
+    linear-gradient(to bottom, rgba(255, 255, 255, 0.04) 1px, transparent 1px);
+  background-size: 64px 64px;
+}
+
+/* ============================================================================
+   GLOBAL FIXED VECTOR GRID (40px x 40px subtle purple grid, masked in hero)
+   ============================================================================ */
+.global-fixed-grid {
+  position: fixed;
+  inset: 0;
+  pointer-events: none;
+  z-index: 0;
+  background-image: 
+    linear-gradient(to right, rgba(127, 69, 219, 0.06) 1px, transparent 1px),
+    linear-gradient(to bottom, rgba(127, 69, 219, 0.06) 1px, transparent 1px);
+  background-size: 40px 40px;
+  mask-image: linear-gradient(to bottom, rgba(0, 0, 0, 0) 0%, rgba(0, 0, 0, 0) 70vh, rgba(0, 0, 0, 1) 100vh);
+  -webkit-mask-image: linear-gradient(to bottom, rgba(0, 0, 0, 0) 0%, rgba(0, 0, 0, 0) 70vh, rgba(0, 0, 0, 1) 100vh);
+}
+
+
+
+

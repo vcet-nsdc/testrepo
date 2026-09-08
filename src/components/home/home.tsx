@@ -1,70 +1,25 @@
-/**
- * Home Page
- * Main landing page with hero section and key information
- */
+'use client';
 
-import { Suspense } from 'react';
-import { Metadata } from 'next';
-import { HeroSection } from '@/components/sections/hero-section';
-import { AboutSection } from '@/components/sections/about-section';
-import { StatsSection } from '@/components/sections/stats-section';
-import { HighlightsSection } from '@/components/sections/highlights-section';
-import { QuickLinksSection } from '@/components/sections/quick-links-section';
-import { CTASection } from '@/components/sections/cta-section';
-import { APP_CONFIG } from '@/lib/constants';
-
-// ============================================================================
-// METADATA
-// ============================================================================
-
-export const metadata: Metadata = {
-  title: 'Home',
-  description: APP_CONFIG.description,
-  openGraph: {
-    title: APP_CONFIG.name,
-    description: APP_CONFIG.description,
-    type: 'website',
-  },
-};
-
-// ============================================================================
-// HOME PAGE COMPONENT
-// ============================================================================
+import { CosmicNodeIgnition } from './CosmicNodeIgnition';
+import { BentoGrid } from './BentoGrid';
 
 export default function HomePage() {
+  const handleSequenceComplete = () => {
+    if (typeof window !== 'undefined') {
+      window.dispatchEvent(new CustomEvent('nsdc-reveal-bento'));
+    }
+  };
+
   return (
-    <main className="min-h-full">
-      {/* Hero Section */}
-      <Suspense fallback={<div className="h-screen" />}>
-        <HeroSection />
-      </Suspense>
+    <main className="min-h-screen bg-[#05030A] text-slate-100 selection:bg-purple-500/30 selection:text-purple-200 overflow-x-hidden relative">
+      {/* Global Fixed Subtle Purple Grid (Anchored permanently behind content below hero) */}
+      <div className="global-fixed-grid" />
 
-      {/* About Section */}
-      <Suspense fallback={<div className="h-96" />}>
-        <AboutSection />
-      </Suspense>
+      {/* 1. The Cosmic Node Ignition Hero (Three.js 3D Emblem + Star Ignition + Gyro Orbits + Pill Navbar Ascent) */}
+      <CosmicNodeIgnition onSequenceComplete={handleSequenceComplete} />
 
-      {/* Stats Section */}
-      <Suspense fallback={<div className="h-32" />}>
-        <StatsSection />
-      </Suspense>
-
-      {/* Highlights Section */}
-      <Suspense fallback={<div className="h-96" />}>
-        <HighlightsSection />
-      </Suspense>
-
-      {/* Quick Links Section */}
-      <Suspense fallback={<div className="h-96" />}>
-        <QuickLinksSection />
-      </Suspense>
-
-      {/* CTA Section */}
-      <Suspense fallback={<div className="h-64" />}>
-        <CTASection />
-      </Suspense>
-
-
+      {/* 2. Crystalline Bento Grid (Data Compiler Matrix with Glint Effects) */}
+      <BentoGrid />
     </main>
   );
 }

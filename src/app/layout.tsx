@@ -4,11 +4,10 @@
  */
 
 import type { Metadata, Viewport } from 'next';
-import { Dosis, Manrope } from 'next/font/google';
+import { Dosis, Manrope, Space_Grotesk, JetBrains_Mono, Inter } from 'next/font/google';
 import { ErrorBoundary } from '@/components/ui/error-boundary';
 import { Navbar } from '@/components/layout/navbar';
 import { Footer } from '@/components/layout/footer';
-import ShaderBackground from '@/components/shader-background';
 import { APP_CONFIG, CONTACT_INFO } from '@/lib/constants';
 import { AuthProvider } from '@/components/providers/AuthProvider';
 import './globals.css';
@@ -23,6 +22,24 @@ const dosis = Dosis({
 const manrope = Manrope({
   subsets: ['latin'],
   variable: '--font-manrope',
+  display: 'swap',
+});
+
+const spaceGrotesk = Space_Grotesk({
+  subsets: ['latin'],
+  variable: '--font-space-grotesk',
+  display: 'swap',
+});
+
+const jetbrainsMono = JetBrains_Mono({
+  subsets: ['latin'],
+  variable: '--font-jetbrains-mono',
+  display: 'swap',
+});
+
+const inter = Inter({
+  subsets: ['latin'],
+  variable: '--font-inter',
   display: 'swap',
 });
 
@@ -158,7 +175,11 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="en" className={`min-h-screen ${dosis.variable} ${manrope.variable}`} suppressHydrationWarning>
+    <html
+      lang="en"
+      className={`min-h-screen ${dosis.variable} ${manrope.variable} ${spaceGrotesk.variable} ${jetbrainsMono.variable} ${inter.variable}`}
+      suppressHydrationWarning
+    >
       <head>
         {/* Preconnect to external domains for performance */}
         <link rel="preconnect" href="https://ik.imagekit.io" />
@@ -184,14 +205,13 @@ export default function RootLayout({
         />
       </head>
       <body
-        className="antialiased dark min-h-screen flex flex-col font-sans"
+        className="antialiased dark min-h-screen flex flex-col font-sans bg-[#08060D] text-slate-100 selection:bg-purple-500/30 selection:text-purple-200"
         suppressHydrationWarning
       >
         <AuthProvider>
           <ErrorBoundary>
             <Navbar />
-            <div className="flex-1 relative">
-              <ShaderBackground />
+            <div className="flex-1 relative bg-[#08060D]">
               <div className="relative z-10">
                 <SocialSidebar />
                 {children}

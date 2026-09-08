@@ -1,13 +1,37 @@
 "use client"
 
-import { motion } from "framer-motion"
+import { useEffect, useState } from "react"
 import { Instagram, Youtube } from "lucide-react"
 import { FaLinkedinIn } from "react-icons/fa"
 import { SiGmail } from "react-icons/si"
-import { useEffect, useState } from "react"
+import { usePathname } from "next/navigation"
+import { getHasPlayedIntro } from "@/lib/introState"
+import { cn } from "@/lib/utils"
 
 export default function SocialSidebar() {
-  const [isVisible, setIsVisible] = useState(true)
+  const pathname = usePathname()
+  const isHomePage = pathname === "/"
+  const [isVisible, setIsVisible] = useState(!isHomePage || getHasPlayedIntro())
+  const [isFooterIntersecting, setIsFooterIntersecting] = useState(false)
+
+  useEffect(() => {
+    if (!isHomePage) {
+      setIsVisible(true)
+      return
+    }
+
+    const handleReveal = () => {
+      setIsVisible(true)
+    }
+
+    window.addEventListener("nsdc-socials-reveal", handleReveal)
+    window.addEventListener("nsdc-reveal-bento", handleReveal)
+
+    return () => {
+      window.removeEventListener("nsdc-socials-reveal", handleReveal)
+      window.removeEventListener("nsdc-reveal-bento", handleReveal)
+    }
+  }, [isHomePage])
 
   useEffect(() => {
     const footer = document.getElementById("footer")
@@ -17,7 +41,7 @@ export default function SocialSidebar() {
       (entries) => {
         const [entry] = entries
         if (entry) {
-          setIsVisible(!entry.isIntersecting)
+          setIsFooterIntersecting(entry.isIntersecting)
         }
       },
       { rootMargin: "0px", threshold: 0.1 }
@@ -27,6 +51,8 @@ export default function SocialSidebar() {
 
     return () => observer.disconnect()
   }, [])
+
+  const shouldShow = isVisible && !isFooterIntersecting
 
   const socialLinks = [
     { 
@@ -86,31 +112,22 @@ export default function SocialSidebar() {
           <stop stopColor="#3399FF" offset="100%" />
         </linearGradient>
       </svg>
-      <motion.div
-        initial={{ x: -100, opacity: 0 }}
-        animate={{ 
-          x: isVisible ? 0 : -100, 
-          opacity: isVisible ? 1 : 0 
-        }}
-        transition={{ duration: 0.5, ease: "easeOut" }}
-        className="fixed left-6 top-1/2 -translate-y-1/2 z-40 hidden lg:block"
-        style={{ pointerEvents: isVisible ? "auto" : "none" }}
+      <div
+        className={cn(
+          "fixed left-6 top-1/2 -translate-y-1/2 z-40 hidden lg:block transition-opacity duration-200",
+          shouldShow ? "opacity-100 pointer-events-auto" : "opacity-0 pointer-events-none"
+        )}
       >
         <div className="flex flex-col space-y-6">
-          {socialLinks.map((social, index) => {
+          {socialLinks.map((social) => {
             const Icon = social.icon
             return (
-              <motion.a
+              <a
                 key={social.label}
                 href={social.href}
                 target={social.href.startsWith('mailto:') ? undefined : "_blank"}
                 rel={social.href.startsWith('mailto:') ? undefined : "noopener noreferrer"}
-                initial={{ scale: 0 }}
-                animate={{ scale: 1 }}
-                transition={{ delay: 1.2 + index * 0.1, type: "spring" }}
-                whileHover={{ scale: 1.15 }}
-                whileTap={{ scale: 0.9 }}
-                className={`w-14 h-14 bg-black/40 backdrop-blur-md rounded-full flex items-center justify-center transition-all duration-300 border ${social.glowClass} group`}
+                className={`w-14 h-14 bg-black/40 backdrop-blur-md rounded-full flex items-center justify-center transition-all duration-300 hover:scale-115 active:scale-90 border ${social.glowClass} group`}
               >
                 {social.id === "instagram" ? (
                   <Icon size={24} stroke="url(#ig-grad)" className={social.iconClass} />
@@ -119,11 +136,11 @@ export default function SocialSidebar() {
                 ) : (
                   <Icon size={24} className={`${social.color} ${social.iconClass}`} />
                 )}
-              </motion.a>
+              </a>
             )
           })}
         </div>
-      </motion.div>
+      </div>
     </>
   )
 }
