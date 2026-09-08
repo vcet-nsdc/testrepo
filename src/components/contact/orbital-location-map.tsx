@@ -1,6 +1,6 @@
 'use client';
 
-import { useEffect, useRef, useState } from 'react';
+import { useEffect, useRef, useState, useCallback } from 'react';
 import * as THREE from 'three';
 
 const VCET_LAT = 19.3838;
@@ -120,15 +120,37 @@ export function OrbitalLocationMap() {
   const [isMapActive, setIsMapActive] = useState(false);
   const isMapActiveRef = useRef(false);
 
-  // Animation State: Direct continuous 1.4s zoom
-  const animStateRef = useRef({
-    progress: 0,
-    startTime: 0,
+  const isMapLoadedRef = useRef(false);
+
+  const hasTriggeredDiveRef = useRef(false);
+  const pendingDiveRef = useRef(false);
+  const fallbackTimerRef = useRef<NodeJS.Timeout | null>(null);
+
+  // Animation State: Direct continuous dive without halting in space
+  const animStateRef = useRef<{
+    animating: boolean;
+    direction: 'in' | 'out';
+    startTime: number;
+    duration: number;
+    startDist: number;
+    targetDist: number;
+    startQuat: THREE.Quaternion;
+    targetQuat: THREE.Quaternion;
+    progress: number;
+  }>({
     animating: false,
-    duration: 1400, // Fast, cinematic, direct 1.4s zoom
+    direction: 'in',
+    startTime: 0,
+    duration: 1800,
+    startDist: 320,
+    targetDist: 81.2,
+    startQuat: new THREE.Quaternion(),
+    targetQuat: new THREE.Quaternion(),
+    progress: 0,
   });
 
-  const triggerDiveRef = useRef<() => void>(() => {});
+  const startDiveRef = useRef<() => void>(() => {});
+  const startOrbitOutRef = useRef<() => void>(() => {});
 
   const handleMouseMove = (e: React.MouseEvent<HTMLDivElement>) => {
     const rect = e.currentTarget.getBoundingClientRect();
@@ -285,7 +307,7 @@ export function OrbitalLocationMap() {
       }
     );
 
-    // 6. Coordinates Math for VCET Campus: 9RMH+GF Vasai-Virar (19.3838° N, 72.8286° E)
+    // 6. Coordinates Math for VCET Campus: (19.3838° N, 72.8286° E)
     const vcetTargetPos = latLonToVector3(VCET_LAT, VCET_LON, EARTH_RADIUS);
     const vcetNormal = vcetTargetPos.clone().normalize();
 
@@ -312,29 +334,65 @@ export function OrbitalLocationMap() {
     const invM_align = M_align.clone().transpose();
     const targetLockQuat = new THREE.Quaternion().setFromRotationMatrix(invM_align);
 
-    // Direct Cinematic Controller
-    const startCinematicDive = () => {
+    // Initial globe orientation
+    const initialQuat = new THREE.Quaternion().setFromEuler(new THREE.Euler(0.15, 0.45, 0));
+    earthGroup.quaternion.copy(initialQuat);
+
+    // Direct Dive: Continuous plunge from space (320) right to surface (81.2)
+    const executeDirectDive = () => {
+      animStateRef.current.animating = true;
+      animStateRef.current.direction = 'in';
+      animStateRef.current.startTime = performance.now();
+      animStateRef.current.duration = 1800; // 1.8s fluid continuous cinematic dive
+      animStateRef.current.startDist = camera.position.z;
+      animStateRef.current.targetDist = 81.2; // Surface is 80.0; camera reaches 1.2 units above VCET
+      animStateRef.current.startQuat = earthGroup.quaternion.clone();
+      animStateRef.current.targetQuat = targetLockQuat.clone();
+      animStateRef.current.progress = 0;
+    };
+    startDiveRef.current = executeDirectDive;
+
+    // Orbit Out: Zoom back out to 3D planetary space view
+    const executeOrbitOut = () => {
       isMapActiveRef.current = false;
       setIsMapActive(false);
-      animStateRef.current.progress = 0;
-      animStateRef.current.startTime = performance.now();
-      animStateRef.current.animating = true;
-    };
-    triggerDiveRef.current = startCinematicDive;
 
-    // Auto-Play: Direct dive starts as soon as user arrives at location card
-    let hasAutoplayed = false;
+      animStateRef.current.animating = true;
+      animStateRef.current.direction = 'out';
+      animStateRef.current.startTime = performance.now();
+      animStateRef.current.duration = 1400;
+      animStateRef.current.startDist = camera.position.z;
+      animStateRef.current.targetDist = 320;
+      animStateRef.current.startQuat = earthGroup.quaternion.clone();
+      animStateRef.current.targetQuat = initialQuat.clone();
+      animStateRef.current.progress = 0;
+    };
+    startOrbitOutRef.current = executeOrbitOut;
+
+    // Auto-Trigger Dive on arrival (synchronized with real map readiness)
     const observer = new IntersectionObserver(
       (entries) => {
         entries.forEach((entry) => {
-          if (entry.isIntersecting && !hasAutoplayed) {
-            hasAutoplayed = true;
-            setTimeout(startCinematicDive, 40);
+          if (entry.isIntersecting && !hasTriggeredDiveRef.current) {
+            hasTriggeredDiveRef.current = true;
+            // If the real map is already ready, plunge in immediately!
+            if (isMapLoadedRef.current) {
+              executeDirectDive();
+            } else {
+              // Otherwise keep the globe active in orbital spin and dive the moment map loads (or after brief safety timeout)
+              pendingDiveRef.current = true;
+              fallbackTimerRef.current = setTimeout(() => {
+                if (pendingDiveRef.current) {
+                  pendingDiveRef.current = false;
+                  executeDirectDive();
+                }
+              }, 1200);
+            }
             observer.disconnect();
           }
         });
       },
-      { threshold: 0.1 }
+      { threshold: 0.15 }
     );
     observer.observe(viewport);
 
@@ -353,13 +411,10 @@ export function OrbitalLocationMap() {
     const resizeObserver = new ResizeObserver(handleResize);
     resizeObserver.observe(viewport);
 
-    // Smooth cubic ease-in-out curve
+    // Cubic Ease-In-Out
     function easeInOutCubic(t: number): number {
       return t < 0.5 ? 4 * t * t * t : 1 - Math.pow(-2 * t + 2, 3) / 2;
     }
-
-    // Initial globe orientation
-    const initialQuat = new THREE.Quaternion().setFromEuler(new THREE.Euler(0.15, 0.45, 0));
 
     // Animation Loop
     let animationFrameId: number;
@@ -370,57 +425,82 @@ export function OrbitalLocationMap() {
       clock.getDelta();
       const elapsedTime = clock.getElapsedTime();
 
-      // Direct continuous progress updating
       if (animStateRef.current.animating) {
         const elapsed = performance.now() - animStateRef.current.startTime;
-        const rawT = Math.min(1, elapsed / animStateRef.current.duration);
+        const rawT = Math.min(1, Math.max(0, elapsed / animStateRef.current.duration));
         const p = easeInOutCubic(rawT);
         animStateRef.current.progress = p;
 
-        // Activate live map during the dive (at 60% of zoom) so it dissolves in directly as the camera lands
-        if (p >= 0.60 && !isMapActiveRef.current) {
-          isMapActiveRef.current = true;
-          setIsMapActive(true);
-        }
+        if (animStateRef.current.direction === 'in') {
+          // DIRECT CONTINUOUS PLUNGE FROM SPACE (320) TO CAMPUS SURFACE (81.2)
+          const curDist = THREE.MathUtils.lerp(
+            animStateRef.current.startDist,
+            animStateRef.current.targetDist,
+            p
+          );
+          camera.position.set(0, 0, curDist);
+          camera.lookAt(0, 0, EARTH_RADIUS);
 
-        if (rawT >= 1) {
-          animStateRef.current.animating = false;
-          if (!isMapActiveRef.current) {
+          // Rotate to face VCET in the first 65% of the dive
+          const rotT = Math.min(1, p / 0.65);
+          const rotEase = Math.sin((rotT * Math.PI) / 2);
+          earthGroup.quaternion.slerpQuaternions(
+            animStateRef.current.startQuat,
+            animStateRef.current.targetQuat,
+            rotEase
+          );
+
+          // Dissolve clouds as camera enters lower atmosphere
+          if (p < 0.60) {
+            cloudsMat.opacity = Math.max(0, 0.85 * (1 - p / 0.60));
+          } else {
+            cloudsMat.opacity = 0;
+          }
+
+          // Transition to real live map during final descent (at 70% zoom)
+          if (p >= 0.70 && !isMapActiveRef.current) {
             isMapActiveRef.current = true;
             setIsMapActive(true);
           }
+
+          if (rawT >= 1) {
+            animStateRef.current.animating = false;
+            isMapActiveRef.current = true;
+            setIsMapActive(true);
+          }
+        } else {
+          // Zoom out back to orbit
+          const curDist = THREE.MathUtils.lerp(
+            animStateRef.current.startDist,
+            animStateRef.current.targetDist,
+            p
+          );
+          camera.position.set(0, 0, curDist);
+          camera.lookAt(0, 0, 0);
+
+          earthGroup.quaternion.slerpQuaternions(
+            animStateRef.current.startQuat,
+            animStateRef.current.targetQuat,
+            p
+          );
+          cloudsMat.opacity = Math.min(0.85, p * 0.85);
+
+          if (rawT >= 1) {
+            animStateRef.current.animating = false;
+          }
         }
+      } else if (!isMapActiveRef.current) {
+        // Continuous smooth planetary rotation while waiting (never frozen!)
+        earthGroup.rotation.y += 0.0015;
+        cloudsMesh.rotation.y += 0.0020;
       }
 
-      const p = animStateRef.current.progress;
-
-      // Dynamic Pin Scaling (Crisp ~30px marker at all zoom levels)
+      // Dynamic Pin Scaling (Sharp, responsive pin at all distances)
       const vcetWorldPos = new THREE.Vector3();
       googleMapPin.getWorldPosition(vcetWorldPos);
       const camDistToVcet = camera.position.distanceTo(vcetWorldPos);
-      const pinScale = Math.max(0.07, Math.min(camDistToVcet * 0.026, 5.0));
+      const pinScale = Math.max(0.04, Math.min(camDistToVcet * 0.024, 4.5));
       googleMapPin.scale.set(pinScale * 0.8, pinScale, 1.0);
-
-      // Cloud rotation
-      cloudsMesh.rotation.y += 0.00035;
-
-      // DIRECT CONTINUOUS ZOOM MOTION (No pauses, no stalls, no delays):
-      // 1. Continuous camera descent from 320 to 122 across the entire duration
-      const cameraDist = THREE.MathUtils.lerp(320, 122, p);
-      camera.position.set(0, 0, cameraDist);
-      camera.lookAt(0, 0, EARTH_RADIUS);
-
-      // 2. Continuous alignment to VCET orientation
-      const rotT = Math.min(1, p / 0.68);
-      const rotEase = Math.sin((rotT * Math.PI) / 2);
-      earthGroup.quaternion.slerpQuaternions(initialQuat, targetLockQuat, rotEase);
-
-      // 3. Clouds dissipate smoothly during the dive
-      if (p < 0.50) {
-        cloudsMat.opacity = Math.max(0, 0.85 * (1 - p / 0.50));
-      } else {
-        cloudsMat.opacity = 0.0;
-      }
 
       // Star Parallax
       starField.rotation.y = elapsedTime * 0.0002;
@@ -436,6 +516,7 @@ export function OrbitalLocationMap() {
       window.removeEventListener('resize', handleResize);
       resizeObserver.disconnect();
       observer.disconnect();
+      if (fallbackTimerRef.current) clearTimeout(fallbackTimerRef.current);
 
       // Clean up Three.js objects
       starGeo.dispose();
@@ -449,6 +530,23 @@ export function OrbitalLocationMap() {
       fallbackEarthTex.dispose();
       renderer.dispose();
     };
+  }, []);
+
+  const handleTriggerDive = useCallback(() => {
+    startDiveRef.current();
+  }, []);
+
+  const handleResetToGlobe = useCallback(() => {
+    startOrbitOutRef.current();
+  }, []);
+
+  const handleIframeLoad = useCallback(() => {
+    isMapLoadedRef.current = true;
+    if (pendingDiveRef.current) {
+      pendingDiveRef.current = false;
+      if (fallbackTimerRef.current) clearTimeout(fallbackTimerRef.current);
+      startDiveRef.current();
+    }
   }, []);
 
   return (
@@ -470,8 +568,39 @@ export function OrbitalLocationMap() {
           </div>
         </div>
         <div className="location-actions">
+          {isMapActive ? (
+            <button
+              type="button"
+              className="location-btn orbital-replay-btn"
+              onClick={handleResetToGlobe}
+              title="Return to 3D Orbit Globe View"
+            >
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+                <circle cx="12" cy="12" r="10" />
+                <path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z" />
+                <path d="M2 12h20" />
+              </svg>
+              <span>3D Orbit</span>
+            </button>
+          ) : (
+            <button
+              type="button"
+              className="location-btn orbital-replay-btn"
+              onClick={handleTriggerDive}
+              title="Direct Zoom to Campus Satellite Map"
+            >
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+                <circle cx="11" cy="11" r="8" />
+                <line x1="21" y1="21" x2="16.65" y2="16.65" />
+                <line x1="11" y1="8" x2="11" y2="14" />
+                <line x1="8" y1="11" x2="14" y2="11" />
+              </svg>
+              <span>Zoom to Map</span>
+            </button>
+          )}
+
           <a
-            href="https://www.google.com/maps/dir/?api=1&destination=9RMH%2BGF+Vasai-Virar,+Maharashtra,+India"
+            href="https://www.google.com/maps/dir/?api=1&destination=19.3838,72.8286"
             target="_blank"
             rel="noreferrer"
             className="location-btn"
@@ -484,12 +613,30 @@ export function OrbitalLocationMap() {
         </div>
       </div>
 
-      {/* Embedded 3D Globe & Interactive Live Map Viewport (Full Width, Clean Unobstructed View) */}
-      <div className="location-map-viewport" id="location-map-viewport" ref={viewportRef}>
+      {/* Embedded 3D Globe & Interactive Live Map Viewport */}
+      <div
+        className="location-map-viewport"
+        id="location-map-viewport"
+        ref={viewportRef}
+        onClick={() => {
+          if (!isMapActive && !animStateRef.current.animating) {
+            handleTriggerDive();
+          }
+        }}
+        style={{ cursor: isMapActive ? 'default' : 'pointer' }}
+      >
         {/* 3D WebGL Canvas */}
         <canvas id="orbital-canvas" ref={canvasRef} />
 
-        {/* Actual Live Interactive Map (Embedded Google Map Satellite at 9RMH+GF Vasai) */}
+        {/* Orbit hint badge when in globe mode */}
+        {!isMapActive && (
+          <div className="orbital-hint-badge">
+            <span className="orbital-hint-pulse" />
+            <span>Click globe to zoom to map</span>
+          </div>
+        )}
+
+        {/* Actual Live Interactive Map (Embedded Google Map Satellite at exact VCET Coordinates) */}
         <div
           className={`embedded-live-map ${isMapActive ? 'active' : ''}`}
           id="embedded-live-map"
@@ -497,9 +644,11 @@ export function OrbitalLocationMap() {
         >
           <iframe
             id="gmap-iframe"
-            src="https://maps.google.com/maps?q=9RMH%2BGF+Vasai-Virar,+Maharashtra,+India&t=k&z=17&ie=UTF8&iwloc=&output=embed"
+            src="https://maps.google.com/maps?q=19.3838,72.8286&t=k&z=17&ie=UTF8&iwloc=&output=embed"
             title="VCET Campus Interactive Live Satellite Map"
             allowFullScreen
+            loading="eager"
+            onLoad={handleIframeLoad}
           />
         </div>
       </div>
