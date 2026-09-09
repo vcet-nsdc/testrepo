@@ -5,7 +5,7 @@ import Registration from '@/models/Registration';
 import EventModel from '@/models/EventModel';
 import FormSchemaModel, { IFormField } from '@/models/FormSchema';
 import { requirePermission } from '@/lib/rbac';
-import * as XLSX from 'xlsx';
+import ExcelJS from 'exceljs';
 
 interface RegistrationDoc {
   _id: string;
@@ -226,13 +226,18 @@ export async function GET(req: NextRequest) {
       return rowObj;
     });
 
-    const ws = XLSX.utils.json_to_sheet(rows);
-    const wb = XLSX.utils.book_new();
-    XLSX.utils.book_append_sheet(wb, ws, 'Registrations');
+    const workbook = new ExcelJS.Workbook();
+    const worksheet = workbook.addWorksheet('Registrations');
 
-    const buf = XLSX.write(wb, { type: 'buffer', bookType: 'xlsx' });
+    if (rows.length > 0 && rows[0]) {
+      const headers = Object.keys(rows[0]);
+      worksheet.columns = headers.map((h) => ({ header: h, key: h, width: Math.max(h.length + 4, 15) }));
+      rows.forEach((row) => worksheet.addRow(row));
+    }
 
-    return new NextResponse(buf, {
+    const buf = await workbook.xlsx.writeBuffer();
+
+    return new NextResponse(buf as unknown as BodyInit, {
       status: 200,
       headers: {
         'Content-Type': 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet',

@@ -170,7 +170,7 @@ export function SectionRenderer({ type, event }: { type: SectionType; event: Pub
             ) : null}
             <Link
               href={`/events/${event.slug}/register`}
-              className="inline-block px-8 py-3 rounded-lg bg-gradient-to-r from-purple-600 to-blue-600 text-white font-semibold hover:from-purple-500 hover:to-blue-500 transition-all"
+              className="btn-liquid-purple px-8 py-3 font-semibold"
             >
               Register Now
             </Link>

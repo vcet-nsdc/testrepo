@@ -12,6 +12,48 @@ import pasteventsdata from '../../public/staticdata/pasteventsdata.json';
 
 export const events: readonly Event[] = [
   {
+    id: 'techx-2026',
+    title: 'TechX 2026 Product Showcase',
+    dateTime: 'September 11, 2026 • 10:00 AM',
+    venue: 'VCET, Vasai',
+    shortDescription: 'Flagship product showcase organized by the Department of Artificial Intelligence and Data Science at VCET.',
+    imagePath: '/assests/techx.jpeg',
+    overview: 'TechX 2026 is a premier Product Showcase organized by the Department of Artificial Intelligence and Data Science at VCET in association with VCET NSDC. Guided by the vision "Charting Ideas into the Uncharted", students and teams explore, demonstrate, connect, and build cutting-edge hardware and software products.',
+    highlights: [
+      'Live demonstration of innovative tech products and hardware prototypes.',
+      'Powered by Tech Computer Education; Co-Powered by AngelOne and Career Launcher.',
+      'Interactive product booths covering AI, Embedded Systems, and Software.',
+      'Rigorous industry evaluation by experienced technology professionals.',
+    ],
+    awards: [
+      'Best Product Innovation Trophies.',
+      'Excellence in Engineering and Presentation Awards.',
+      'Official Certificates of Recognition for all participating teams.',
+    ],
+    status: 'upcoming',
+    category: 'competition',
+  },
+  {
+    id: 'byteverse-2026',
+    title: 'Byteverse 2026 Arena',
+    dateTime: 'November 2026 • 10:00 AM',
+    venue: 'VCET, Vasai',
+    shortDescription: 'A high-voltage, manga-themed tech competition organized by VCET NSDC.',
+    imagePath: '/assests/byteverse.jpeg',
+    overview: 'Byteverse 2026 is a high-voltage, manga-themed tech competition organized by VCET NSDC. Assemble your squad, pick your domain, and battle it out with the brightest minds across campuses.',
+    highlights: [
+      'Interactive technical arena across systems, Web3, and applied AI.',
+      'Manga-styled team battles with dynamic live leaderboard progression.',
+      'Direct mentorship, domain excellence trophies, and cash prizes.',
+    ],
+    awards: [
+      'Cash prizes and championship trophies for winning squads.',
+      'Domain excellence awards and certificates for all attendees.',
+    ],
+    status: 'past',
+    category: 'competition',
+  },
+  {
     id: 'code-o-fiesta-2025',
     title: 'Code‑o‑Fiesta',
     dateTime: 'September 13, 2025 • 9:30 AM',
@@ -31,7 +73,7 @@ export const events: readonly Event[] = [
       'Certificates for participants and winners.',
       'Potential opportunities for projects to gain further mentorship or exposure.',
     ],
-    status: 'upcoming',
+    status: 'past',
     category: 'competition',
   },
 ] as const;

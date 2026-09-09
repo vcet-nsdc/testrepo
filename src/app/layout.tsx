@@ -1,6 +1,6 @@
 /**
  * Root Layout Component
- * Main layout wrapper with fonts, metadata, OpenGraph, and JSON-LD Structured Data
+ * Main layout wrapper with fonts, metadata, and global providers
  */
 
 import type { Metadata, Viewport } from 'next';
@@ -9,7 +9,7 @@ import { ErrorBoundary } from '@/components/ui/error-boundary';
 import { Navbar } from '@/components/layout/navbar';
 import { Footer } from '@/components/layout/footer';
 import ShaderBackground from '@/components/shader-background';
-import { APP_CONFIG, CONTACT_INFO } from '@/lib/constants';
+import { APP_CONFIG } from '@/lib/constants';
 import { AuthProvider } from '@/components/providers/AuthProvider';
 import './globals.css';
 import SocialSidebar from '@/components/socialsidebar';
@@ -27,20 +27,19 @@ const manrope = Manrope({
 });
 
 // ============================================================================
-// METADATA CONFIGURATION (SEO OPTIMIZED)
+// METADATA CONFIGURATION
 // ============================================================================
 
 export const metadata: Metadata = {
   title: {
-    default: "VCET NSDC | National Student Data Corps - Vidyavardhini's College of Engineering",
-    template: `%s | ${APP_CONFIG.shortName}`,
+    default: APP_CONFIG.name,
+    template: `%s | ${APP_CONFIG.name}`,
   },
   description: APP_CONFIG.description,
   keywords: [...APP_CONFIG.keywords],
-  authors: [{ name: APP_CONFIG.author, url: APP_CONFIG.url }],
+  authors: [{ name: APP_CONFIG.author }],
   creator: APP_CONFIG.author,
   publisher: APP_CONFIG.author,
-  category: 'Education & Technology',
   formatDetection: {
     email: false,
     address: false,
@@ -52,26 +51,26 @@ export const metadata: Metadata = {
   },
   openGraph: {
     type: 'website',
-    locale: 'en_IN',
+    locale: 'en_US',
     url: APP_CONFIG.url,
-    title: "VCET NSDC | National Student Data Corps",
+    title: APP_CONFIG.name,
     description: APP_CONFIG.description,
     siteName: APP_CONFIG.name,
     images: [
       {
-        url: `${APP_CONFIG.url}/assests/poster.jpg`,
+        url: '/og-image.png',
         width: 1200,
         height: 630,
-        alt: 'VCET NSDC Official Chapter',
+        alt: APP_CONFIG.name,
       },
     ],
   },
   twitter: {
     card: 'summary_large_image',
-    title: "VCET NSDC | National Student Data Corps",
+    title: APP_CONFIG.name,
     description: APP_CONFIG.description,
-    images: [`${APP_CONFIG.url}/assests/poster.jpg`],
-    creator: '@vcet_nsdc',
+    images: ['/og-image.png'],
+    creator: '@nsdc_vcet',
   },
   robots: {
     index: true,
@@ -95,57 +94,9 @@ export const viewport: Viewport = {
   maximumScale: 5,
   userScalable: true,
   themeColor: [
-    { media: '(prefers-color-scheme: light)', color: '#0b0b14' },
-    { media: '(prefers-color-scheme: dark)', color: '#0b0b14' },
+    { media: '(prefers-color-scheme: light)', color: '#ffffff' },
+    { media: '(prefers-color-scheme: dark)', color: '#000000' },
   ],
-};
-
-// ============================================================================
-// SCHEMA.ORG JSON-LD STRUCTURED DATA
-// ============================================================================
-
-const jsonLdOrganization = {
-  '@context': 'https://schema.org',
-  '@type': 'Organization',
-  name: 'VCET NSDC',
-  alternateName: 'National Student Data Corps - VCET Chapter',
-  url: APP_CONFIG.url,
-  logo: `${APP_CONFIG.url}/icon.svg`,
-  description: APP_CONFIG.description,
-  address: {
-    '@type': 'PostalAddress',
-    streetAddress: CONTACT_INFO.address.street,
-    addressLocality: CONTACT_INFO.address.campus,
-    addressRegion: CONTACT_INFO.address.state,
-    postalCode: CONTACT_INFO.address.pincode,
-    addressCountry: 'IN',
-  },
-  contactPoint: {
-    '@type': 'ContactPoint',
-    email: CONTACT_INFO.email,
-    contactType: 'student chapter',
-  },
-  sameAs: [
-    'https://instagram.com/vcet_nsdc',
-    'https://linkedin.com/company/vcet-nsdc',
-    'https://youtube.com/@vcet_nsdc',
-  ],
-};
-
-const jsonLdCollege = {
-  '@context': 'https://schema.org',
-  '@type': 'CollegeOrUniversity',
-  name: 'Vidyavardhini\'s College of Engineering and Technology',
-  alternateName: 'VCET Vasai',
-  url: 'https://vcet.edu.in',
-  address: {
-    '@type': 'PostalAddress',
-    streetAddress: CONTACT_INFO.address.street,
-    addressLocality: 'Vasai Road',
-    addressRegion: 'Maharashtra',
-    postalCode: '401202',
-    addressCountry: 'IN',
-  },
 };
 
 // ============================================================================
@@ -172,19 +123,9 @@ export default function RootLayout({
       
         {/* DNS prefetch for performance */}
         <link rel="dns-prefetch" href="//ik.imagekit.io" />
-
-        {/* Schema.org JSON-LD Scripts */}
-        <script
-          type="application/ld+json"
-          dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLdOrganization) }}
-        />
-        <script
-          type="application/ld+json"
-          dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLdCollege) }}
-        />
       </head>
       <body
-        className="antialiased dark min-h-screen flex flex-col font-sans"
+        className={`antialiased dark min-h-screen flex flex-col font-sans`}
         suppressHydrationWarning
       >
         <AuthProvider>

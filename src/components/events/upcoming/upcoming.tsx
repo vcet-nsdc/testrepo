@@ -20,40 +20,49 @@ const Upcoming: React.FC = () => {
 
   const events = [
     {
-      title: 'Byteverse 2026',
-      dateTime: 'November 2026',
+      title: 'TechX 2026 Product Showcase',
+      dateTime: '11th September 2026',
       venue: 'VCET, Vasai',
       shortDescription:
-        'Byteverse 2026 is a high-voltage, manga-themed tech competition organized by VCET NSDC. Assemble your squad, pick your domain, and battle it out with the brightest minds across campuses. Whether you code, design, or innovate - this is your arena.',
-      imagePath: '/assests/byteverse.jpeg',
-      logoPath: '/assests/byteverse_logo_v2.png',
+        'Department of Artificial Intelligence & Data Science in association with VCET NSDC presents TechX 2026: Charting Ideas into the Uncharted. Explore, demonstrate, connect, and build cutting-edge hardware and software products.',
+      imagePath: '/assests/techx.jpeg',
+      logoPath: '/assests/techx_3d_logo.png',
       overview:
-        'Byteverse 2026 is a high-voltage, manga-themed tech competition organized by VCET NSDC. Assemble your squad, pick your domain, and battle it out with the brightest minds across campuses. Whether you code, design, or innovate - this is your arena.',
+        'TechX 2026 is a flagship Product Showcase organized by the Department of Artificial Intelligence and Data Science at VCET in association with VCET NSDC. Guided by the vision "Charting Ideas into the Uncharted", students and teams explore, demonstrate, connect, and build cutting-edge hardware and software products before distinguished industry leaders.',
       highlights: [
-        'Interactive technical rounds testing diverse computer science knowledge.',
-        'Opportunities to learn about the latest industry trends.',
-        'Engaging competition format designed to challenge and entertain.',
-        'Showcase your technical prowess among peers and win exciting rewards.',
+        'Live demonstration of innovative tech products and working prototypes.',
+        'Powered by Tech Computer Education; Co-Powered by AngelOne and Career Launcher.',
+        'Interactive product booths covering AI, Embedded Systems, and Software.',
+        'Rigorous industry evaluation by experienced technology professionals and mentors.',
       ],
       awards: [
-        'Exciting prizes for the winning teams.',
-        'Certificates of participation for all attendees.',
-        'Special recognition for top performers in specific domains.',
+        'Best Product Innovation Trophies.',
+        'Excellence in Engineering and Presentation Awards.',
+        'Official Certificates of Recognition for all participating teams.',
       ],
-      websiteLink: 'https://byteverse-2026.vercel.app',
     },
   ];
 
   return (
-    <div className='font-body min-h-screen flex justify-center items-center'>
-      {/* Removed overlayRef div */}
+    <div className='font-body flex flex-col justify-center items-center'>
+      <div className='w-full max-w-4xl mx-auto px-4 sm:px-6 pt-24 pb-4 md:pt-36'>
+        <div className='text-center mb-10'>
+          <div className="inline-flex items-center gap-2 bg-purple-500/10 border border-purple-500/30 rounded-full px-4 py-1.5 mb-3 backdrop-blur-md">
+            <span className="relative flex h-2 w-2">
+              <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-purple-400 opacity-75"></span>
+              <span className="relative inline-flex rounded-full h-2 w-2 bg-purple-500"></span>
+            </span>
+            <span className="text-xs font-heading font-semibold uppercase tracking-wider text-purple-200">
+              Live Showcase
+            </span>
+          </div>
+          <h1 className='text-4xl md:text-5xl font-bold text-white mb-3 text-balance font-heading'>Ongoing Event</h1>
+          <p className='text-base md:text-lg text-purple-200 max-w-xl mx-auto font-body'>
+            Explore, demonstrate, connect, and build — Charting Ideas into the Uncharted
+          </p>
+        </div>
 
-      {/* Removed Header Section */}
-
-      {/* Removed Statistics Cards Section */}
-
-      <div className='max-w-3xl mx-auto px-6 pt-20 pb-20 md:pt-40'>
-        <div className='flex flex-col items-center gap-16'>
+        <div className='flex flex-col items-center gap-12'>
           {events.map((event, index) => (
             <EventCard key={index} {...event} />
           ))}
@@ -209,20 +218,7 @@ const Upcoming: React.FC = () => {
         .event-card-wrapper.is-tilted .attendee-icons {
           transform: translateZ(80px);
         }
-        .card-surface {
-          background: linear-gradient(
-            180deg,
-            #a78bfa 0%,
-            #8b5cf6 45%,
-            #7c3aed 100%
-          );
-          border: 1px solid rgba(139, 92, 246, 0.35);
-          box-shadow:
-            0 0 0 1px rgba(139, 92, 246, 0.15),
-            0 10px 30px rgba(99, 102, 241, 0.18);
-        }
-        /* Removed side-panel-gradient */
-        /* Removed image-cover */
+        /* Glassmorphism styles are handled via modern Tailwind classes */
       `}</style>
     </div>
   );
