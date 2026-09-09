@@ -11,8 +11,6 @@ export default function SocialSidebar() {
   const pathname = usePathname()
   const [isVisible, setIsVisible] = useState(true)
 
-  if (pathname === '/contact') return null
-
   useEffect(() => {
     const footer = document.getElementById("footer")
     if (!footer) return
@@ -31,6 +29,8 @@ export default function SocialSidebar() {
 
     return () => observer.disconnect()
   }, [])
+
+  if (pathname === '/contact' || pathname?.startsWith('/contact/')) return null
 
   const socialLinks = [
     { 
