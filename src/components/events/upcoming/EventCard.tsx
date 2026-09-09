@@ -246,17 +246,17 @@ const EventCard: React.FC<EventCardProps> = ({
                     </div>
                   </div>
 
-                  {/* Sponsor Glass Pill */}
-                  <div className="flex items-center gap-2.5 p-1.5 pr-3.5 rounded-xl bg-white/[0.05] border border-white/10 backdrop-blur-md mb-3 w-fit hover:border-pink-500/30 transition-colors">
+                  {/* Sponsors Glass Pill */}
+                  <div className="flex flex-wrap items-center gap-2 p-1.5 pr-3.5 rounded-xl bg-white/[0.05] border border-white/10 backdrop-blur-md mb-3 w-fit hover:border-red-500/30 transition-colors">
                     <div className="relative w-14 h-7 bg-white/95 rounded-lg p-1 flex items-center justify-center shadow-sm shrink-0">
-                      <Image src="/assests/itech.png" alt="ITech" fill className="object-contain p-0.5" />
+                      <Image src="/assests/sponsor_tech_computer.png" alt="Tech Computer Education" fill className="object-contain p-0.5" />
                     </div>
                     <span className="text-white/90 text-xs font-heading">
-                      Sponsored by – <strong className="text-pink-300 font-semibold">ITech</strong>
+                      Powered by <strong className="text-red-300 font-semibold">Tech Computer Education</strong>
                     </span>
                   </div>
 
-                  {/* Byteverse Website Link on Card */}
+                  {/* Website Link on Card (if available) */}
                   {websiteLink && (
                     <div className="mb-3">
                       <a
@@ -264,14 +264,14 @@ const EventCard: React.FC<EventCardProps> = ({
                         target="_blank"
                         rel="noopener noreferrer"
                         onClick={(e) => e.stopPropagation()}
-                        className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-gradient-to-r from-pink-500/20 via-purple-500/20 to-violet-500/20 hover:from-pink-500/30 hover:to-purple-500/30 border border-pink-500/40 text-pink-200 hover:text-white text-xs font-heading font-medium transition-all duration-300 shadow-[0_0_20px_rgba(236,72,153,0.25)] hover:shadow-[0_0_25px_rgba(236,72,153,0.4)] group/link"
-                        title="Open Byteverse Website"
+                        className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-gradient-to-r from-red-500/20 via-rose-500/20 to-purple-500/20 hover:from-red-500/30 hover:to-rose-500/30 border border-red-500/40 text-red-200 hover:text-white text-xs font-heading font-medium transition-all duration-300 shadow-[0_0_20px_rgba(239,68,68,0.25)] hover:shadow-[0_0_25px_rgba(239,68,68,0.4)] group/link"
+                        title="Open Event Website"
                       >
-                        <Globe className="w-3.5 h-3.5 text-pink-400 group-hover/link:rotate-12 transition-transform duration-300" />
+                        <Globe className="w-3.5 h-3.5 text-red-400 group-hover/link:rotate-12 transition-transform duration-300" />
                         <span className="font-semibold underline-offset-2 group-hover/link:underline">
                           {websiteLink.replace(/^https?:\/\//, '')}
                         </span>
-                        <ExternalLink className="w-3 h-3 text-pink-400 group-hover/link:translate-x-0.5 group-hover/link:-translate-y-0.5 transition-transform" />
+                        <ExternalLink className="w-3 h-3 text-red-400 group-hover/link:translate-x-0.5 group-hover/link:-translate-y-0.5 transition-transform" />
                       </a>
                     </div>
                   )}
@@ -283,22 +283,27 @@ const EventCard: React.FC<EventCardProps> = ({
 
                 {/* Glass Bottom Bar with Actions */}
                 <div className="flex flex-wrap items-center justify-between gap-3 pt-3 mt-3 border-t border-white/10">
-                  <div className="flex items-center gap-2 text-[11px] text-purple-300/80 font-body">
-                    <Users className="w-3.5 h-3.5 text-violet-400 shrink-0" />
-                    <span>Teams • Open to all campuses</span>
+                  <div className="flex items-center gap-2 text-[11px] text-rose-300/80 font-body">
+                    <Users className="w-3.5 h-3.5 text-rose-400 shrink-0" />
+                    <span>Product Showcase • VCET Vasai</span>
                   </div>
                   <div className="flex items-center gap-2.5">
-                    {websiteLink && (
+                    {websiteLink ? (
                       <a
                         href={websiteLink}
                         target="_blank"
                         rel="noopener noreferrer"
                         onClick={(e) => e.stopPropagation()}
-                        className="inline-flex items-center gap-1.5 px-4 py-2 rounded-xl bg-gradient-to-r from-pink-600 via-fuchsia-600 to-purple-600 hover:from-pink-500 hover:to-purple-500 text-white text-xs font-heading font-semibold shadow-[0_0_25px_rgba(236,72,153,0.35)] hover:shadow-[0_0_30px_rgba(236,72,153,0.5)] transition-all duration-300 hover:scale-105 active:scale-95"
+                        className="inline-flex items-center gap-1.5 px-4 py-2 rounded-xl bg-gradient-to-r from-red-600 via-rose-600 to-purple-600 hover:from-red-500 hover:to-purple-500 text-white text-xs font-heading font-semibold shadow-[0_0_25px_rgba(239,68,68,0.35)] hover:shadow-[0_0_30px_rgba(239,68,68,0.5)] transition-all duration-300 hover:scale-105 active:scale-95"
                       >
                         <span>Visit Website</span>
                         <ExternalLink className="w-3.5 h-3.5" />
                       </a>
+                    ) : (
+                      <span className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-xl bg-white/[0.06] border border-white/10 text-zinc-300 text-[11px] font-heading font-medium">
+                        <span className="w-1.5 h-1.5 rounded-full bg-emerald-400 animate-pulse" />
+                        <span>Portal Coming Soon</span>
+                      </span>
                     )}
                     <button
                       type="button"
@@ -306,7 +311,7 @@ const EventCard: React.FC<EventCardProps> = ({
                       className="inline-flex items-center gap-1.5 text-xs font-heading text-white px-4 py-2 rounded-xl bg-white/10 hover:bg-white/15 border border-white/15 backdrop-blur-md transition-all duration-300 hover:scale-105 shadow-sm font-medium active:scale-95"
                     >
                       <span>More Details</span>
-                      <ArrowRight className="w-3.5 h-3.5 text-pink-300" />
+                      <ArrowRight className="w-3.5 h-3.5 text-red-300" />
                     </button>
                   </div>
                 </div>
@@ -428,18 +433,44 @@ const EventCard: React.FC<EventCardProps> = ({
                       </p>
                     </div>
 
-                    {/* Sponsored by section */}
+                    {/* Sponsors & Partners section */}
                     <div>
-                      <h4 className="text-fuchsia-300 text-xs font-body uppercase tracking-wider mb-2">Sponsored by</h4>
-                      <div className="flex items-center gap-4 bg-white/[0.05] rounded-2xl p-3.5 w-fit border border-white/10 hover:border-pink-500/30 transition-colors backdrop-blur-md">
-                        <div className="relative w-28 h-14 bg-white flex items-center justify-center rounded-xl overflow-hidden p-1.5 shadow-sm">
-                          <Image src="/assests/itech.png" alt="ITech Computer Education" fill className="object-contain" />
+                      <h4 className="text-rose-300 text-xs font-body uppercase tracking-wider mb-2">Event Sponsors & Partners</h4>
+                      <div className="grid grid-cols-1 sm:grid-cols-3 gap-3">
+                        <div className="flex items-center gap-3 bg-white/[0.05] rounded-xl p-3 border border-white/10 backdrop-blur-md">
+                          <div className="relative w-16 h-10 bg-white flex items-center justify-center rounded-lg overflow-hidden p-1 shadow-sm shrink-0">
+                            <Image src="/assests/sponsor_tech_computer.png" alt="Tech Computer Education" fill className="object-contain" />
+                          </div>
+                          <div>
+                            <span className="text-white text-xs font-heading font-semibold block leading-tight">
+                              Tech Computer Education
+                            </span>
+                            <span className="text-[10px] text-red-300 font-mono">Powered By</span>
+                          </div>
                         </div>
-                        <div>
-                          <span className="text-white text-sm sm:text-base font-heading font-semibold block">
-                            ITech Computer Education
-                          </span>
-                          <span className="text-xs text-purple-300 font-body">Official Event Sponsor</span>
+
+                        <div className="flex items-center gap-3 bg-white/[0.05] rounded-xl p-3 border border-white/10 backdrop-blur-md">
+                          <div className="relative w-16 h-10 bg-white flex items-center justify-center rounded-lg overflow-hidden p-1 shadow-sm shrink-0">
+                            <Image src="/assests/sponsor_angelone.png" alt="AngelOne" fill className="object-contain" />
+                          </div>
+                          <div>
+                            <span className="text-white text-xs font-heading font-semibold block leading-tight">
+                              AngelOne
+                            </span>
+                            <span className="text-[10px] text-amber-300 font-mono">Co-Powered By</span>
+                          </div>
+                        </div>
+
+                        <div className="flex items-center gap-3 bg-white/[0.05] rounded-xl p-3 border border-white/10 backdrop-blur-md">
+                          <div className="relative w-16 h-10 bg-white flex items-center justify-center rounded-lg overflow-hidden p-1 shadow-sm shrink-0">
+                            <Image src="/assests/sponsor_career_launcher.png" alt="Career Launcher" fill className="object-contain" />
+                          </div>
+                          <div>
+                            <span className="text-white text-xs font-heading font-semibold block leading-tight">
+                              Career Launcher
+                            </span>
+                            <span className="text-[10px] text-amber-300 font-mono">Co-Powered By</span>
+                          </div>
                         </div>
                       </div>
                     </div>

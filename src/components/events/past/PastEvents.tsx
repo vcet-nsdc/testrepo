@@ -47,8 +47,34 @@ export function PastEventsSection({ events = [] }: PastEventsSectionProps) {
     };
   }, [selectedEvent]);
 
-  // All 14 existing past events with 100% unmodified information
+  // All past events with 100% accurate information
   const sampleEvents: PastEvent[] = [
+    {
+      id: "event_byteverse_2026",
+      title: "Byteverse 2026 Arena",
+      year: "2025-26",
+      date: "2026-03-08",
+      time: "10:00 AM – 6:00 PM",
+      venue: "VCET, Vasai",
+      description:
+        "Byteverse 2026 is a high-voltage, manga-themed tech competition organized by VCET NSDC.",
+      about:
+        "Byteverse 2026 was VCET NSDC's premier manga-themed arena where students assembled squads to engineer high-impact software, solve computational puzzles, and battle it out across campuses on a live dynamic leaderboard. Whether coding, designing, or innovating, participants brought unprecedented intensity.",
+      highlights: [
+        "Interactive technical arena across systems, Web3, and applied AI.",
+        "Manga-styled team battles with dynamic live leaderboard progression.",
+        "Direct mentorship, domain excellence trophies, and cash prizes.",
+        "Showcase your technical prowess among peers and win exciting rewards.",
+        "Certificates of participation for all attendees.",
+        "Special recognition for top performers in specific domains.",
+      ],
+      gallery: [
+        "/assests/byteverse.jpeg",
+        "/assests/byteverse_logo_v2.png",
+        "/assests/itech.png"
+      ],
+      link: "https://byteverse-2026.vercel.app",
+    },
     {
       id: "event_techblitz_2026",
       title: "Techblitz 2026",
