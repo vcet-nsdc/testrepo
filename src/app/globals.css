@@ -377,7 +377,7 @@ body.modal-open {
 
 .group:hover .logo-alphabet-trace,
 .logo-alphabet-trace:hover {
-  filter: drop-shadow(0 0 14px rgba(239, 68, 68, 0.8))
-          drop-shadow(0 0 28px rgba(244, 63, 94, 0.45))
+  filter: drop-shadow(0 0 14px rgba(192, 132, 252, 0.85))
+          drop-shadow(0 0 28px rgba(168, 85, 247, 0.5))
           drop-shadow(0 14px 28px rgba(0, 0, 0, 0.85)) !important;
 }

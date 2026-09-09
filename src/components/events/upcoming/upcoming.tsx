@@ -47,17 +47,17 @@ const Upcoming: React.FC = () => {
     <div className='font-body flex flex-col justify-center items-center'>
       <div className='w-full max-w-4xl mx-auto px-4 sm:px-6 pt-24 pb-4 md:pt-36'>
         <div className='text-center mb-10'>
-          <div className="inline-flex items-center gap-2 bg-red-500/10 border border-red-500/30 rounded-full px-4 py-1.5 mb-3 backdrop-blur-md">
+          <div className="inline-flex items-center gap-2 bg-purple-500/10 border border-purple-500/30 rounded-full px-4 py-1.5 mb-3 backdrop-blur-md">
             <span className="relative flex h-2 w-2">
-              <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-red-400 opacity-75"></span>
-              <span className="relative inline-flex rounded-full h-2 w-2 bg-red-500"></span>
+              <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-purple-400 opacity-75"></span>
+              <span className="relative inline-flex rounded-full h-2 w-2 bg-purple-500"></span>
             </span>
-            <span className="text-xs font-heading font-semibold uppercase tracking-wider text-red-200">
+            <span className="text-xs font-heading font-semibold uppercase tracking-wider text-purple-200">
               Live Showcase
             </span>
           </div>
           <h1 className='text-4xl md:text-5xl font-bold text-white mb-3 text-balance font-heading'>Ongoing Event</h1>
-          <p className='text-base md:text-lg text-rose-200 max-w-xl mx-auto font-body'>
+          <p className='text-base md:text-lg text-purple-200 max-w-xl mx-auto font-body'>
             Explore, demonstrate, connect, and build — Charting Ideas into the Uncharted
           </p>
         </div>

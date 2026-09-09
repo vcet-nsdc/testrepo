@@ -10,12 +10,12 @@ import {
   Clock,
   MapPin, 
   Sparkles, 
-  ExternalLink, 
-  Trophy, 
+  ExternalLink,
   ArrowUp, 
   Layers, 
   ChevronDown,
   ArrowRight,
+  Maximize2,
   X
 } from "lucide-react";
 
@@ -612,6 +612,7 @@ export default function Events() {
   const [activeCheckpoint, setActiveCheckpoint] = React.useState<number>(0);
   const [isAtEnd, setIsAtEnd] = React.useState<boolean>(false);
   const [isDetailModalOpen, setIsDetailModalOpen] = React.useState<boolean>(false);
+  const [isPosterLightboxOpen, setIsPosterLightboxOpen] = React.useState<boolean>(false);
 
   // Scroll parallax for ongoing event logo
   const { scrollYProgress: heroScrollProgress } = useScroll({
@@ -649,9 +650,9 @@ export default function Events() {
     logoMouseY.set(0);
   };
 
-  // Robust background scroll lock when detail modal is open
+  // Robust background scroll lock when detail modal or poster lightbox is open
   React.useEffect(() => {
-    if (!isDetailModalOpen) return;
+    if (!isDetailModalOpen && !isPosterLightboxOpen) return;
 
     const scrollY = window.scrollY;
     const prevOverflow = document.body.style.overflow;
@@ -665,7 +666,13 @@ export default function Events() {
     document.body.style.width = "100%";
 
     const handleKeyDown = (e: KeyboardEvent) => {
-      if (e.key === "Escape") setIsDetailModalOpen(false);
+      if (e.key === "Escape") {
+        if (isPosterLightboxOpen) {
+          setIsPosterLightboxOpen(false);
+        } else {
+          setIsDetailModalOpen(false);
+        }
+      }
     };
     window.addEventListener("keydown", handleKeyDown);
 
@@ -677,7 +684,7 @@ export default function Events() {
       document.body.style.width = prevWidth;
       window.scrollTo(0, scrollY);
     };
-  }, [isDetailModalOpen]);
+  }, [isDetailModalOpen, isPosterLightboxOpen]);
 
   const beamTarget = useMotionValue(0);
   const smoothBeamHeight = useSpring(beamTarget, {
@@ -821,84 +828,209 @@ export default function Events() {
       {/* 0. DETAIL MODAL: Portaled to Document Body with scroll lock */}
       {typeof document !== "undefined" &&
         createPortal(
-          <AnimatePresence>
-            {isDetailModalOpen && (
-              <>
-                <motion.div
-                  initial={{ opacity: 0 }}
-                  animate={{ opacity: 1 }}
-                  exit={{ opacity: 0 }}
-                  onClick={() => setIsDetailModalOpen(false)}
-                  className="fixed inset-0 bg-black/85 backdrop-blur-md h-full w-full z-[100]"
-                />
-                <div
-                  className="fixed inset-0 grid place-items-center z-[101] p-4 sm:p-6 overflow-y-auto overscroll-contain"
-                  onWheel={(e) => e.stopPropagation()}
-                  onClick={() => setIsDetailModalOpen(false)}
-                >
-                  <motion.div
-                    onClick={(e) => e.stopPropagation()}
-                    initial={{ opacity: 0, scale: 0.94, y: 15 }}
-                    animate={{ opacity: 1, scale: 1, y: 0 }}
-                    exit={{ opacity: 0, scale: 0.94, y: 15 }}
-                    transition={{ type: "spring", stiffness: 300, damping: 25 }}
-                    className="w-full max-w-3xl max-h-[88vh] flex flex-col overflow-auto [scrollbar-width:none] [-ms-overflow-style:none] rounded-[32px] bg-gradient-to-b from-[#1c080d]/98 via-[#0e0407]/98 to-[#170511]/98 backdrop-blur-2xl border-[1.5px] border-red-500/40 shadow-[0_0_70px_rgba(239,68,68,0.35)] relative my-auto"
+          <>
+            {/* Full-Screen Poster Lightbox Portal */}
+            <AnimatePresence>
+              {isPosterLightboxOpen && (
+            <motion.div
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              exit={{ opacity: 0 }}
+              transition={{ duration: 0.2 }}
+              className="fixed inset-0 z-[120] flex items-center justify-center p-3 sm:p-6 bg-black/92 backdrop-blur-2xl"
+              onClick={() => setIsPosterLightboxOpen(false)}
+            >
+              <motion.div
+                initial={{ opacity: 0, scale: 0.92, y: 15 }}
+                animate={{ opacity: 1, scale: 1, y: 0 }}
+                exit={{ opacity: 0, scale: 0.92, y: 15 }}
+                transition={{ type: "spring", stiffness: 320, damping: 28 }}
+                className="relative max-h-[95vh] max-w-[95vw] flex flex-col items-center"
+                onClick={(e) => e.stopPropagation()}
+              >
+                {/* Floating control bar */}
+                <div className="w-full flex items-center justify-between pb-3 px-1 text-white">
+                  <div className="flex items-center gap-2 text-xs font-mono text-purple-200">
+                    <Sparkles className="w-3.5 h-3.5 text-purple-400" />
+                    <span>TechX 2026 Official Poster Preview</span>
+                  </div>
+                  <button
+                    type="button"
+                    onClick={() => setIsPosterLightboxOpen(false)}
+                    className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-full bg-white/10 hover:bg-white/20 border border-white/20 text-white text-xs font-mono transition-colors cursor-pointer shadow-md"
                   >
-                    {/* Top specular highlight */}
-                    <div className="absolute inset-x-12 top-0 h-[2px] bg-gradient-to-r from-transparent via-red-400 to-transparent shadow-[0_0_18px_#f43f5e] pointer-events-none z-20" />
+                    <span>Close (Esc)</span>
+                    <X className="w-4 h-4" />
+                  </button>
+                </div>
 
-                    {/* Modal Banner Image */}
-                    <div className="relative">
-                      <img
-                        src="/assests/techx.jpeg"
-                        alt="TechX 2026 Product Showcase"
-                        className="w-full h-64 sm:h-80 object-cover object-top"
-                      />
-                      <div className="absolute inset-0 bg-gradient-to-t from-[#0e0407] via-transparent to-black/40" />
+                {/* High-res full poster */}
+                <div className="relative rounded-2xl overflow-hidden border border-purple-500/40 shadow-[0_0_60px_rgba(168,85,247,0.35)] bg-black/60">
+                  <img
+                    src="/assests/techx.jpeg"
+                    alt="TechX 2026 Product Showcase Official Poster"
+                    className="max-h-[86vh] w-auto object-contain rounded-2xl select-none"
+                  />
+                </div>
+              </motion.div>
+            </motion.div>
+          )}
+        </AnimatePresence>
 
-                      {/* Modal Category Pill */}
-                      <div className="absolute top-5 left-5 z-20">
-                        <div className="inline-flex items-center gap-2.5 rounded-full border border-red-500/50 bg-[#1f0a0e]/85 backdrop-blur-md px-4 py-1.5 shadow-[0_0_15px_rgba(239,68,68,0.3)]">
-                          <span className="w-2 h-2 rounded-full bg-red-400 animate-ping" />
-                          <span className="text-[11px] font-mono font-bold tracking-widest text-red-200 uppercase">
-                            PRODUCT SHOWCASE
+        {/* Ongoing Event Details Modal */}
+        <AnimatePresence>
+          {isDetailModalOpen && (
+            <>
+              {/* Dimmed backdrop */}
+              <motion.div
+                initial={{ opacity: 0 }}
+                animate={{ opacity: 1 }}
+                exit={{ opacity: 0 }}
+                onClick={() => setIsDetailModalOpen(false)}
+                className="fixed inset-0 bg-black/85 backdrop-blur-md h-full w-full z-[100]"
+              />
+              <div
+                className="fixed inset-0 grid place-items-center z-[101] p-4 sm:p-6 overflow-y-auto overscroll-contain"
+                onWheel={(e) => e.stopPropagation()}
+                onClick={() => setIsDetailModalOpen(false)}
+              >
+                <motion.div
+                  onClick={(e) => e.stopPropagation()}
+                  initial={{ opacity: 0, scale: 0.94, y: 15 }}
+                  animate={{ opacity: 1, scale: 1, y: 0 }}
+                  exit={{ opacity: 0, scale: 0.94, y: 15 }}
+                  transition={{ type: "spring", stiffness: 300, damping: 25 }}
+                  className="w-full max-w-4xl max-h-[88vh] flex flex-col overflow-auto [scrollbar-width:none] [-ms-overflow-style:none] rounded-[32px] bg-gradient-to-b from-[#150a2e]/98 via-[#090416]/98 to-[#130728]/98 backdrop-blur-2xl border-[1.5px] border-purple-400/40 shadow-[0_0_80px_rgba(147,51,234,0.35)] relative my-auto"
+                >
+                  {/* Top specular highlight */}
+                  <div className="absolute inset-x-12 top-0 h-[2px] bg-gradient-to-r from-transparent via-purple-300 to-transparent shadow-[0_0_18px_#c084fc] pointer-events-none z-20" />
+
+                  {/* Modal Header Bar */}
+                  <div className="sticky top-0 z-30 flex items-center justify-between px-6 py-4 bg-[#0e0620]/80 backdrop-blur-md border-b border-purple-500/20">
+                    <div className="inline-flex items-center gap-2 rounded-full border border-purple-400/40 bg-purple-950/60 px-3.5 py-1 shadow-[0_0_15px_rgba(168,85,247,0.25)]">
+                      <span className="w-2 h-2 rounded-full bg-purple-400 animate-ping" />
+                      <span className="text-[11px] font-mono font-bold tracking-widest text-purple-300 uppercase">
+                        PRODUCT SHOWCASE
+                      </span>
+                    </div>
+
+                    <button
+                      type="button"
+                      onClick={() => setIsDetailModalOpen(false)}
+                      aria-label="Close dialog"
+                      className="w-9 h-9 rounded-full bg-white/10 hover:bg-white/20 border border-white/20 text-white/80 hover:text-white flex items-center justify-center transition-all duration-300 hover:scale-105 cursor-pointer shadow-md"
+                    >
+                      <X className="w-4 h-4" />
+                    </button>
+                  </div>
+
+                  {/* Modal Content Details - Two Column Layout with Visible & Clickable Poster */}
+                  <div className="p-6 sm:p-8 grid grid-cols-1 md:grid-cols-12 gap-6 items-start text-zinc-300">
+                    {/* Left: Visible Event Poster (Clickable to see full poster) */}
+                    <div className="md:col-span-5 flex flex-col items-center">
+                      <div 
+                        onClick={() => setIsPosterLightboxOpen(true)}
+                        className="group/poster relative w-full rounded-2xl overflow-hidden border border-purple-500/30 bg-purple-950/20 shadow-[0_0_30px_rgba(168,85,247,0.18)] hover:border-purple-400 hover:shadow-[0_0_40px_rgba(168,85,247,0.35)] transition-all duration-300 cursor-pointer"
+                        title="Click to view full poster"
+                      >
+                        <img
+                          src="/assests/techx.jpeg"
+                          alt="TechX 2026 Product Showcase Poster"
+                          className="w-full h-auto max-h-[460px] object-contain mx-auto transition-transform duration-500 group-hover/poster:scale-[1.02]"
+                        />
+                        {/* Hover Overlay indicating Click to Expand */}
+                        <div className="absolute inset-0 bg-gradient-to-t from-black/85 via-black/20 to-transparent opacity-0 group-hover/poster:opacity-100 transition-opacity duration-300 flex flex-col justify-end p-4 items-center">
+                          <span className="inline-flex items-center gap-1.5 px-3.5 py-1.5 rounded-full bg-purple-600/90 text-white font-mono text-xs font-semibold shadow-lg backdrop-blur-md border border-purple-300/40 transform -translate-y-1 group-hover/poster:translate-y-0 transition-transform">
+                            <Maximize2 className="w-3.5 h-3.5 text-purple-200" />
+                            <span>Click for Full Poster</span>
                           </span>
                         </div>
                       </div>
-
-                      {/* Close Button */}
                       <button
                         type="button"
-                        onClick={() => setIsDetailModalOpen(false)}
-                        aria-label="Close dialog"
-                        className="absolute top-5 right-5 z-20 w-10 h-10 rounded-full bg-black/60 backdrop-blur-md border border-white/20 text-white/80 hover:text-white hover:border-red-400 flex items-center justify-center transition-all duration-300 hover:scale-110 cursor-pointer shadow-lg"
+                        onClick={() => setIsPosterLightboxOpen(true)}
+                        className="mt-2.5 inline-flex items-center gap-1.5 text-xs font-mono text-purple-300 hover:text-white transition-colors cursor-pointer"
                       >
-                        <X className="w-5 h-5" />
+                        <Maximize2 className="w-3 h-3 text-purple-400" />
+                        <span className="underline underline-offset-4">Open Full Poster View</span>
                       </button>
                     </div>
 
-                    {/* Modal Content Details */}
-                    <div className="p-6 sm:p-8 space-y-6 text-zinc-300">
+                    {/* Right: Summarized Information in Website Theme */}
+                    <div className="md:col-span-7 space-y-5">
                       <div>
-                        <span className="inline-block text-[11px] font-mono font-semibold uppercase tracking-wider text-red-400 mb-1.5">
-                          Department of Artificial Intelligence and Data Science
+                        <span className="inline-block text-[11px] font-mono font-semibold uppercase tracking-wider text-purple-400">
+                          Dept. of Artificial Intelligence & Data Science
                         </span>
-                        <h3 className="text-2xl sm:text-3xl font-black text-white font-heading tracking-tight">
+                        <h3 className="text-2xl sm:text-3xl font-black text-white font-heading tracking-tight mt-1">
                           TechX 2026 Product Showcase
                         </h3>
-                        <p className="text-red-300/90 font-mono text-xs sm:text-sm mt-1">
-                          Ongoing Event • 11th September 2026 • VCET, Vasai
+                        <p className="text-purple-200/80 font-mono text-xs sm:text-sm mt-0.5">
+                          Charting Ideas into the Uncharted
                         </p>
                       </div>
 
-                      {/* Sponsor / Partnership Showcase */}
-                      <div className="space-y-2.5">
-                        <p className="text-xs font-mono uppercase text-red-300 font-bold tracking-wider">
+                      {/* Quick Metrics (Date, Time, Venue) */}
+                      <div className="grid grid-cols-1 sm:grid-cols-3 gap-2 p-3 rounded-2xl bg-black/30 border border-purple-500/20 backdrop-blur-md text-xs font-mono">
+                        <div className="flex items-center gap-2">
+                          <Calendar className="w-3.5 h-3.5 text-purple-400 shrink-0" />
+                          <span className="text-white font-semibold">11 Sep 2026</span>
+                        </div>
+                        <div className="flex items-center gap-2">
+                          <Clock className="w-3.5 h-3.5 text-purple-400 shrink-0" />
+                          <span className="text-zinc-300">10 AM – 5 PM</span>
+                        </div>
+                        <div className="flex items-center gap-2">
+                          <MapPin className="w-3.5 h-3.5 text-purple-400 shrink-0" />
+                          <span className="text-zinc-300">VCET, Vasai</span>
+                        </div>
+                      </div>
+
+                      {/* Summarized Mission Overview */}
+                      <div>
+                        <h4 className="text-xs font-mono uppercase tracking-wider text-purple-400 font-bold mb-1.5 flex items-center gap-1.5">
+                          <Sparkles className="w-3.5 h-3.5 text-purple-400" />
+                          Event Summary
+                        </h4>
+                        <p className="text-zinc-300 leading-relaxed text-xs sm:text-sm">
+                          TechX 2026 is VCET's premier product showcase by the Department of AI & Data Science in association with VCET NSDC. Student teams explore, demonstrate, and build innovative hardware and AI solutions to solve real-world problems before leading industry evaluators.
+                        </p>
+                      </div>
+
+                      {/* Summarized Key Focus Areas */}
+                      <div>
+                        <h5 className="text-xs font-mono uppercase tracking-wider text-purple-400 font-bold mb-2 flex items-center gap-1.5">
+                          <Layers className="w-3.5 h-3.5 text-purple-400" />
+                          Highlights
+                        </h5>
+                        <div className="grid grid-cols-1 sm:grid-cols-2 gap-2 text-xs">
+                          <div className="bg-black/20 p-2.5 rounded-xl border border-purple-500/20 backdrop-blur-sm flex items-start gap-2">
+                            <span className="text-purple-400 font-bold">•</span>
+                            <span>Live prototypes across AI, Embedded Systems & Robotics</span>
+                          </div>
+                          <div className="bg-black/20 p-2.5 rounded-xl border border-purple-500/20 backdrop-blur-sm flex items-start gap-2">
+                            <span className="text-purple-400 font-bold">•</span>
+                            <span>Direct evaluation from senior industry delegates</span>
+                          </div>
+                          <div className="bg-black/20 p-2.5 rounded-xl border border-purple-500/20 backdrop-blur-sm flex items-start gap-2">
+                            <span className="text-purple-400 font-bold">•</span>
+                            <span>Interactive booths with hands-on prototype test runs</span>
+                          </div>
+                          <div className="bg-black/20 p-2.5 rounded-xl border border-purple-500/20 backdrop-blur-sm flex items-start gap-2">
+                            <span className="text-purple-400 font-bold">•</span>
+                            <span>Innovation trophies & official certificates for all teams</span>
+                          </div>
+                        </div>
+                      </div>
+
+                      {/* Official Sponsors (Summarized & Badged) */}
+                      <div>
+                        <p className="text-xs font-mono uppercase text-purple-300 font-bold tracking-wider mb-2">
                           Official Sponsors & Partners
                         </p>
-                        <div className="grid grid-cols-1 sm:grid-cols-3 gap-3">
-                          <div className="flex items-center gap-3 p-3 rounded-2xl bg-black/40 border border-red-500/30 backdrop-blur-md">
-                            <div className="w-16 h-10 bg-white rounded-lg p-1 flex items-center justify-center shrink-0 shadow-sm overflow-hidden">
+                        <div className="grid grid-cols-1 sm:grid-cols-3 gap-2">
+                          <div className="flex items-center gap-2.5 p-2 rounded-xl bg-black/30 border border-purple-500/20 backdrop-blur-md">
+                            <div className="w-12 h-8 bg-white rounded-md p-1 flex items-center justify-center shrink-0 shadow-sm overflow-hidden">
                               <img
                                 src="/assests/sponsor_tech_computer.png"
                                 alt="Tech Computer Education"
@@ -906,15 +1038,13 @@ export default function Events() {
                               />
                             </div>
                             <div className="min-w-0">
-                              <p className="text-xs font-bold text-white leading-tight truncate">
-                                Tech Computer
-                              </p>
-                              <p className="text-[10px] text-red-300 font-mono uppercase">Powered By</p>
+                              <p className="text-[11px] font-bold text-white leading-tight truncate">Tech Computer</p>
+                              <p className="text-[9px] text-purple-300 font-mono uppercase">Powered By</p>
                             </div>
                           </div>
 
-                          <div className="flex items-center gap-3 p-3 rounded-2xl bg-black/40 border border-red-500/30 backdrop-blur-md">
-                            <div className="w-16 h-10 bg-white rounded-lg p-1 flex items-center justify-center shrink-0 shadow-sm overflow-hidden">
+                          <div className="flex items-center gap-2.5 p-2 rounded-xl bg-black/30 border border-purple-500/20 backdrop-blur-md">
+                            <div className="w-12 h-8 bg-white rounded-md p-1 flex items-center justify-center shrink-0 shadow-sm overflow-hidden">
                               <img
                                 src="/assests/sponsor_angelone.png"
                                 alt="AngelOne"
@@ -922,15 +1052,13 @@ export default function Events() {
                               />
                             </div>
                             <div className="min-w-0">
-                              <p className="text-xs font-bold text-white leading-tight truncate">
-                                AngelOne
-                              </p>
-                              <p className="text-[10px] text-amber-300 font-mono uppercase">Co-Powered By</p>
+                              <p className="text-[11px] font-bold text-white leading-tight truncate">AngelOne</p>
+                              <p className="text-[9px] text-amber-300 font-mono uppercase">Co-Powered By</p>
                             </div>
                           </div>
 
-                          <div className="flex items-center gap-3 p-3 rounded-2xl bg-black/40 border border-red-500/30 backdrop-blur-md">
-                            <div className="w-16 h-10 bg-white rounded-lg p-1 flex items-center justify-center shrink-0 shadow-sm overflow-hidden">
+                          <div className="flex items-center gap-2.5 p-2 rounded-xl bg-black/30 border border-purple-500/20 backdrop-blur-md">
+                            <div className="w-12 h-8 bg-white rounded-md p-1 flex items-center justify-center shrink-0 shadow-sm overflow-hidden">
                               <img
                                 src="/assests/sponsor_career_launcher.png"
                                 alt="Career Launcher"
@@ -938,90 +1066,42 @@ export default function Events() {
                               />
                             </div>
                             <div className="min-w-0">
-                              <p className="text-xs font-bold text-white leading-tight truncate">
-                                Career Launcher
-                              </p>
-                              <p className="text-[10px] text-amber-300 font-mono uppercase">Co-Powered By</p>
+                              <p className="text-[11px] font-bold text-white leading-tight truncate">Career Launcher</p>
+                              <p className="text-[9px] text-amber-300 font-mono uppercase">Co-Powered By</p>
                             </div>
                           </div>
                         </div>
                       </div>
 
-                      {/* Mission Overview */}
-                      <div>
-                        <h4 className="text-lg font-bold text-white mb-2 flex items-center gap-2">
-                          <Sparkles className="w-5 h-5 text-red-400" />
-                          Mission Overview
-                        </h4>
-                        <p className="text-zinc-300 leading-relaxed text-sm sm:text-base">
-                          TechX 2026 is the premier Product Showcase organized by the Department of Artificial Intelligence and Data Science at VCET in association with VCET NSDC. Centered on the vision "Charting Ideas into the Uncharted", TechX provides an open platform for student innovators to explore, demonstrate, connect, and build cutting-edge hardware and software products before distinguished industry leaders.
-                        </p>
-                      </div>
-
-                      {/* Technical Highlights */}
-                      <div>
-                        <h5 className="text-sm font-mono uppercase tracking-wider text-red-400 font-bold mb-3 flex items-center gap-2">
-                          <Layers className="w-4 h-4 text-red-400" />
-                          Showcase Highlights & Focus Areas
-                        </h5>
-                        <ul className="grid grid-cols-1 sm:grid-cols-2 gap-2 text-xs sm:text-sm">
-                          <li className="flex items-start gap-2 bg-black/20 p-3 rounded-xl border border-red-500/20 backdrop-blur-sm">
-                            <span className="text-red-400 font-bold">•</span>
-                            <span>Live product demonstrations across AI, Machine Learning, and Robotics.</span>
-                          </li>
-                          <li className="flex items-start gap-2 bg-black/20 p-3 rounded-xl border border-red-500/20 backdrop-blur-sm">
-                            <span className="text-red-400 font-bold">•</span>
-                            <span>Direct jury evaluation on real-world impact, architecture, and deployment.</span>
-                          </li>
-                          <li className="flex items-start gap-2 bg-black/20 p-3 rounded-xl border border-red-500/20 backdrop-blur-sm">
-                            <span className="text-red-400 font-bold">•</span>
-                            <span>Interactive product booths with hands-on prototype test runs.</span>
-                          </li>
-                          <li className="flex items-start gap-2 bg-black/20 p-3 rounded-xl border border-red-500/20 backdrop-blur-sm">
-                            <span className="text-red-400 font-bold">•</span>
-                            <span>Networking opportunities with seasoned industry leaders and sponsors.</span>
-                          </li>
-                        </ul>
-                      </div>
-
-                      {/* Awards & Recognition */}
-                      <div className="p-4 rounded-2xl bg-red-950/20 border border-red-500/20 backdrop-blur-sm">
-                        <h5 className="text-sm font-mono uppercase tracking-wider text-red-400 font-bold mb-2 flex items-center gap-2">
-                          <Trophy className="w-4 h-4 text-red-400" />
-                          Prizes & Recognition
-                        </h5>
-                        <p className="text-xs sm:text-sm text-zinc-300">
-                          Excellence trophies for standout product designs, innovation awards, and official certificates of accomplishment recognized by VCET & VCET NSDC.
-                        </p>
-                      </div>
-
-                      {/* Direct Action Link / Status */}
-                      <div className="pt-2 flex flex-wrap items-center justify-between gap-3">
+                      {/* Status Bar */}
+                      <div className="pt-2 flex flex-wrap items-center justify-between gap-3 border-t border-purple-500/20">
                         <div className="flex items-center gap-2 text-xs font-mono text-zinc-400">
                           <span className="w-2 h-2 rounded-full bg-emerald-400 animate-pulse" />
-                          <span>Official Website & Portal Launching Soon</span>
+                          <span>Official Portal Launching Soon</span>
                         </div>
-                        <span className="inline-flex items-center gap-2 px-5 py-2.5 rounded-xl bg-white/[0.06] border border-white/10 text-zinc-300 text-xs font-mono font-medium">
+                        <span className="inline-flex items-center gap-2 px-4 py-2 rounded-xl bg-white/[0.06] border border-white/10 text-zinc-300 text-xs font-mono">
                           <span>Link Coming Soon</span>
                         </span>
                       </div>
                     </div>
-                  </motion.div>
-                </div>
-              </>
-            )}
-          </AnimatePresence>,
-          document.body
-        )}
+                  </div>
+                </motion.div>
+              </div>
+            </>
+          )}
+        </AnimatePresence>
+      </>,
+      document.body
+    )}
 
       {/* 1. HERO SECTION: Ongoing Events + Giant Border-Illuminated Logo + Dates & Details + Drop Button */}
       <section 
         ref={heroRef}
-        className="px-4 sm:px-6 pt-20 sm:pt-24 pb-8 sm:pb-12 max-w-[1500px] w-full mx-auto flex flex-col items-center justify-center min-h-[85vh] border-b border-red-900/20 relative"
+        className="px-4 sm:px-6 pt-20 sm:pt-24 pb-8 sm:pb-12 max-w-[1500px] w-full mx-auto flex flex-col items-center justify-center min-h-[85vh] border-b border-purple-900/20 relative"
       >
         {/* Atmospheric ambient glows - isolated GPU layer to eliminate reflow lag */}
-        <div className="absolute top-1/3 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[750px] h-[450px] bg-red-600/18 blur-[160px] rounded-full pointer-events-none transform-gpu will-change-transform" />
-        <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[550px] h-[320px] bg-purple-600/15 blur-[140px] rounded-full pointer-events-none transform-gpu will-change-transform" />
+        <div className="absolute top-1/3 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[750px] h-[450px] bg-purple-600/18 blur-[160px] rounded-full pointer-events-none transform-gpu will-change-transform" />
+        <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[550px] h-[320px] bg-indigo-600/15 blur-[140px] rounded-full pointer-events-none transform-gpu will-change-transform" />
 
         <div className="relative z-10 w-full flex flex-col items-center text-center">
           {/* Ongoing Events Heading in bold head title font with warm beige styling */}
@@ -1038,7 +1118,7 @@ export default function Events() {
             initial={{ opacity: 0, y: 8 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.7, delay: 0.08 }}
-            className="text-xs sm:text-sm font-mono uppercase tracking-widest text-red-300/90 mt-2"
+            className="text-xs sm:text-sm font-mono uppercase tracking-widest text-purple-300/90 mt-2"
           >
             Department of AI & Data Science • Charting Ideas into the Uncharted
           </motion.p>
@@ -1053,7 +1133,7 @@ export default function Events() {
               onMouseLeave={handleLogoMouseLeave}
             >
               {/* Ambient Radial Backlight that gently highlights on hover */}
-              <div className="absolute inset-x-0 inset-y-2 w-full h-full rounded-full bg-gradient-to-r from-red-600/35 via-rose-500/25 to-purple-600/30 blur-[75px] opacity-15 group-hover:opacity-55 group-hover:scale-105 transition-all duration-500 pointer-events-none transform-gpu" />
+              <div className="absolute inset-x-0 inset-y-2 w-full h-full rounded-full bg-gradient-to-r from-purple-600/30 via-indigo-500/25 to-fuchsia-600/30 blur-[75px] opacity-15 group-hover:opacity-55 group-hover:scale-105 transition-all duration-500 pointer-events-none transform-gpu" />
 
               <motion.div
                 style={{
@@ -1086,24 +1166,24 @@ export default function Events() {
             </div>
           </div>
 
-          {/* Event Dates, Time and Venue */}
+          {/* Event Dates, Time and Venue - Prominently sized with website theme styling */}
           <motion.div
             initial={{ opacity: 0, y: 15 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.7, delay: 0.15 }}
-            className="flex flex-wrap items-center justify-center gap-2.5 sm:gap-3.5 mt-3 sm:mt-4 text-xs sm:text-sm font-medium"
+            className="flex flex-wrap items-center justify-center gap-3 sm:gap-4.5 mt-5 sm:mt-7 text-sm sm:text-base md:text-lg font-medium"
           >
-            <div className="flex items-center gap-2 px-3.5 sm:px-4 py-1.5 rounded-full bg-red-950/40 border border-red-500/30 backdrop-blur-md text-zinc-200 shadow-[0_0_15px_rgba(239,68,68,0.15)]">
-              <Calendar className="w-3.5 h-3.5 text-red-400" />
-              <span className="font-mono text-white font-semibold">11th September 2026</span>
+            <div className="flex items-center gap-2.5 sm:gap-3 px-5 sm:px-6 py-2.5 sm:py-3 rounded-2xl bg-purple-950/60 border border-purple-500/40 backdrop-blur-xl text-zinc-100 shadow-[0_0_25px_rgba(168,85,247,0.22)] hover:border-purple-400 hover:shadow-[0_0_30px_rgba(168,85,247,0.4)] transition-all duration-300">
+              <Calendar className="w-5 h-5 text-purple-400 shrink-0" />
+              <span className="font-mono text-white font-bold tracking-wide">11th September 2026</span>
             </div>
-            <div className="flex items-center gap-2 px-3.5 sm:px-4 py-1.5 rounded-full bg-red-950/40 border border-red-500/30 backdrop-blur-md text-zinc-200 shadow-[0_0_15px_rgba(239,68,68,0.15)]">
-              <Clock className="w-3.5 h-3.5 text-red-400" />
-              <span className="font-mono text-zinc-300">10:00 AM – 5:00 PM IST</span>
+            <div className="flex items-center gap-2.5 sm:gap-3 px-5 sm:px-6 py-2.5 sm:py-3 rounded-2xl bg-purple-950/60 border border-purple-500/40 backdrop-blur-xl text-zinc-100 shadow-[0_0_25px_rgba(168,85,247,0.22)] hover:border-purple-400 hover:shadow-[0_0_30px_rgba(168,85,247,0.4)] transition-all duration-300">
+              <Clock className="w-5 h-5 text-purple-400 shrink-0" />
+              <span className="font-mono text-zinc-200 font-semibold tracking-wide">10:00 AM – 5:00 PM IST</span>
             </div>
-            <div className="flex items-center gap-2 px-3.5 sm:px-4 py-1.5 rounded-full bg-red-950/40 border border-red-500/30 backdrop-blur-md text-zinc-200 shadow-[0_0_15px_rgba(239,68,68,0.15)]">
-              <MapPin className="w-3.5 h-3.5 text-red-400" />
-              <span className="font-mono text-zinc-300">VCET, Vasai</span>
+            <div className="flex items-center gap-2.5 sm:gap-3 px-5 sm:px-6 py-2.5 sm:py-3 rounded-2xl bg-purple-950/60 border border-purple-500/40 backdrop-blur-xl text-zinc-100 shadow-[0_0_25px_rgba(168,85,247,0.22)] hover:border-purple-400 hover:shadow-[0_0_30px_rgba(168,85,247,0.4)] transition-all duration-300">
+              <MapPin className="w-5 h-5 text-purple-400 shrink-0" />
+              <span className="font-mono text-zinc-200 font-semibold tracking-wide">VCET, Vasai</span>
             </div>
           </motion.div>
 
@@ -1112,16 +1192,16 @@ export default function Events() {
             initial={{ opacity: 0, y: 15 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.7, delay: 0.25 }}
-            className="mt-3.5 sm:mt-4"
+            className="mt-4 sm:mt-5"
           >
             <button
               type="button"
               onClick={() => setIsDetailModalOpen(true)}
-              className="group relative inline-flex items-center gap-2.5 px-7 py-2.5 rounded-full bg-gradient-to-r from-red-600 via-rose-600 to-purple-600 hover:from-red-500 hover:via-rose-500 hover:to-purple-500 text-white font-bold text-xs sm:text-sm shadow-[0_0_25px_rgba(239,68,68,0.45)] hover:shadow-[0_0_35px_rgba(244,63,94,0.8)] hover:scale-105 active:scale-95 transition-all duration-300 border border-red-300/40 cursor-pointer"
+              className="group relative inline-flex items-center gap-3 px-8 py-3 rounded-full bg-gradient-to-r from-purple-600 via-fuchsia-600 to-indigo-600 hover:from-purple-500 hover:via-fuchsia-500 hover:to-indigo-500 text-white font-bold text-sm sm:text-base shadow-[0_0_30px_rgba(168,85,247,0.45)] hover:shadow-[0_0_40px_rgba(192,132,252,0.8)] hover:scale-105 active:scale-95 transition-all duration-300 border border-purple-300/40 cursor-pointer"
             >
-              <Sparkles className="w-3.5 h-3.5 text-red-200 group-hover:rotate-12 transition-transform duration-300" />
+              <Sparkles className="w-4 h-4 text-purple-200 group-hover:rotate-12 transition-transform duration-300" />
               <span>More Details</span>
-              <ArrowRight className="w-3.5 h-3.5 text-red-200 group-hover:translate-x-1 transition-transform duration-300" />
+              <ArrowRight className="w-4 h-4 text-purple-200 group-hover:translate-x-1 transition-transform duration-300" />
             </button>
           </motion.div>
 

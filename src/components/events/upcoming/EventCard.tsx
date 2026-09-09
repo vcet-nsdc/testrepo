@@ -247,12 +247,12 @@ const EventCard: React.FC<EventCardProps> = ({
                   </div>
 
                   {/* Sponsors Glass Pill */}
-                  <div className="flex flex-wrap items-center gap-2 p-1.5 pr-3.5 rounded-xl bg-white/[0.05] border border-white/10 backdrop-blur-md mb-3 w-fit hover:border-red-500/30 transition-colors">
+                  <div className="flex flex-wrap items-center gap-2 p-1.5 pr-3.5 rounded-xl bg-white/[0.05] border border-white/10 backdrop-blur-md mb-3 w-fit hover:border-purple-500/30 transition-colors">
                     <div className="relative w-14 h-7 bg-white/95 rounded-lg p-1 flex items-center justify-center shadow-sm shrink-0">
                       <Image src="/assests/sponsor_tech_computer.png" alt="Tech Computer Education" fill className="object-contain p-0.5" />
                     </div>
                     <span className="text-white/90 text-xs font-heading">
-                      Powered by <strong className="text-red-300 font-semibold">Tech Computer Education</strong>
+                      Powered by <strong className="text-purple-300 font-semibold">Tech Computer Education</strong>
                     </span>
                   </div>
 
@@ -264,14 +264,14 @@ const EventCard: React.FC<EventCardProps> = ({
                         target="_blank"
                         rel="noopener noreferrer"
                         onClick={(e) => e.stopPropagation()}
-                        className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-gradient-to-r from-red-500/20 via-rose-500/20 to-purple-500/20 hover:from-red-500/30 hover:to-rose-500/30 border border-red-500/40 text-red-200 hover:text-white text-xs font-heading font-medium transition-all duration-300 shadow-[0_0_20px_rgba(239,68,68,0.25)] hover:shadow-[0_0_25px_rgba(239,68,68,0.4)] group/link"
+                        className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-gradient-to-r from-purple-500/20 via-fuchsia-500/20 to-indigo-500/20 hover:from-purple-500/30 hover:to-fuchsia-500/30 border border-purple-500/40 text-purple-200 hover:text-white text-xs font-heading font-medium transition-all duration-300 shadow-[0_0_20px_rgba(168,85,247,0.25)] hover:shadow-[0_0_25px_rgba(168,85,247,0.4)] group/link"
                         title="Open Event Website"
                       >
-                        <Globe className="w-3.5 h-3.5 text-red-400 group-hover/link:rotate-12 transition-transform duration-300" />
+                        <Globe className="w-3.5 h-3.5 text-purple-400 group-hover/link:rotate-12 transition-transform duration-300" />
                         <span className="font-semibold underline-offset-2 group-hover/link:underline">
                           {websiteLink.replace(/^https?:\/\//, '')}
                         </span>
-                        <ExternalLink className="w-3 h-3 text-red-400 group-hover/link:translate-x-0.5 group-hover/link:-translate-y-0.5 transition-transform" />
+                        <ExternalLink className="w-3 h-3 text-purple-400 group-hover/link:translate-x-0.5 group-hover/link:-translate-y-0.5 transition-transform" />
                       </a>
                     </div>
                   )}
@@ -283,8 +283,8 @@ const EventCard: React.FC<EventCardProps> = ({
 
                 {/* Glass Bottom Bar with Actions */}
                 <div className="flex flex-wrap items-center justify-between gap-3 pt-3 mt-3 border-t border-white/10">
-                  <div className="flex items-center gap-2 text-[11px] text-rose-300/80 font-body">
-                    <Users className="w-3.5 h-3.5 text-rose-400 shrink-0" />
+                  <div className="flex items-center gap-2 text-[11px] text-purple-300/80 font-body">
+                    <Users className="w-3.5 h-3.5 text-purple-400 shrink-0" />
                     <span>Product Showcase • VCET Vasai</span>
                   </div>
                   <div className="flex items-center gap-2.5">
@@ -294,7 +294,7 @@ const EventCard: React.FC<EventCardProps> = ({
                         target="_blank"
                         rel="noopener noreferrer"
                         onClick={(e) => e.stopPropagation()}
-                        className="inline-flex items-center gap-1.5 px-4 py-2 rounded-xl bg-gradient-to-r from-red-600 via-rose-600 to-purple-600 hover:from-red-500 hover:to-purple-500 text-white text-xs font-heading font-semibold shadow-[0_0_25px_rgba(239,68,68,0.35)] hover:shadow-[0_0_30px_rgba(239,68,68,0.5)] transition-all duration-300 hover:scale-105 active:scale-95"
+                        className="inline-flex items-center gap-1.5 px-4 py-2 rounded-xl bg-gradient-to-r from-purple-600 via-fuchsia-600 to-indigo-600 hover:from-purple-500 hover:to-indigo-500 text-white text-xs font-heading font-semibold shadow-[0_0_25px_rgba(168,85,247,0.35)] hover:shadow-[0_0_30px_rgba(168,85,247,0.5)] transition-all duration-300 hover:scale-105 active:scale-95"
                       >
                         <span>Visit Website</span>
                         <ExternalLink className="w-3.5 h-3.5" />
@@ -311,7 +311,7 @@ const EventCard: React.FC<EventCardProps> = ({
                       className="inline-flex items-center gap-1.5 text-xs font-heading text-white px-4 py-2 rounded-xl bg-white/10 hover:bg-white/15 border border-white/15 backdrop-blur-md transition-all duration-300 hover:scale-105 shadow-sm font-medium active:scale-95"
                     >
                       <span>More Details</span>
-                      <ArrowRight className="w-3.5 h-3.5 text-red-300" />
+                      <ArrowRight className="w-3.5 h-3.5 text-purple-300" />
                     </button>
                   </div>
                 </div>
@@ -435,7 +435,7 @@ const EventCard: React.FC<EventCardProps> = ({
 
                     {/* Sponsors & Partners section */}
                     <div>
-                      <h4 className="text-rose-300 text-xs font-body uppercase tracking-wider mb-2">Event Sponsors & Partners</h4>
+                      <h4 className="text-purple-300 text-xs font-body uppercase tracking-wider mb-2">Event Sponsors & Partners</h4>
                       <div className="grid grid-cols-1 sm:grid-cols-3 gap-3">
                         <div className="flex items-center gap-3 bg-white/[0.05] rounded-xl p-3 border border-white/10 backdrop-blur-md">
                           <div className="relative w-16 h-10 bg-white flex items-center justify-center rounded-lg overflow-hidden p-1 shadow-sm shrink-0">
