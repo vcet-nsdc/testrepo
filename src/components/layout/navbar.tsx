@@ -21,8 +21,8 @@ export function Navbar() {
   };
 
   return (
-    <nav className="fixed top-3 left-0 right-0 z-50 pointer-events-none">
-      <div className="pointer-events-auto mx-auto max-w-6xl px-5 py-2.5 flex items-center justify-between rounded-full border border-white/10 bg-black/40 backdrop-blur shadow-lg">
+    <nav className="fixed top-3 left-0 right-0 z-50 pointer-events-none flex justify-center px-4">
+      <div className="pointer-events-auto w-full max-w-6xl mx-auto px-5 py-2.5 flex items-center justify-between rounded-full border border-white/10 bg-black/40 backdrop-blur shadow-lg">
         {/* Logo */}
         <Link href="/" className="flex items-center select-none">
           <Image

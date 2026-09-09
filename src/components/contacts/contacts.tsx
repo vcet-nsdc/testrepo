@@ -145,13 +145,13 @@ const Contacts = () => {
         <div className="mt-8 space-y-4 text-center text-base md:text-lg">
           <p>
             <span className="mr-2">📧</span>
-            <span className="font-medium">Chairperson</span>:&nbsp;
-            <a className="underline hover:text-primary-light" href="mailto:shreya.225297202@vcet.edu.in ">shreya.225297202@vcet.edu.in </a>
+            <span className="font-medium">Chairperson (James Lewis)</span>:&nbsp;
+            <a className="underline hover:text-primary-light" href="mailto:james.236127101@vcet.edu.in">james.236127101@vcet.edu.in</a>
           </p>
           <p>
             <span className="mr-2">📧</span>
-            <span className="font-medium">Secretary</span>:&nbsp;
-            <a className="underline hover:text-primary-light" href="mailto:saloni.225257205@vcet.edu.in">  saloni.225257205@vcet.edu.in</a>
+            <span className="font-medium">Secretary (Shruti Gauchandra)</span>:&nbsp;
+            <a className="underline hover:text-primary-light" href="mailto:shruti.235997201@vcet.edu.in">shruti.235997201@vcet.edu.in</a>
           </p>
           <p>
             <span className="mr-2">📧</span>

@@ -1,0 +1,560 @@
+/* UPGRADED FOOTER - SOLID STATIC DARK BLACK BACKGROUND */
+  .upgraded-footer {
+    position: relative;
+    background: #000000;
+    border-top: 1px solid rgba(255, 255, 255, 0.08);
+    padding: 64px 0 36px;
+  }
+
+  /* Content Wrapper */
+  .footer-content-wrap {
+    position: relative;
+    z-index: 1;
+  }
+
+  /* 4-Column Grid */
+  .footer-main-grid {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 36px;
+    margin-bottom: 48px;
+  }
+  @media (min-width: 640px) {
+    .footer-main-grid {
+      grid-template-columns: 1fr 1fr;
+      gap: 32px;
+    }
+  }
+  @media (min-width: 1024px) {
+    .footer-main-grid {
+      grid-template-columns: 1.4fr 1.3fr 0.85fr 1.15fr;
+      gap: 36px;
+    }
+  }
+
+  /* Header & Accent Line */
+  .footer-block-header {
+    margin-bottom: 14px;
+  }
+  .footer-heading {
+    font-family: var(--font-heading);
+    font-size: 19px;
+    font-weight: 700;
+    color: #ffffff;
+    letter-spacing: 0.02em;
+    margin: 0 0 8px 0;
+  }
+  .heading-accent-line {
+    height: 2px;
+    width: 38px;
+    background: linear-gradient(90deg, var(--color-primary-light) 0%, var(--color-primary) 80%, transparent 100%);
+    border-radius: 2px;
+    box-shadow: 0 0 8px rgba(164, 114, 247, 0.7);
+    transition: width 0.3s ease;
+  }
+  .footer-block:hover .heading-accent-line {
+    width: 54px;
+  }
+
+  /* Col 1: About */
+  .footer-text {
+    font-size: 13.5px;
+    color: var(--color-light-grey);
+    line-height: 1.75;
+    opacity: 0.88;
+    margin: 0;
+  }
+
+  /* Col 2: Address */
+  .address-box {
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+    font-size: 13.5px;
+    color: #ffffff;
+    line-height: 1.65;
+    margin-bottom: 16px;
+  }
+  .address-line {
+    color: #ffffff;
+  }
+  .address-line.institution {
+    color: #ffffff;
+    font-weight: 600;
+  }
+  .footer-map-link {
+    display: inline-flex;
+    align-items: center;
+    gap: 7px;
+    font-family: var(--font-heading);
+    font-size: 13px;
+    font-weight: 700;
+    color: var(--color-primary-light);
+    text-decoration: none;
+    transition: all 0.2s ease;
+  }
+  .footer-map-link svg {
+    width: 14px;
+    height: 14px;
+  }
+  .footer-map-link svg.ext-arrow {
+    width: 11px;
+    height: 11px;
+    transition: transform 0.2s ease;
+  }
+  .footer-map-link:hover {
+    color: #ffffff;
+    text-shadow: 0 0 10px rgba(164, 114, 247, 0.6);
+  }
+  .footer-map-link:hover svg.ext-arrow {
+    transform: translate(2px, -2px);
+  }
+
+  /* Col 3: Quick Links */
+  .quick-links-nav {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+  }
+  .quick-link-item {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    font-size: 13.5px;
+    color: var(--color-light-grey);
+    text-decoration: none;
+    transition: all 0.2s cubic-bezier(0.16, 1, 0.3, 1);
+    opacity: 0.85;
+  }
+  .link-chevron {
+    color: var(--color-primary-light);
+    font-size: 15px;
+    line-height: 1;
+    font-weight: 700;
+    transition: transform 0.2s ease;
+  }
+  .quick-link-item:hover {
+    opacity: 1;
+    color: #ffffff;
+    transform: translateX(5px);
+    text-shadow: 0 0 12px rgba(164, 114, 247, 0.6);
+  }
+  .quick-link-item:hover .link-chevron {
+    transform: translateX(2px);
+  }
+
+  /* Col 4: Contact Us (Gmail & Social Badges) */
+  .gmail-card {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 10px;
+    padding: 8px 12px;
+    background: rgba(255, 255, 255, 0.03);
+    border: 1px solid rgba(255, 255, 255, 0.08);
+    border-radius: var(--radius-md);
+    margin-bottom: 18px;
+    transition: all 0.2s ease;
+  }
+  .gmail-card:hover {
+    border-color: rgba(164, 114, 247, 0.45);
+    background: rgba(127, 69, 219, 0.1);
+    box-shadow: 0 4px 20px rgba(127, 69, 219, 0.2);
+  }
+  .gmail-info {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    min-width: 0;
+  }
+  .gmail-emblem {
+    width: 18px;
+    height: 18px;
+    flex-shrink: 0;
+  }
+  .gmail-address {
+    font-size: 12.5px;
+    color: #ffffff;
+    text-decoration: none;
+    font-weight: 500;
+    white-space: nowrap;
+    transition: color 0.15s ease;
+  }
+  .gmail-address:hover {
+    color: var(--color-primary-light);
+    text-decoration: underline;
+  }
+
+  /* FancyButton Social Row */
+  .social-badges-row {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    flex-wrap: wrap;
+  }
+
+  /* FancyButton Core */
+  .fancy-btn {
+    position: relative;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 44px;
+    height: 44px;
+    border-radius: 9999px;
+    backdrop-filter: blur(16px);
+    -webkit-backdrop-filter: blur(16px);
+    cursor: pointer;
+    overflow: hidden;
+    text-decoration: none;
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    box-shadow: 0 10px 20px -5px rgba(0, 0, 0, 0.5);
+    transition: transform 0.3s cubic-bezier(0.16, 1, 0.3, 1), 
+                border-color 0.3s ease-out, 
+                background 0.3s ease-out, 
+                box-shadow 0.3s ease-out;
+    color: var(--color-light-grey);
+    outline: none;
+  }
+
+  .fancy-btn:hover {
+    transform: scale(1.1) rotate(2deg);
+    box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.5), 0 8px 10px -6px rgba(0, 0, 0, 0.5);
+    color: #ffffff;
+  }
+
+  .fancy-btn:active {
+    transform: scale(0.95) rotate(0deg);
+  }
+
+  /* Light Sweep Shimmer */
+  .fancy-btn .fancy-btn-shimmer {
+    position: absolute;
+    inset: 0;
+    transform: translateX(-100%);
+    transition: transform 0.7s cubic-bezier(0.16, 1, 0.3, 1);
+    pointer-events: none;
+    z-index: 1;
+  }
+
+  .fancy-btn:hover .fancy-btn-shimmer {
+    transform: translateX(100%);
+  }
+
+  .fancy-btn .fancy-btn-icon {
+    position: relative;
+    z-index: 10;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 18px;
+    height: 18px;
+    transition: transform 0.25s ease;
+  }
+
+  .fancy-btn .fancy-btn-icon svg {
+    width: 18px;
+    height: 18px;
+  }
+
+  /* Variant: Default */
+  .fancy-btn.fancy-btn-default {
+    border-color: rgba(255, 255, 255, 0.1);
+    background: linear-gradient(to top right, rgba(0, 0, 0, 0.6), rgba(0, 0, 0, 0.4));
+  }
+  .fancy-btn.fancy-btn-default:hover {
+    border-color: rgba(255, 255, 255, 0.3);
+    background: linear-gradient(to top right, rgba(255, 255, 255, 0.1), rgba(0, 0, 0, 0.4));
+    box-shadow: 0 0 20px rgba(255, 255, 255, 0.2);
+  }
+  .fancy-btn.fancy-btn-default .fancy-btn-shimmer {
+    background: linear-gradient(to right, transparent, rgba(255, 255, 255, 0.15), transparent);
+  }
+
+  /* Variant: Indigo (LinkedIn) */
+  .fancy-btn.fancy-btn-indigo {
+    border-color: rgba(99, 102, 241, 0.2);
+    background: linear-gradient(to top right, rgba(0, 0, 0, 0.6), rgba(0, 0, 0, 0.4));
+  }
+  .fancy-btn.fancy-btn-indigo:hover {
+    border-color: rgba(99, 102, 241, 0.5);
+    background: linear-gradient(to top right, rgba(99, 102, 241, 0.15), rgba(0, 0, 0, 0.4));
+    box-shadow: 0 0 22px rgba(99, 102, 241, 0.35);
+  }
+  .fancy-btn.fancy-btn-indigo .fancy-btn-shimmer {
+    background: linear-gradient(to right, transparent, rgba(129, 140, 248, 0.25), transparent);
+  }
+
+  /* Variant: Red (YouTube) */
+  .fancy-btn.fancy-btn-red {
+    border-color: rgba(239, 68, 68, 0.2);
+    background: linear-gradient(to top right, rgba(0, 0, 0, 0.6), rgba(0, 0, 0, 0.4));
+  }
+  .fancy-btn.fancy-btn-red:hover {
+    border-color: rgba(239, 68, 68, 0.5);
+    background: linear-gradient(to top right, rgba(239, 68, 68, 0.15), rgba(0, 0, 0, 0.4));
+    box-shadow: 0 0 22px rgba(239, 68, 68, 0.35);
+  }
+  .fancy-btn.fancy-btn-red .fancy-btn-shimmer {
+    background: linear-gradient(to right, transparent, rgba(248, 113, 113, 0.25), transparent);
+  }
+
+  /* Variant: Purple (Instagram) */
+  .fancy-btn.fancy-btn-purple {
+    border-color: rgba(168, 85, 247, 0.2);
+    background: linear-gradient(to top right, rgba(0, 0, 0, 0.6), rgba(0, 0, 0, 0.4));
+  }
+  .fancy-btn.fancy-btn-purple:hover {
+    border-color: rgba(168, 85, 247, 0.5);
+    background: linear-gradient(to top right, rgba(168, 85, 247, 0.15), rgba(0, 0, 0, 0.4));
+    box-shadow: 0 0 22px rgba(168, 85, 247, 0.35);
+  }
+  .fancy-btn.fancy-btn-purple .fancy-btn-shimmer {
+    background: linear-gradient(to right, transparent, rgba(192, 132, 252, 0.25), transparent);
+  }
+
+  /* Variant: Green */
+  .fancy-btn.fancy-btn-green {
+    border-color: rgba(34, 197, 94, 0.2);
+    background: linear-gradient(to top right, rgba(0, 0, 0, 0.6), rgba(0, 0, 0, 0.4));
+  }
+  .fancy-btn.fancy-btn-green:hover {
+    border-color: rgba(34, 197, 94, 0.5);
+    background: linear-gradient(to top right, rgba(34, 197, 94, 0.15), rgba(0, 0, 0, 0.4));
+    box-shadow: 0 0 22px rgba(34, 197, 94, 0.35);
+  }
+  .fancy-btn.fancy-btn-green .fancy-btn-shimmer {
+    background: linear-gradient(to right, transparent, rgba(74, 222, 128, 0.25), transparent);
+  }
+
+  /* Bottom Divider & Credits Bar */
+  .footer-divider-glow {
+    width: 100%;
+    height: 1px;
+    background: rgba(255, 255, 255, 0.08);
+    margin-bottom: 28px;
+  }
+  .footer-bottom-bar {
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+    align-items: flex-start;
+    justify-content: space-between;
+  }
+  @media (min-width: 860px) {
+    .footer-bottom-bar {
+      flex-direction: row;
+      align-items: center;
+    }
+  }
+
+  /* SHIMMER TEXT UTILITIES - Base Text Color is Pure White with Colored Shimmer Waves */
+
+  /* 1. White Shimmer */
+  .white-shimmer-text {
+    color: #ffffff;
+    background: linear-gradient(
+      110deg,
+      #d4d4d8 0%,
+      #d4d4d8 35%,
+      #ffffff 50%,
+      #d4d4d8 65%,
+      #d4d4d8 100%
+    );
+    background-size: 240% 100%;
+    -webkit-background-clip: text;
+    background-clip: text;
+    -webkit-text-fill-color: transparent;
+    animation: whiteShimmerFlow 3.6s ease-in-out infinite;
+    display: inline;
+    -webkit-box-decoration-break: clone;
+    box-decoration-break: clone;
+  }
+
+  @keyframes whiteShimmerFlow {
+    0% {
+      background-position: 240% 0;
+    }
+    100% {
+      background-position: -240% 0;
+    }
+  }
+
+  /* SHARED UNIFIED TIMING: Exactly 4.5s ease-in-out infinite for all names */
+  @keyframes nameShimmerFlow {
+    0% {
+      background-position: 220% 0;
+    }
+    100% {
+      background-position: -220% 0;
+    }
+  }
+
+  /* 2. Soft Golden Shimmer Effect on White Text (Suraj Phirke) */
+  .golden-shimmer-text {
+    color: #ffffff;
+    background: linear-gradient(
+      110deg,
+      #ffffff 0%,
+      #ffffff 38%,
+      #fef08a 47%,
+      #fffbeb 50%,
+      #fde047 53%,
+      #ffffff 62%,
+      #ffffff 100%
+    );
+    background-size: 220% 100%;
+    -webkit-background-clip: text;
+    background-clip: text;
+    -webkit-text-fill-color: transparent;
+    animation: nameShimmerFlow 4.5s ease-in-out infinite;
+    font-weight: 700;
+    display: inline-block;
+    filter: drop-shadow(0 0 5px rgba(250, 204, 21, 0.22));
+  }
+
+  /* 3. Soft Copper Shimmer Effect on White Text (Co-Lead Developers: Naman and Madhusudan) */
+  .copper-shimmer-text {
+    color: #ffffff;
+    background: linear-gradient(
+      110deg,
+      #ffffff 0%,
+      #ffffff 38%,
+      #fed7aa 47%,
+      #ffedd5 50%,
+      #fdba74 53%,
+      #ffffff 62%,
+      #ffffff 100%
+    );
+    background-size: 220% 100%;
+    -webkit-background-clip: text;
+    background-clip: text;
+    -webkit-text-fill-color: transparent;
+    animation: nameShimmerFlow 4.5s ease-in-out infinite;
+    font-weight: 700;
+    display: inline-block;
+    filter: drop-shadow(0 0 5px rgba(251, 146, 60, 0.22));
+  }
+
+  /* 4. Soft Velvety Red Shimmer Effect on White Text (Team Members) */
+  .velvet-red-shimmer-text {
+    color: #ffffff;
+    background: linear-gradient(
+      110deg,
+      #ffffff 0%,
+      #ffffff 38%,
+      #fecdd3 47%,
+      #fee2e2 50%,
+      #fda4af 53%,
+      #ffffff 62%,
+      #ffffff 100%
+    );
+    background-size: 220% 100%;
+    -webkit-background-clip: text;
+    background-clip: text;
+    -webkit-text-fill-color: transparent;
+    animation: nameShimmerFlow 4.5s ease-in-out infinite;
+    font-weight: 700;
+    display: inline-block;
+    filter: drop-shadow(0 0 5px rgba(244, 63, 94, 0.22));
+  }
+
+  .footer-credits-section {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+  }
+  .lead-dev-box {
+    display: inline-flex;
+    align-items: baseline;
+    gap: 8px;
+    font-family: var(--font-heading);
+  }
+  .lead-dev-tag {
+    font-size: 12.5px;
+    font-weight: 800;
+    letter-spacing: 0.06em;
+    color: var(--color-primary-light);
+    text-shadow: 0 0 10px rgba(164, 114, 247, 0.4);
+  }
+  .lead-dev-name {
+    font-size: 15px;
+    letter-spacing: 0.02em;
+    color: #ffffff;
+  }
+
+  .co-lead-dev-box {
+    display: inline-flex;
+    align-items: baseline;
+    gap: 8px;
+    font-family: var(--font-heading);
+    flex-wrap: wrap;
+  }
+  .co-lead-dev-tag {
+    font-size: 12.5px;
+    font-weight: 800;
+    letter-spacing: 0.06em;
+    color: var(--color-primary-light);
+    text-shadow: 0 0 10px rgba(164, 114, 247, 0.4);
+    text-transform: uppercase;
+  }
+  .co-lead-names-list {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    flex-wrap: wrap;
+  }
+  .co-lead-name {
+    font-size: 14.5px;
+    font-weight: 700;
+    letter-spacing: 0.02em;
+    color: #ffffff;
+  }
+  .co-lead-bullet {
+    color: #ea580c;
+    font-size: 10px;
+  }
+
+  .team-members-box {
+    display: inline-flex;
+    align-items: baseline;
+    gap: 8px;
+    font-family: var(--font-heading);
+    flex-wrap: wrap;
+  }
+  .team-dev-tag {
+    font-size: 12.5px;
+    font-weight: 800;
+    letter-spacing: 0.06em;
+    color: var(--color-primary-light);
+    text-shadow: 0 0 10px rgba(164, 114, 247, 0.4);
+    text-transform: uppercase;
+  }
+  .team-names-list {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    flex-wrap: wrap;
+  }
+  .team-member-name {
+    font-size: 14.5px;
+    font-weight: 700;
+    letter-spacing: 0.02em;
+    color: #ffffff;
+  }
+  .team-bullet {
+    color: #ef4444;
+    font-size: 10px;
+  }
+
+  .footer-copyright-box {
+    color: var(--color-text-grey);
+    font-size: 12.5px;
+    font-family: var(--font-sans);
+  }
+  .copyright-text {
+    opacity: 0.85;
+  }
