@@ -64,8 +64,8 @@ export const NAVIGATION = {
 
 export const CONTACT_INFO = {
   email: 'nsdc@vcet.edu.in',
-  chairperson: 'shreya.225297202@vcet.edu.in',
-  secretary: 'saloni.225257205@vcet.edu.in',
+  chairperson: 'james.236127101@vcet.edu.in',
+  secretary: 'shruti.235997201@vcet.edu.in',
   address: {
     street: 'Vidyavardhini\'s College Of Engineering and Technology, K.T. Marg',
     campus: 'Vartak College Campus, Vasai Road (W)',
