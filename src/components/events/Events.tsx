@@ -5,6 +5,7 @@ import { createPortal } from "react-dom";
 import { motion, useSpring, useMotionValue, useScroll, useTransform, AnimatePresence } from "framer-motion";
 import { ExpandableCard } from "@/components/ui/expandable-card";
 import { ImageCarousel } from "@/components/events/past/imagecrousal";
+import { LiquidMetalButton } from "@/components/ui/liquid-metal-button";
 import { 
   Calendar, 
   Clock,
@@ -14,7 +15,6 @@ import {
   ArrowUp, 
   Layers, 
   ChevronDown,
-  ArrowRight,
   Maximize2,
   X
 } from "lucide-react";
@@ -1114,15 +1114,6 @@ export default function Events() {
             Ongoing Events
           </motion.h1>
 
-          <motion.p
-            initial={{ opacity: 0, y: 8 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.7, delay: 0.08 }}
-            className="text-xs sm:text-sm font-mono uppercase tracking-widest text-purple-300/90 mt-2"
-          >
-            Department of AI & Data Science • Charting Ideas into the Uncharted
-          </motion.p>
-
           {/* Interactive 3D Dimensional Logo with Perspective Mouse-Tilt and Hover Light-Up Effect */}
           <div className="mt-2 sm:mt-3 relative w-full flex justify-center items-center">
             {/* Interactive 3D Dimensional Logo tightly bounded to the logo image */}
@@ -1187,22 +1178,19 @@ export default function Events() {
             </div>
           </motion.div>
 
-          {/* More Details Button Option */}
+          {/* More Details Button Option - Signature Liquid Metal Pill Theme */}
           <motion.div
             initial={{ opacity: 0, y: 15 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.7, delay: 0.25 }}
-            className="mt-4 sm:mt-5"
+            className="mt-5 sm:mt-6 flex justify-center"
           >
-            <button
-              type="button"
+            <LiquidMetalButton
+              label="More Details"
               onClick={() => setIsDetailModalOpen(true)}
-              className="group relative inline-flex items-center gap-3 px-8 py-3 rounded-full bg-gradient-to-r from-purple-600 via-fuchsia-600 to-indigo-600 hover:from-purple-500 hover:via-fuchsia-500 hover:to-indigo-500 text-white font-bold text-sm sm:text-base shadow-[0_0_30px_rgba(168,85,247,0.45)] hover:shadow-[0_0_40px_rgba(192,132,252,0.8)] hover:scale-105 active:scale-95 transition-all duration-300 border border-purple-300/40 cursor-pointer"
-            >
-              <Sparkles className="w-4 h-4 text-purple-200 group-hover:rotate-12 transition-transform duration-300" />
-              <span>More Details</span>
-              <ArrowRight className="w-4 h-4 text-purple-200 group-hover:translate-x-1 transition-transform duration-300" />
-            </button>
+              showArrow={true}
+              height={48}
+            />
           </motion.div>
 
           {/* Drop Button Connecting to Past Events Timeline */}

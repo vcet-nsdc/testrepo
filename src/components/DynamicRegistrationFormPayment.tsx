@@ -107,15 +107,15 @@ export default function DynamicRegistrationFormPayment({
                 <button
                   type="button"
                   onClick={copyUpi}
-                  className="w-full sm:w-auto flex items-center justify-center gap-1.5 px-4 py-2 sm:py-1.5 rounded-lg bg-gradient-to-r from-purple-600 via-indigo-600 to-pink-600 hover:from-purple-500 hover:to-pink-500 border border-purple-300/40 text-white text-xs font-extrabold transition-all shadow-md whitespace-nowrap active:scale-95"
+                  className="btn-liquid-purple !py-1.5 !px-3.5 text-xs font-bold whitespace-nowrap"
                 >
                   {copied ? (
                     <>
-                      <Check className="w-3.5 h-3.5 text-emerald-300" /> Copied!
+                      <Check className="w-3.5 h-3.5 text-emerald-300 no-shift" /> <span>Copied!</span>
                     </>
                   ) : (
                     <>
-                      <Copy className="w-3.5 h-3.5" /> Copy UPI
+                      <Copy className="w-3.5 h-3.5 no-shift" /> <span>Copy UPI</span>
                     </>
                   )}
                 </button>
@@ -217,7 +217,7 @@ export default function DynamicRegistrationFormPayment({
             <button
               type="button"
               onClick={() => setZoomQr(false)}
-              className="w-full py-2.5 bg-gradient-to-r from-purple-600 via-indigo-600 to-pink-600 hover:from-purple-500 hover:to-pink-500 text-white rounded-xl text-xs font-black shadow-lg transition-transform active:scale-95"
+              className="btn-liquid-purple w-full !py-2 text-xs font-bold"
             >
               Close
             </button>

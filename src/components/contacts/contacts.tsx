@@ -128,9 +128,9 @@ const Contacts = () => {
               </div>
               <button
                 type="submit"
-                className="w-full py-2 px-4 rounded-lg bg-primary text-white font-semibold hover:bg-primary-light transition"
+                className="btn-liquid-purple w-full !py-3 font-semibold"
               >
-                Send Message
+                <span>Send Message</span>
               </button>
             </>
           )}

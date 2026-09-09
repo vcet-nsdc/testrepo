@@ -248,7 +248,7 @@ export default function DynamicRegistrationForm({ event, formSchema, upiId, qrCo
         </p>
         <button
           onClick={() => (window.location.href = "/")}
-          className="w-full sm:w-auto bg-gradient-to-r from-purple-600 via-indigo-600 to-pink-600 hover:from-purple-500 hover:to-pink-500 text-white font-bold text-sm sm:text-base px-8 py-3.5 rounded-xl border border-purple-300/40 shadow-[0_0_30px_rgba(168,85,247,0.4)] transition-transform active:scale-95"
+          className="btn-liquid-purple px-8 py-3.5"
         >
           Return to Home Page
         </button>
@@ -387,15 +387,15 @@ export default function DynamicRegistrationForm({ event, formSchema, upiId, qrCo
         <button
           disabled={submitting}
           type="submit"
-          className="relative inline-flex items-center justify-center w-full sm:w-auto px-10 sm:px-14 py-4 text-sm sm:text-base font-black text-white bg-gradient-to-r from-purple-600 via-indigo-600 to-pink-600 hover:from-purple-500 hover:via-indigo-500 hover:to-pink-500 rounded-xl focus:outline-none focus:ring-2 focus:ring-purple-400 disabled:opacity-50 disabled:cursor-not-allowed shadow-[0_0_40px_rgba(168,85,247,0.5)] hover:shadow-[0_0_55px_rgba(168,85,247,0.7)] transition-all active:scale-95 border border-purple-300/40"
+          className="btn-liquid-purple px-10 sm:px-14 py-3.5 text-sm sm:text-base font-black tracking-wide"
         >
           {submitting ? (
             <>
-              <Loader2 className="mr-2.5 h-4 w-4 sm:h-5 sm:w-5 animate-spin text-white" />
-              PROCESSING REGISTRATION…
+              <Loader2 className="mr-2.5 h-4 w-4 sm:h-5 sm:w-5 animate-spin text-white no-shift" />
+              <span>PROCESSING REGISTRATION…</span>
             </>
           ) : (
-            "SUBMIT REGISTRATION"
+            <span>SUBMIT REGISTRATION</span>
           )}
         </button>
       </div>

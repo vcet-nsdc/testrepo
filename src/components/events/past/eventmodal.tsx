@@ -166,10 +166,10 @@ export function EventModal({ event, onClose, stockImages }: EventModalProps) {
                       href={event.link}
                       target="_blank"
                       rel="noopener noreferrer"
-                      className="inline-flex items-center gap-2 bg-gradient-to-r from-purple-600 to-fuchsia-600 hover:from-purple-500 hover:to-fuchsia-500 text-white px-5 py-2 rounded-xl text-xs font-heading font-medium shadow-md transition-all duration-200"
+                      className="btn-liquid-purple text-xs !py-2 !px-5"
                     >
                       <span>Explore Event Page</span>
-                      <ExternalLink className="w-3.5 h-3.5" />
+                      <ExternalLink className="w-3.5 h-3.5 no-shift" />
                     </a>
                   </div>
                 )}

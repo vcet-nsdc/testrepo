@@ -380,4 +380,69 @@ body.modal-open {
   filter: drop-shadow(0 0 14px rgba(192, 132, 252, 0.85))
           drop-shadow(0 0 28px rgba(168, 85, 247, 0.5))
           drop-shadow(0 14px 28px rgba(0, 0, 0, 0.85)) !important;
+}
+
+/* ==========================================================================
+   SIGNATURE LIQUID METAL / CHROMATIC PURPLE PILL BUTTON THEME
+   Replicates the holographic iridescent rim, inner specular gloss, and deep
+   vibrant purple body of the signature LiquidMetalButton across the website.
+   ========================================================================== */
+.btn-liquid-purple {
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  padding: 12px 26px;
+  border-radius: 9999px;
+  font-family: inherit;
+  font-size: 14.5px;
+  font-weight: 600;
+  letter-spacing: 0.01em;
+  color: #ffffff !important;
+  background: 
+    linear-gradient(135deg, #8b5cf6 0%, #7c3aed 45%, #6d28d9 100%) padding-box,
+    linear-gradient(135deg, rgba(236, 72, 153, 0.75), rgba(192, 132, 252, 0.95) 30%, rgba(96, 165, 250, 0.85) 65%, rgba(244, 114, 182, 0.8)) border-box;
+  border: 1.5px solid transparent;
+  box-shadow: 
+    inset 0 1px 1.5px rgba(255, 255, 255, 0.45), 
+    inset 0 -2px 5px rgba(59, 7, 100, 0.4),
+    0 0 0 1px rgba(167, 139, 250, 0.35),
+    0 4px 18px rgba(109, 40, 217, 0.45), 
+    0 0 14px rgba(124, 58, 237, 0.25);
+  cursor: pointer;
+  outline: none;
+  text-shadow: 0 1px 2px rgba(0, 0, 0, 0.3), 0 0 12px rgba(216, 180, 254, 0.4);
+  transition: all 0.35s cubic-bezier(0.34, 1.56, 0.64, 1);
+  user-select: none;
+  white-space: nowrap;
+  text-decoration: none;
+}
+
+.btn-liquid-purple:hover {
+  transform: translateY(-2px) scale(1.02);
+  background: 
+    linear-gradient(135deg, #9333ea 0%, #7e22ce 40%, #6b21a8 100%) padding-box,
+    linear-gradient(135deg, rgba(244, 114, 182, 0.95), rgba(216, 180, 254, 1) 30%, rgba(129, 140, 248, 0.95) 65%, rgba(244, 114, 182, 0.95)) border-box;
+  box-shadow: 
+    inset 0 1px 1.5px rgba(255, 255, 255, 0.55), 
+    inset 0 -2px 5px rgba(59, 7, 100, 0.3),
+    0 0 0 1px rgba(216, 180, 254, 0.7),
+    0 8px 30px rgba(124, 58, 237, 0.65), 
+    0 0 22px rgba(168, 85, 247, 0.45);
+}
+
+.btn-liquid-purple:active {
+  transform: translateY(1px) scale(0.97);
+  box-shadow: 
+    inset 0 2px 4px rgba(0, 0, 0, 0.4),
+    0 2px 8px rgba(109, 40, 217, 0.4);
+}
+
+.btn-liquid-purple svg {
+  transition: transform 0.25s cubic-bezier(0.34, 1.56, 0.64, 1);
+}
+
+.btn-liquid-purple:hover svg:not(.no-shift) {
+  transform: translateX(4px);
 }

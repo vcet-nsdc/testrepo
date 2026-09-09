@@ -14,9 +14,9 @@ export function CTASection() {
         <div className="flex items-center justify-center gap-4">
           <Link
             href="/events"
-            className="inline-block rounded-md bg-purple-500 hover:bg-purple-600 px-5 py-2 font-medium transition-colors"
+            className="btn-liquid-purple !py-2.5 !px-6 text-sm font-semibold"
           >
-            Upcoming Events
+            <span>Upcoming Events</span>
           </Link>
           <Link
             href="/contact"

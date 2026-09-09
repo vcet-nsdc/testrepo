@@ -238,7 +238,7 @@ export default function RegisterForm() {
         <button
           disabled={isSubmitting}
           type="submit"
-          className="relative inline-flex items-center justify-center w-full sm:w-auto px-10 py-4 font-bold text-white transition-all duration-200 bg-gradient-to-r from-purple-600 to-blue-600 rounded-xl hover:from-purple-500 hover:to-blue-500 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-offset-black focus:ring-purple-500 disabled:opacity-70 disabled:cursor-not-allowed shadow-[0_0_20px_rgba(168,85,247,0.4)] hover:shadow-[0_0_30px_rgba(168,85,247,0.6)] hover:-translate-y-1"
+          className="btn-liquid-purple px-10 py-3.5 font-bold text-sm sm:text-base"
         >
           {isSubmitting ? (
             <>
