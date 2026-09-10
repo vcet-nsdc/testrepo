@@ -978,7 +978,7 @@ export default function Events() {
                         </div>
                         <div className="flex items-center gap-2">
                           <Clock className="w-3.5 h-3.5 text-purple-400 shrink-0" />
-                          <span className="text-zinc-300">10 AM – 5 PM</span>
+                          <span className="text-zinc-300">9:00 AM – 5:00 PM</span>
                         </div>
                         <div className="flex items-center gap-2">
                           <MapPin className="w-3.5 h-3.5 text-purple-400 shrink-0" />
@@ -1170,7 +1170,7 @@ export default function Events() {
             </div>
             <div className="flex items-center gap-2.5 sm:gap-3 px-5 sm:px-6 py-2.5 sm:py-3 rounded-2xl bg-purple-950/60 border border-purple-500/40 backdrop-blur-xl text-zinc-100 shadow-[0_0_25px_rgba(168,85,247,0.22)] hover:border-purple-400 hover:shadow-[0_0_30px_rgba(168,85,247,0.4)] transition-all duration-300">
               <Clock className="w-5 h-5 text-purple-400 shrink-0" />
-              <span className="font-mono text-zinc-200 font-semibold tracking-wide">10:00 AM – 5:00 PM IST</span>
+              <span className="font-mono text-zinc-200 font-semibold tracking-wide">9:00 AM – 5:00 PM IST</span>
             </div>
             <div className="flex items-center gap-2.5 sm:gap-3 px-5 sm:px-6 py-2.5 sm:py-3 rounded-2xl bg-purple-950/60 border border-purple-500/40 backdrop-blur-xl text-zinc-100 shadow-[0_0_25px_rgba(168,85,247,0.22)] hover:border-purple-400 hover:shadow-[0_0_30px_rgba(168,85,247,0.4)] transition-all duration-300">
               <MapPin className="w-5 h-5 text-purple-400 shrink-0" />

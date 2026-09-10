@@ -14,7 +14,7 @@ export const events: readonly Event[] = [
   {
     id: 'techx-2026',
     title: 'TechX 2026 Product Showcase',
-    dateTime: 'September 11, 2026 • 10:00 AM',
+    dateTime: 'September 11, 2026 • 9:00 AM',
     venue: 'VCET, Vasai',
     shortDescription: 'Flagship product showcase organized by the Department of Artificial Intelligence and Data Science at VCET.',
     imagePath: '/assests/techx.jpeg',
