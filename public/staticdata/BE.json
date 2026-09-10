@@ -28,60 +28,6 @@
   },
   {
     "id": 4,
-    "name": "Vaishnavi Vijay Pathare",
-    "position": "Organizing Head",
-    "email": "vaishnavi.236257201@vcet.edu.in",
-    "instagram": "https://www.instagram.com/itsjusttt._vaishnavi_/",
-    "linkedin": "https://www.linkedin.com/in/vaishnavi-vijay-pathare-872a7a282",
-    "photo": "https://res.cloudinary.com/ddjcjgi7a/image/upload/v1788504666/Vaishnavi1_ikgtba.png"
-  },
-  {
-    "id": 5,
-    "name": "Sharvari Bhondekar",
-    "position": "Organizing Head",
-    "email": "sharvari.235897202@vcet.edu.in",
-    "instagram": "https://www.instagram.com/saru_.23_/",
-    "linkedin": "https://www.linkedin.com/in/sharvari-bhondekar-872a7a282",
-    "photo": "https://res.cloudinary.com/ddjcjgi7a/image/upload/v1788504669/Sharvari1_afmaob.png"
-  },
-  {
-    "id": 6,
-    "name": "Divya Davane",
-    "position": "Creative Head",
-    "email": "divya.235937202@vcet.edu.in",
-    "instagram": "https://www.instagram.com/divyacado/",
-    "linkedin": "https://www.linkedin.com/in/divya-davane-973514316",
-    "photo": "https://res.cloudinary.com/ddjcjgi7a/image/upload/v1788504661/Divya1_ok0ncm.png"
-  },
-  {
-    "id": 7,
-    "name": "Shifa Shaikh",
-    "position": "Creative Head",
-    "email": "shifa.s2409487209@vcet.edu.in",
-    "instagram": "https://www.instagram.com/shifaa_18_/",
-    "linkedin": "https://www.linkedin.com/in/shifa-shaikh-84b0b1375",
-    "photo": "https://res.cloudinary.com/ddjcjgi7a/image/upload/v1788504663/Shifa1_suol91.png"
-  },
-  {
-    "id": 8,
-    "name": "Soham Sawant",
-    "position": " Technical Head ",
-    "email": "soham.236387101@vcet.edu.in",
-    "instagram": "https://www.instagram.com/_sawant_soham/",
-    "linkedin": "https://www.linkedin.com/in/soham-sawant-54674b356",
-    "photo": "https://res.cloudinary.com/ddjcjgi7a/image/upload/v1788504667/Soham1_twgibd.png"
-  },
-  {
-    "id": 9,
-    "name": "Sumit Patel",
-    "position": "Technical Head",
-    "email": "sumit.236247105@vcet.edu.in",
-    "instagram": "https://www.instagram.com/sumitvpatel_/",
-    "linkedin": "https://www.linkedin.com/in/sumitvpatel",
-    "photo": "https://res.cloudinary.com/ddjcjgi7a/image/upload/v1788504663/Sumit1_fwxtzn.png"
-  },
-  {
-    "id": 10,
     "name": "Suraj Phirke",
     "position": "Social Media/ Website Head",
     "email": "suraj.s2409467105@vcet.edu.in",
@@ -90,16 +36,25 @@
     "photo": "https://res.cloudinary.com/ddjcjgi7a/image/upload/v1788504662/Suraj1_osglqv.png"
   },
   {
-    "id": 11,
-    "name": "Swara Save",
-    "position": "Documentation/ PR Head",
-    "email": "swara.236367205@vcet.edu.in",
-    "instagram": "https://www.instagram.com/swarasave_10/",
-    "linkedin": "https://www.linkedin.com/in/swara-save-587ab3370",
-    "photo": "https://res.cloudinary.com/ddjcjgi7a/image/upload/v1788504666/Swara1_odbpv8.png"
+    "id": 5,
+    "name": "Soham Sawant",
+    "position": "Technical Head",
+    "email": "soham.236387101@vcet.edu.in",
+    "instagram": "https://www.instagram.com/_sawant_soham/",
+    "linkedin": "https://www.linkedin.com/in/soham-sawant-54674b356",
+    "photo": "https://res.cloudinary.com/ddjcjgi7a/image/upload/v1788504667/Soham1_twgibd.png"
   },
   {
-    "id": 12,
+    "id": 6,
+    "name": "Sumit Patel",
+    "position": "Technical Head",
+    "email": "sumit.236247105@vcet.edu.in",
+    "instagram": "https://www.instagram.com/sumitvpatel_/",
+    "linkedin": "https://www.linkedin.com/in/sumitvpatel",
+    "photo": "https://res.cloudinary.com/ddjcjgi7a/image/upload/v1788504663/Sumit1_fwxtzn.png"
+  },
+  {
+    "id": 7,
     "name": "Ashutosh Singh",
     "position": "Sponsorship Head",
     "email": "ashutosh.236437109@vcet.edu.in",
@@ -108,12 +63,57 @@
     "photo": "https://res.cloudinary.com/ddjcjgi7a/image/upload/v1788504660/Ashutosh1_p8wgsa.png"
   },
   {
-    "id": 13,
+    "id": 8,
     "name": "Siddhi Gaikwad",
     "position": "Sponsorship Head",
     "email": "Siddhigaikwad200401@gmail.com",
     "instagram": "https://www.instagram.com/Siddhigaikwad_91?igsh=aGx3ZGZmMXZkaDVo",
     "linkedin": "https://www.linkedin.com/in/siddhi-gaikwad-a34a2921b?utm_source=share_via&utm_content=profile&utm_medium=member_android",
     "photo": "https://res.cloudinary.com/ddjcjgi7a/image/upload/v1788504669/Siddhi1_gjndww.png"
+  },
+  {
+    "id": 9,
+    "name": "Vaishnavi Vijay Pathare",
+    "position": "Organizing Head",
+    "email": "vaishnavi.236257201@vcet.edu.in",
+    "instagram": "https://www.instagram.com/itsjusttt._vaishnavi_/",
+    "linkedin": "https://www.linkedin.com/in/vaishnavi-vijay-pathare-872a7a282",
+    "photo": "https://res.cloudinary.com/ddjcjgi7a/image/upload/v1788504666/Vaishnavi1_ikgtba.png"
+  },
+  {
+    "id": 10,
+    "name": "Divya Davane",
+    "position": "Creative Head",
+    "email": "divya.235937202@vcet.edu.in",
+    "instagram": "https://www.instagram.com/divyacado/",
+    "linkedin": "https://www.linkedin.com/in/divya-davane-973514316",
+    "photo": "https://res.cloudinary.com/ddjcjgi7a/image/upload/v1788504661/Divya1_ok0ncm.png"
+  },
+  {
+    "id": 11,
+    "name": "Sharvari Bhondekar",
+    "position": "Organizing Head",
+    "email": "sharvari.235897202@vcet.edu.in",
+    "instagram": "https://www.instagram.com/saru_.23_/",
+    "linkedin": "https://www.linkedin.com/in/sharvari-bhondekar-872a7a282",
+    "photo": "https://res.cloudinary.com/ddjcjgi7a/image/upload/v1788504669/Sharvari1_afmaob.png"
+  },
+  {
+    "id": 12,
+    "name": "Shifa Shaikh",
+    "position": "Creative Head",
+    "email": "shifa.s2409487209@vcet.edu.in",
+    "instagram": "https://www.instagram.com/shifaa_18_/",
+    "linkedin": "https://www.linkedin.com/in/shifa-shaikh-84b0b1375",
+    "photo": "https://res.cloudinary.com/ddjcjgi7a/image/upload/v1788504663/Shifa1_suol91.png"
+  },
+  {
+    "id": 13,
+    "name": "Swara Save",
+    "position": "Documentation/ PR Head",
+    "email": "swara.236367205@vcet.edu.in",
+    "instagram": "https://www.instagram.com/swarasave_10/",
+    "linkedin": "https://www.linkedin.com/in/swara-save-587ab3370",
+    "photo": "https://res.cloudinary.com/ddjcjgi7a/image/upload/v1788504666/Swara1_odbpv8.png"
   }
 ]
