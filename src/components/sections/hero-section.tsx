@@ -6,9 +6,8 @@
 'use client';
 
 import { motion } from 'framer-motion';
-import { ArrowRight } from 'lucide-react';
 import Image from 'next/image';
-import { Button } from '@/components/ui/button';
+import { LiquidMetalButton } from '@/components/ui/liquid-metal-button';
 
 export function HeroSection() {
   return (
@@ -77,13 +76,12 @@ export function HeroSection() {
           transition={{ delay: 2, duration: 0.8 }}
           className="flex justify-center"
         >
-          <Button 
-            className="flex items-center justify-center gap-2"
+          <LiquidMetalButton 
+            label="About Us"
             onClick={() => document.getElementById('about')?.scrollIntoView({ behavior: 'smooth' })}
-          >
-            <span>About Us</span>
-            <ArrowRight className="h-5 w-5" />
-          </Button>
+            showArrow={true}
+            height={48}
+          />
         </motion.div>
       </div>
     </section>

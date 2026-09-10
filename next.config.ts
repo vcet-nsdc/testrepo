@@ -4,7 +4,7 @@
 
 /** @type {import("next").NextConfig} */
 const config = {
-  output: "standalone",
+  ...(process.env.VERCEL ? {} : { output: "standalone" }),
   images: {
     // SVGs are no longer allowed through the image optimizer. They were a
     // stored-XSS vector and only internal (non-optimized) assets used them.

@@ -101,7 +101,9 @@ const Teams: React.FC = () => {
             variants={containerVariants}
           >
             {beTeam.map((member) => {
-              const avatar = member.photo.startsWith('http') ? member.photo : `/${member.photo}`;
+              const avatar = member?.photo && typeof member.photo === 'string'
+                ? (member.photo.startsWith('http') ? member.photo : `/${member.photo}`)
+                : '/globe.svg';
               return (
                 <motion.div key={member.id} variants={itemVariants}>
                   <ProfileCard
@@ -133,7 +135,9 @@ const Teams: React.FC = () => {
             variants={containerVariants}
           >
             {teTeam.map((member) => {
-              const avatar = member.photo.startsWith('http') ? member.photo : `/${member.photo}`;
+              const avatar = member?.photo && typeof member.photo === 'string'
+                ? (member.photo.startsWith('http') ? member.photo : `/${member.photo}`)
+                : '/globe.svg';
               return (
                 <motion.div key={member.id} variants={itemVariants}>
                   <ProfileCard

@@ -68,7 +68,7 @@ export function EventCard({ event }: EventCardProps) {
               </div>
               <Button
                 onClick={() => setIsModalOpen(true)}
-                className="bg-gradient-to-r from-fuchsia-600 to-purple-700 text-white px-4 py-2 rounded-xl text-xs font-medium hover:shadow-lg hover:scale-105 transition-all duration-200"
+                className="btn-liquid-purple !text-xs !py-1.5 !px-4 font-medium"
               >
                 Read more
               </Button>

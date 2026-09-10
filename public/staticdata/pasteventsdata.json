@@ -1,6 +1,28 @@
 {
   "events": [
     {
+      "id": "event_byteverse_2026",
+      "title": "Byteverse 2026 Arena",
+      "year": "2025-26",
+      "date": "2026-03-08",
+      "time": "10:00 AM – 6:00 PM",
+      "venue": "VCET, Vasai",
+      "description": "A high-voltage, manga-themed tech competition organized by VCET NSDC with multi-track challenges.",
+      "about": "Byteverse 2026 was VCET NSDC's premier manga-themed arena where students assembled squads to engineer high-impact software, solve computational puzzles, and battle it out across campuses on a live dynamic leaderboard. Whether coding, designing, or innovating, participants brought unprecedented intensity.",
+      "highlights": [
+        "Interactive technical arena across systems, Web3, and applied AI.",
+        "Manga-styled team battles with dynamic live leaderboard progression.",
+        "Direct mentorship from industry leaders and faculty evaluators.",
+        "Grand cash prizes for champion squads, trophies, and certificates for all attendees."
+      ],
+      "gallery": [
+        "/assests/byteverse.jpeg",
+        "/assests/byteverse_logo_v2.png",
+        "/assests/itech.png"
+      ],
+      "link": "https://byteverse-2026.vercel.app"
+    },
+    {
       "id": "techx_2025",
       "title": "TechX Product Showcase 2025",
       "year": "2025-26",

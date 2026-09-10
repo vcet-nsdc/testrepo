@@ -1,3 +1,4 @@
+@import url('https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400..900;1,400..900&family=Cinzel+Decorative:wght@700;900&family=Italiana&family=Rozha+One&display=swap');
 @import "tailwindcss";
 @plugin "tailwindcss-animate";
 
@@ -19,6 +20,7 @@
   /* Font Variables */
   --font-manrope: "Manrope", sans-serif;
   --font-dosis: "Dosis", sans-serif;
+  --font-transcity: "Playfair Display", "Italiana", "Rozha One", "Cinzel Decorative", Georgia, serif;
   --radius: 0.625rem;
   --background: oklch(1 0 0);
   --foreground: oklch(0.145 0 0);
@@ -68,6 +70,7 @@
   /* Fonts */
   --font-sans: var(--font-manrope);
   --font-heading: var(--font-dosis);
+  --font-transcity: var(--font-transcity);
   --color-sidebar-ring: var(--sidebar-ring);
   --color-sidebar-border: var(--sidebar-border);
   --color-sidebar-accent-foreground: var(--sidebar-accent-foreground);
@@ -275,3 +278,171 @@ body.certificate-modal-open {
 body.modal-open {
   overflow: hidden !important;
 }
+
+/* Continuous Auto-Scrolling Photo Strip (Event Photo Marquee) */
+@keyframes photoStripScroll {
+  0% {
+    transform: translate3d(0, 0, 0);
+  }
+  100% {
+    transform: translate3d(-50%, 0, 0);
+  }
+}
+
+.photo-strip-container {
+  position: relative;
+  width: 100%;
+  overflow: hidden;
+}
+
+.photo-strip-track {
+  display: flex;
+  width: max-content;
+  will-change: transform;
+  animation: photoStripScroll var(--marquee-duration, 35s) linear infinite;
+}
+
+.photo-strip-container:hover .photo-strip-track {
+  animation-play-state: paused !important;
+}
+
+.photo-strip-mask {
+  mask-image: linear-gradient(
+    to right,
+    transparent 0%,
+    black 6%,
+    black 94%,
+    transparent 100%
+  );
+  -webkit-mask-image: linear-gradient(
+    to right,
+    transparent 0%,
+    black 6%,
+    black 94%,
+    transparent 100%
+  );
+}
+
+/* UI Image Auto Slider track support */
+.infinite-scroll-track {
+  display: flex;
+  width: max-content;
+  will-change: transform;
+  animation: photoStripScroll var(--slider-duration, 25s) linear infinite;
+}
+
+.scroll-mask-container {
+  mask-image: linear-gradient(
+    to right,
+    transparent 0%,
+    black 10%,
+    black 90%,
+    transparent 100%
+  );
+  -webkit-mask-image: linear-gradient(
+    to right,
+    transparent 0%,
+    black 10%,
+    black 90%,
+    transparent 100%
+  );
+}
+
+.group:hover .infinite-scroll-track {
+  animation-play-state: paused !important;
+}
+
+/* Transcity Authentic Luxury Serif Display Typography */
+@font-face {
+  font-family: 'Transcity';
+  src: url('/fonts/Transcity.otf') format('opentype');
+  font-weight: 400;
+  font-style: normal;
+  font-display: swap;
+}
+
+.font-transcity {
+  font-family: 'Transcity', 'Playfair Display', 'Italiana', Georgia, serif;
+  font-feature-settings: "swsh" 1, "dlig" 1, "liga" 1;
+}
+
+/* Refined alphabet outline illumination tracing each letter on hover - GPU-optimized for 120fps */
+.logo-alphabet-trace {
+  filter: drop-shadow(0 12px 24px rgba(0, 0, 0, 0.8));
+  will-change: transform;
+  transform: translateZ(0);
+  backface-visibility: hidden;
+  transition: filter 0.25s ease;
+}
+
+.group:hover .logo-alphabet-trace,
+.logo-alphabet-trace:hover {
+  filter: drop-shadow(0 0 14px rgba(192, 132, 252, 0.85))
+          drop-shadow(0 0 28px rgba(168, 85, 247, 0.5))
+          drop-shadow(0 14px 28px rgba(0, 0, 0, 0.85)) !important;
+}
+
+/* ==========================================================================
+   SIGNATURE LIQUID METAL / CHROMATIC PURPLE PILL BUTTON THEME
+   Replicates the holographic iridescent rim, inner specular gloss, and deep
+   vibrant purple body of the signature LiquidMetalButton across the website.
+   ========================================================================== */
+.btn-liquid-purple {
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  padding: 12px 26px;
+  border-radius: 9999px;
+  font-family: inherit;
+  font-size: 14.5px;
+  font-weight: 600;
+  letter-spacing: 0.01em;
+  color: #ffffff !important;
+  background: 
+    linear-gradient(135deg, #8b5cf6 0%, #7c3aed 45%, #6d28d9 100%) padding-box,
+    linear-gradient(135deg, rgba(236, 72, 153, 0.75), rgba(192, 132, 252, 0.95) 30%, rgba(96, 165, 250, 0.85) 65%, rgba(244, 114, 182, 0.8)) border-box;
+  border: 1.5px solid transparent;
+  box-shadow: 
+    inset 0 1px 1.5px rgba(255, 255, 255, 0.45), 
+    inset 0 -2px 5px rgba(59, 7, 100, 0.4),
+    0 0 0 1px rgba(167, 139, 250, 0.35),
+    0 4px 18px rgba(109, 40, 217, 0.45), 
+    0 0 14px rgba(124, 58, 237, 0.25);
+  cursor: pointer;
+  outline: none;
+  text-shadow: 0 1px 2px rgba(0, 0, 0, 0.3), 0 0 12px rgba(216, 180, 254, 0.4);
+  transition: all 0.35s cubic-bezier(0.34, 1.56, 0.64, 1);
+  user-select: none;
+  white-space: nowrap;
+  text-decoration: none;
+}
+
+.btn-liquid-purple:hover {
+  transform: translateY(-2px) scale(1.02);
+  background: 
+    linear-gradient(135deg, #9333ea 0%, #7e22ce 40%, #6b21a8 100%) padding-box,
+    linear-gradient(135deg, rgba(244, 114, 182, 0.95), rgba(216, 180, 254, 1) 30%, rgba(129, 140, 248, 0.95) 65%, rgba(244, 114, 182, 0.95)) border-box;
+  box-shadow: 
+    inset 0 1px 1.5px rgba(255, 255, 255, 0.55), 
+    inset 0 -2px 5px rgba(59, 7, 100, 0.3),
+    0 0 0 1px rgba(216, 180, 254, 0.7),
+    0 8px 30px rgba(124, 58, 237, 0.65), 
+    0 0 22px rgba(168, 85, 247, 0.45);
+}
+
+.btn-liquid-purple:active {
+  transform: translateY(1px) scale(0.97);
+  box-shadow: 
+    inset 0 2px 4px rgba(0, 0, 0, 0.4),
+    0 2px 8px rgba(109, 40, 217, 0.4);
+}
+
+.btn-liquid-purple svg {
+  transition: transform 0.25s cubic-bezier(0.34, 1.56, 0.64, 1);
+}
+
+.btn-liquid-purple:hover svg:not(.no-shift) {
+  transform: translateX(4px);
+}
